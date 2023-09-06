@@ -1,0 +1,15 @@
+#-----------------------------------------------------------
+# xsim v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Mon Sep  4 12:16:53 2023
+# Process ID: 14978
+# Current directory: /home/henry/Dropbox/NTNU/5_Klasse/TDT4295 Datamaskinprosjekt/SIM
+# Command line: xsim -source {xsim.dir/tb_snapshot.wdb/xsim_script.tcl}
+# Log file: /home/henry/Dropbox/NTNU/5_Klasse/TDT4295 Datamaskinprosjekt/SIM/xsim.log
+# Journal file: /home/henry/Dropbox/NTNU/5_Klasse/TDT4295 Datamaskinprosjekt/SIM/xsim.jou
+#-----------------------------------------------------------
+start_gui
+source xsim.dir/tb_snapshot.wdb/xsim_script.tcl
+create_wave_config; add_wave /; set_property needs_save false [current_wave_config]
+close_sim
