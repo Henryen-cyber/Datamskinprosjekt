@@ -1,1 +1,0 @@
--debug "all" -top "tb" -snapshot "tb_snapshot" 

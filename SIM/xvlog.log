@@ -1,6 +1,0 @@
-INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/henry/Dropbox/NTNU/5_Klasse/TDT4295 Datamaskinprosjekt/SRC/adder.sv" into library work
-INFO: [VRFC 10-311] analyzing module adder
-INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/henry/Dropbox/NTNU/5_Klasse/TDT4295 Datamaskinprosjekt/SRC/subtractor.sv" into library work
-INFO: [VRFC 10-311] analyzing module subtractor_systemverilog
-INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/henry/Dropbox/NTNU/5_Klasse/TDT4295 Datamaskinprosjekt/SRC/tb.sv" into library work
-INFO: [VRFC 10-311] analyzing module tb
