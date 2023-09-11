@@ -1,10 +1,10 @@
 #Define target part and create output directory
 set partNum xc7a35ticsg324-1L
 set outputDir OPT
-set topModule topmodule
+set topModule adder
 file mkdir outputDir
 set files [glob -nocomplain "$outputDir/*"]
-if {[llength $files] != 0}{
+if {[llength $files] != 0} {
 	#clear folder contetnts
 	puts "### Clearing $outputDir ###"
 	file delete -force {*}[glob -directory $outputDir *];
@@ -15,7 +15,7 @@ if {[llength $files] != 0}{
 #Reference HDL and constraints source files
 read_verilog -library -sv [glob SRC/*.sv]
 read_vhdl -library 	usrDefLib [glob SRC/*.vhdl]
-read_xdc XDC/constraint.xdc
+read_xdc XDC/Arty-Master.xdc
 
 #Run synthesis
 synth_design -top $topModule -part $partNum
@@ -29,7 +29,7 @@ place_design
 report_clock_utilization -file $outputDir/clock_util.rpt
 
 #Get timing vialation and run optimizations if needed
-if{[get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup]] < 0}{
+if {[get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup]] < 0}{
 	puts "### Found Timing Vialations ###"
 	puts "### Running Physical Optimizations ###"
 	phys_opt_design
