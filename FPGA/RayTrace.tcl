@@ -29,7 +29,7 @@ place_design
 report_clock_utilization -file $outputDir/clock_util.rpt
 
 #Get timing vialation and run optimizations if needed
-if {[get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup]] < 0}{
+if {[get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup]] < 0} {
 	puts "### Found Timing Vialations ###"
 	puts "### Running Physical Optimizations ###"
 	phys_opt_design
@@ -46,5 +46,5 @@ report_route_status -file $outputDir/port_route_status.rpt
 report_timing_summary -file $outputDir/post_route_timing_summary.rpt
 report_power -file $outputDir/post_route_power.rpt
 report_drc -file $outputDir/post_imp_drc.rpt
-write_verilog -sv -force $outputDir/ray_trace_impl_netlist.sv -mode timesim -sdf_anno true
+write_verilog -force $outputDir/ray_trace_impl_netlist.sv -mode timesim -sdf_anno true
 write_bitstream -force $outputDir/raytrace.bit
