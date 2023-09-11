@@ -12,15 +12,3 @@ module adder (
     end
 
 endmodule : adder
-
-module subtractor (
-    input wire a,
-    input wire b,
-    output reg c
-);
-
-    always_comb begin
-        c = a || b;
-    end
-
-endmodule : subtractor
