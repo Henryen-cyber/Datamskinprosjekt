@@ -2,7 +2,7 @@
 set partNum xc7a35ticsg324-1L
 set outputDir OPT
 set topModule adder
-file mkdir outputDir
+file mkdir $outputDir
 set files [glob -nocomplain "$outputDir/*"]
 if {[llength $files] != 0} {
 	#clear folder contetnts
