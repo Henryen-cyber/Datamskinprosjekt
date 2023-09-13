@@ -377,7 +377,7 @@
       "no_connect_dangling": "warning",
       "pin_not_connected": "error",
       "pin_not_driven": "error",
-      "pin_to_pin": "warning",
+      "pin_to_pin": "error",
       "power_pin_not_driven": "error",
       "similar_labels": "warning",
       "simulation_model_issue": "ignore",
@@ -467,6 +467,47 @@
     "subpart_first_id": 65,
     "subpart_id_separator": 0
   },
-  "sheets": [],
+  "sheets": [
+    [
+      "e9047d94-28be-4266-894b-6ee25ef088bd",
+      ""
+    ],
+    [
+      "30b429a8-b068-46fd-8deb-ee4af8cda04e",
+      "PowerSupply"
+    ],
+    [
+      "5a7a2c0a-f09d-4b4f-9411-f51dd121457c",
+      "FPGA_layout"
+    ],
+    [
+      "f9a74965-bde5-47a2-9f66-243cb6fc0f53",
+      "EFM32GGxxaa"
+    ],
+    [
+      "81518b75-edd1-4c8b-a158-389aac8d5196",
+      "HDMI"
+    ],
+    [
+      "760de0cd-a539-410a-930b-c8ea7f36c5e7",
+      "VGA"
+    ],
+    [
+      "3d4f3bb6-8d8f-4b26-b7c8-e791b7e32814",
+      "spi_fpga_flash"
+    ],
+    [
+      "6d4349c0-ecb8-4299-82a4-493a16e674d3",
+      "DDR3"
+    ],
+    [
+      "e35285fd-162a-4f7e-974b-e69dceb1cfdc",
+      "SRAM"
+    ],
+    [
+      "9bdc0e5f-64f6-460a-91de-0c1b5a4e8753",
+      "SRAM_FPGA"
+    ]
+  ],
   "text_variables": {}
 }
