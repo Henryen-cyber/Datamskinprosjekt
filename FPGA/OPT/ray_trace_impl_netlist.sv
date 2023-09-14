@@ -1,7 +1,7 @@
 // Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2020.1 (lin64) Build 2902540 Wed May 27 19:54:35 MDT 2020
-// Date        : Wed Sep 13 15:53:03 2023
+// Date        : Thu Sep 14 10:49:43 2023
 // Host        : Henry-LinuxMint running 64-bit Linux Mint 21.2
 // Command     : write_verilog -force OPT/ray_trace_impl_netlist.sv -mode timesim -sdf_anno true
 // Design      : spi_interface
