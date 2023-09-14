@@ -1,33 +1,15 @@
 SOURCES_SV := \
-    ../SRC/adder.sv \
-    ../SRC/subtractor.sv \
-    ../SRC/tb.sv \
+    /SRC/spi_interface.sv \
+    /SRC/tb.sv \
 
 COMP_OPTS_SV := \
     --incr \
     --relax \
 
 DEFINES_SV :=
-SOURCES_VHDL := ../SRC/subtractor.vhdl
 COMP_OPTS_VHDL := --incr --relax
 
 TB_TOP := tb
-
-SUB ?= VHDL
-ifeq ($(SUB), VHDL)
-  $(info Building with VHDL subtractor)
-  DEFINES_SV := $(DEFINES_SV) -d SUBTRACTOR_VHDL
-else ifeq ($(SUB), SV)
-  $(info Building with SYSTEMVERILOG subtractor)
-  DEFINES_SV := $(DEFINES_SV) -d SUBTRACTOR_SV
-else
-  $(info )
-  $(info BAD SUBTRACTOR TYPE)
-  $(info Available options:)
-  $(info make SUB=VHDL <target>)
-  $(info make SUB=SV <target>)
-  $(error )
-endif
 
 #==== Default target - running simulation without drawing waveforms ====#
 .PHONY : simulate
@@ -72,36 +54,6 @@ else
 	@echo "### COMPILING SYSTEMVERILOG ###"
 	xvlog --sv $(COMP_OPTS_SV) $(DEFINES_SV) $(SOURCES_SV)
 	touch .comp_sv.timestamp
-endif
-
-#==== COMPILING VERILOG ====#
-ifeq ($(SOURCES_V),)
-.comp_v.timestamp :
-	@echo
-	@echo "### NO VERILOG SOURCES GIVEN ###"
-	@echo "### SKIPPED VERILOG COMPILATION ###"
-	touch .comp_v.timestamp
-else
-.comp_v.timestamp : $(SOURCES_V)
-	@echo
-	@echo "### COMPILING VERILOG ###"
-	xvlog $(COMP_OPTS_V) $(DEFINES_V) $(SOURCES_V)
-	touch .comp_v.timestamp
-endif
-
-#==== COMPILING VHDL ====#
-ifeq ($(SOURCES_VHDL),)
-.comp_vhdl.timestamp :
-	@echo
-	@echo "### NO VHDL SOURCES GIVEN ###"
-	@echo "### SKIPPED VHDL COMPILATION ###"
-	touch .comp_vhdl.timestamp
-else
-.comp_vhdl.timestamp : $(SOURCES_VHDL)
-	@echo
-	@echo "### COMPILING VHDL ###"
-	xvhdl $(COMP_OPTS_VHDL) $(SOURCES_VHDL)
-	touch .comp_vhdl.timestamp
 endif
 
 .PHONY : clean
