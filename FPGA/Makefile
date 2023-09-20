@@ -1,5 +1,5 @@
 bit : 
-	vivado -mode batch -nolog -nojournal -source BIT/RayTrace.tcl
+	vivado -mode batch -nolog -nojournal -source RayTrace.tcl
 
 .PHONY : program
 program : 

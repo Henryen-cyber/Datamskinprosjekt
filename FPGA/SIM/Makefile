@@ -1,6 +1,6 @@
 SOURCES_SV := \
-    /SRC/spi_interface.sv \
-    /SRC/tb.sv \
+    ../SRC/spi_interface.sv \
+    ../SRC/spi_tb.sv \
 
 COMP_OPTS_SV := \
     --incr \
@@ -19,8 +19,7 @@ simulate : $(TB_TOP)_snapshot.wdb
 elaborate : .elab.timestamp
 
 .PHONY : compile
-compile : .comp_sv.timestamp .comp_v.timestamp .comp_vhdl.timestamp
-
+compile : .comp_sv.timestamp 
 #==== WAVEFORM DRAWING ====#
 .PHONY : waves
 waves : $(TB_TOP)_snapshot.wdb
@@ -35,7 +34,7 @@ $(TB_TOP)_snapshot.wdb : .elab.timestamp
 	xsim $(TB_TOP)_snapshot -tclbatch xsim_cfg.tcl
 
 #==== ELABORATION ====#
-.elab.timestamp : .comp_sv.timestamp .comp_v.timestamp .comp_vhdl.timestamp
+.elab.timestamp : .comp_sv.timestamp 
 	@echo
 	@echo "### ELABORATING ###"
 	xelab -debug all -top $(TB_TOP) -snapshot $(TB_TOP)_snapshot

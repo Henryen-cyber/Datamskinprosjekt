@@ -48,6 +48,7 @@ module spi_interface(
     always @(posedge clk)
         if(ssel_active)
         begin
+            led <= 1;
             if(ssel_startmessage)
                 byte_data_sendt <= cnt;
             else if(sck_fallingedge)
@@ -57,6 +58,8 @@ module spi_interface(
                 else
                     byte_data_sendt <= {byte_data_sendt[6:0], 1'b0};
             end
+        end else begin
+                led <= 0;
         end
     assign miso = byte_data_sendt[7];
 endmodule
