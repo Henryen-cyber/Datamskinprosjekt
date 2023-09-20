@@ -1,7 +1,7 @@
 // Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2020.1 (lin64) Build 2902540 Wed May 27 19:54:35 MDT 2020
-// Date        : Thu Sep 14 10:49:43 2023
+// Date        : Tue Sep 19 13:50:03 2023
 // Host        : Henry-LinuxMint running 64-bit Linux Mint 21.2
 // Command     : write_verilog -force OPT/ray_trace_impl_netlist.sv -mode timesim -sdf_anno true
 // Design      : spi_interface
@@ -12,7 +12,7 @@
 `timescale 1 ps / 1 ps
 `define XIL_TIMING
 
-(* ECO_CHECKSUM = "c37c3943" *) 
+(* ECO_CHECKSUM = "11f5e54d" *) 
 (* NotValidForBitStream *)
 module spi_interface
    (clk,
@@ -49,6 +49,8 @@ module spi_interface
   wire [0:0]cnt_reg;
   wire [7:1]cnt_reg__0;
   wire led;
+  wire led_OBUF;
+  wire led_i_1_n_0;
   wire miso;
   wire miso_OBUF;
   wire [1:0]p_0_in;
@@ -386,10 +388,20 @@ end
         .D(p_0_in__0[7]),
         .Q(cnt_reg__0[7]),
         .R(1'b0));
-  OBUFT led_OBUF_inst
-       (.I(1'b0),
-        .O(led),
-        .T(1'b1));
+  OBUF led_OBUF_inst
+       (.I(led_OBUF),
+        .O(led));
+  LUT1 #(
+    .INIT(2'h1)) 
+    led_i_1
+       (.I0(p_0_in0),
+        .O(led_i_1_n_0));
+  FDRE led_reg
+       (.C(clk_IBUF_BUFG),
+        .CE(1'b1),
+        .D(led_i_1_n_0),
+        .Q(led_OBUF),
+        .R(1'b0));
   OBUF miso_OBUF_inst
        (.I(miso_OBUF),
         .O(miso));
