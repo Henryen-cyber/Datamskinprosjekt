@@ -1,7 +1,7 @@
 #Define target part and create output directory
 set partNum xc7a35ticsg324-1L
 set outputDir OPT
-set topModule adder
+set topModule spi_interface
 file mkdir $outputDir
 set files [glob -nocomplain "$outputDir/*"]
 if {[llength $files] != 0} {
@@ -14,7 +14,7 @@ if {[llength $files] != 0} {
 
 #Reference HDL and constraints source files
 read_verilog -library -sv [glob SRC/*.sv]
-read_vhdl -library 	usrDefLib [glob SRC/*.vhdl]
+#read_vhdl -library 	usrDefLib [glob ../SRC/*.vhdl]
 read_xdc XDC/Arty-Master.xdc
 
 #Run synthesis
