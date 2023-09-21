@@ -503,6 +503,10 @@
     [
       "e35285fd-162a-4f7e-974b-e69dceb1cfdc",
       "SRAM"
+    ],
+    [
+      "65904ece-fe30-45bb-94bd-e245ab68e3ab",
+      "FPGA_SRAM"
     ]
   ],
   "text_variables": {}
