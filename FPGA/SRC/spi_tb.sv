@@ -1,31 +1,42 @@
-module tb;
-    logic mosi, miso, ssel_, sck, led, ssel_endmessage, ssel_active;
+module tb();
+    logic mosi, miso, ssel_, sck, led;
     logic clk;
-    logic [7:0] byte_data_recieved;
-    
-    logic [7:0] data_to_send = 8'b11110000;
-    int i = 0;
-    
-    spi_interface DUT_spi(.*);
 
-    always #1 clk = ~clk;
-    always #3 sck = ~sck;
+    spi_interface DUT(
+        .clk(clk),
+        .mosi(mosi),
+        .miso(miso),
+        .ssel_(ssel_),
+        .sck(sck),
+        .led(led)
+    );
 
     initial begin
-        #0 ssel_ = 1;
-        #6 ssel_ = 0;
-        @(posedge sck);
-        if(ssel_active) begin
-            mosi = data_to_send[i];
-            i++;
-        end else begin
-            $display("ssel_ is high");
-        end
-        #30 ssel_ = 1;
-        #31 $finish;
+        clk = 0;
+        sck = 0;
+        ssel_ = 1;
+        #5 ssel_ = 0;
+        #5 mosi = 1;
+        #5 mosi = 1;
+        #5 mosi = 0;
+        #5 mosi = 0;
+        #5 mosi = 1;
+        #5 mosi = 0;
+        #5 mosi = 0;
+        #5 mosi = 0;
+        #10 $finish;
     end
 
-    assert property ( @(posedge clk) ssel_endmessage |-> byte_data_recieved == 8'b11110000);
+    always #1 clk = ~clk;
+    always #5 sck = ~sck;
+
+    property p_led;
+        always @(posedge sck) !ssel_ |-> led;
+    endproperty
+
+    assert property(p_led)
+        else
+            $error("Led is not in sync with ssel_");
 
 endmodule
 
