@@ -395,6 +395,58 @@
         )
       )
     )
+    (symbol "power:+3.3V" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "#PWR" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Value" "+3.3V" (at 0 3.556 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "global power" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Power symbol creates a global label with name \"+3.3V\"" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "+3.3V_0_1"
+        (polyline
+          (pts
+            (xy -0.762 1.27)
+            (xy 0 2.54)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 0 0)
+            (xy 0 2.54)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 0 2.54)
+            (xy 0.762 1.27)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+      )
+      (symbol "+3.3V_1_1"
+        (pin power_in line (at 0 0 90) (length 0) hide
+          (name "+3.3V" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
     (symbol "power:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -6.35 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -476,6 +528,8 @@
   (junction (at 113.03 92.71) (diameter 0) (color 0 0 0 0)
     (uuid e8169bf6-cd26-4c93-8b69-57c821cd96d9)
   )
+
+  (no_connect (at 118.11 114.3) (uuid 27badd5a-dc14-446a-9d73-7f16c17eee36))
 
   (wire (pts (xy 113.03 92.71) (xy 148.59 92.71))
     (stroke (width 0) (type default))
@@ -703,6 +757,11 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 5fa9d6b4-d6f5-407f-9901-d43c1b835933)
   )
+  (text "This Should be VBUS Power In?\nAlso needs a VBUSEN somewhere (enable signal)\n"
+    (at 172.72 72.39 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 9c05f132-c687-4af2-9e7e-a514b7cdcc59)
+  )
   (text "USB Max Voltage: 5V\n" (at 52.07 82.55 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid a0dc6735-b327-4933-9b63-47d4065d7e57)
@@ -771,6 +830,34 @@
       (project "RayTracingPCB"
         (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53/f8dfcd07-d713-410a-88b5-31ae3a6c85dd"
           (reference "R1101") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:+3.3V") (at 207.01 63.5 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 0af9f033-26c4-446e-8233-41f00dce512c)
+    (property "Reference" "#PWR017" (at 207.01 67.31 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+3.3V" (at 207.01 58.42 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 207.01 63.5 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 207.01 63.5 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 047356d2-6e8b-441c-8cf8-7841625616da))
+    (instances
+      (project "RayTracingPCB"
+        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53"
+          (reference "#PWR017") (unit 1)
+        )
+        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53/f8dfcd07-d713-410a-88b5-31ae3a6c85dd"
+          (reference "#PWR021") (unit 1)
         )
       )
     )
@@ -861,7 +948,7 @@
     (property "Reference" "L1103" (at 149.86 78.74 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "L" (at 160.02 78.74 90)
+    (property "Value" "CBF221HC" (at 160.02 78.74 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "" (at 157.48 77.47 0)

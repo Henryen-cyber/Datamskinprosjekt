@@ -390,7 +390,8 @@
   "libraries": {
     "pinned_footprint_libs": [],
     "pinned_symbol_libs": [
-      "IP4220CZ6"
+      "IP4220CZ6",
+      "0000_CustomComponents"
     ]
   },
   "meta": {
