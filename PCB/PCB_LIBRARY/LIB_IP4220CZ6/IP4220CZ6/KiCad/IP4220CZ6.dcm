@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP IP4220CZ6
+D Dual Schmitt-Trigger Inverter
+K
+F https://assets.nexperia.com/documents/data-sheet/IP4220CZ6.pdf
+$ENDCMP
+#
+#End Doc Library

@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP EFM32GG11B420F2048GQ100-B
+D ARM Microcontrollers - MCU ARM Cortex-M4 32-bit 72 MHz 2048 kB USB LCD MCU
+K
+F https://www.arrow.com/en/products/efm32gg11b420f2048gq100-b/silicon-labs
+$ENDCMP
+#
+#End Doc Library
