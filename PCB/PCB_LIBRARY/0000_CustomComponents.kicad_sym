@@ -176,13 +176,5 @@
         (number "8" (effects (font (size 1.27 1.27))))
       )
     )
-    (symbol "IS62WVS2568FBLL-20NLI-TR | SQI Mode_1_1"
-      (text "256Kx8 LOW VOLTAGE, SERIAL SRAM\nwith SPI, SDI and SQI INTERFACE" (at 7.62 -20.32 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (text "8-pin SOIC package" (at 0 -16.51 0)
-        (effects (font (size 1.27 1.27)))
-      )
-    )
   )
 )
