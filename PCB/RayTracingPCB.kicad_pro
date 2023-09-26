@@ -389,7 +389,10 @@
   },
   "libraries": {
     "pinned_footprint_libs": [],
-    "pinned_symbol_libs": []
+    "pinned_symbol_libs": [
+      "IP4220CZ6",
+      "0000_CustomComponents"
+    ]
   },
   "meta": {
     "filename": "RayTracingPCB.kicad_pro",
@@ -507,6 +510,10 @@
     [
       "65904ece-fe30-45bb-94bd-e245ab68e3ab",
       "FPGA_SRAM"
+    ],
+    [
+      "f8dfcd07-d713-410a-88b5-31ae3a6c85dd",
+      "PX00_USB_3_MICRO_AB"
     ]
   ],
   "text_variables": {}
