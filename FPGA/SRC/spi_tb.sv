@@ -1,6 +1,7 @@
 module tb();
     logic mosi, miso, ssel_, sck, led;
     logic clk;
+    logic[7:0] data_out;
 
     spi_interface DUT(
         .clk(clk),
@@ -8,8 +9,12 @@ module tb();
         .miso(miso),
         .ssel_(ssel_),
         .sck(sck),
-        .led(led)
+        .led(led),
+        .data_out(data_out)
     );
+
+    always #1 clk = ~clk;
+    always #5 sck = ~sck;
 
     initial begin
         clk = 0;
@@ -24,20 +29,19 @@ module tb();
         #5 mosi = 0;
         #5 mosi = 0;
         #5 mosi = 0;
+        $display("%h", DUT.ssel_endmessage);
         #10 $finish;
     end
 
-    always #1 clk = ~clk;
-    always #5 sck = ~sck;
-
-    property p_led;
-        always @(posedge sck) !ssel_ |-> led;
+    property a;
+        always @(posedge clk) DUT.ssel_endmessage |-> data_out == 8'b011001000;
     endproperty
 
-    assert property(p_led)
-        else
-            $error("Led is not in sync with ssel_");
-
+    assert property (a) begin
+        $display("Correct output");
+    end else begin
+        $error("Data out is wrong!");
+    end
 endmodule
 
 
