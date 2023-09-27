@@ -514,6 +514,10 @@
     [
       "f8dfcd07-d713-410a-88b5-31ae3a6c85dd",
       "PX00_USB_3_MICRO_AB"
+    ],
+    [
+      "d3202836-2d47-4157-b8f3-eaab3c329b5f",
+      "FPGA_IO_CD"
     ]
   ],
   "text_variables": {}

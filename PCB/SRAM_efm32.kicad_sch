@@ -2,7 +2,7 @@
 
   (uuid b0cf4bf9-0c5c-4b61-9c80-4c4ffac2d086)
 
-  (paper "A4")
+  (paper "A3")
 
   (lib_symbols
     (symbol "0000_CustomComponents:IS62WVS2568FBLL-20NLI-TR | SQI Mode" (in_bom yes) (on_board yes)
