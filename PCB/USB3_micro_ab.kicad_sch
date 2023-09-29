@@ -1044,7 +1044,7 @@
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid d896eb0d-cfa4-4608-9742-9e3b84c6f0e3)
   )
-  (hierarchical_label "EFM32GG11_USB_VBUS" (shape output) (at 172.72 77.47 0) (fields_autoplaced)
+  (hierarchical_label "EFM32GG11_USB_VBUS" (shape input) (at 172.72 77.47 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid fa07b324-68d6-4358-8c79-beab3d38ff88)
   )
