@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP MT25QL256ABA1EW9-0SIT
+D NOR Flash SPI FLASH NOR SLC 64MX4 WPDFN
+K
+F https://www.micron.com/products/nor-flash/serial-nor-flash/part-catalog/mt25ql256aba1ew9-0sit
+$ENDCMP
+#
+#End Doc Library
