@@ -1,6 +1,6 @@
 {
   "board": {
-    "active_layer": 4,
+    "active_layer": 0,
     "active_layer_preset": "All Layers",
     "auto_track_width": false,
     "hidden_netclasses": [
@@ -18,6 +18,7 @@
       "EBI_AddressData"
     ],
     "hidden_nets": [
+      "",
       "GND",
       "+1V0",
       "+3.3V",
@@ -51,7 +52,17 @@
       "Net-(IC1-C)",
       "/FPGA Artix-7 100T 1FGG484C/Programmer interface/QSPI_DQ3",
       "unconnected-(IC1-EP-Pad9)",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_DQ13",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_DQ15",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_DQ12",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_UDQS_N",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_DQ14",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_DQ11",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_DQ9",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_UDQS_P",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_DQ10",
       "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_UDM",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_DQ8",
       "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_DQ0",
       "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_LDM",
       "/FPGA Artix-7 100T 1FGG484C/DDR3/DDR3_DQ2",
