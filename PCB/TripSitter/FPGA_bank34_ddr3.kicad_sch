@@ -4580,7 +4580,7 @@
     (pin "N1" (uuid e8636441-8b43-46ff-9587-00227013569e))
     (pin "N2" (uuid d5a274dd-61be-4e1a-b89f-c41675990028))
     (pin "N3" (uuid 93783239-9725-488d-96e1-3eb61fed5545))
-    (pin "N7" (uuid 9a2706f6-e081-438a-8c69-516242a2ee24))
+    (pin "N7" (uuid 9a2706f6-e081-438a-8c69-516242a2ee25))
     (pin "N8" (uuid e783562e-f166-4b57-a888-6ad77995781e))
     (pin "N9" (uuid 307995a3-6f92-4128-8e16-715eaf4ddef7))
     (pin "P1" (uuid 93bd007c-3c39-4179-a67b-7d589964e502))
@@ -4601,7 +4601,7 @@
     (pin "T7" (uuid 488edbd6-db2d-4846-9085-e47825e4bf43))
     (pin "T8" (uuid 0deb51ff-b38f-485b-b5cd-eec40c772ba2))
     (pin "T9" (uuid 610c098a-2461-45c4-90f4-9967fe90e138))
-    (pin "N7" (uuid 9a2706f6-e081-438a-8c69-516242a2ee24))
+    (pin "N7" (uuid 9a2706f6-e081-438a-8c69-516242a2ee25))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/7cb3d455-0645-42c8-9782-d5dac1372bd2"

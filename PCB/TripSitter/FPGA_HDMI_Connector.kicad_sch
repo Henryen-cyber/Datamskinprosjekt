@@ -1231,7 +1231,7 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 48c7eb82-6e02-4fa1-8e5f-86d343564c1d)
   )
-  (label "5V2" (at 261.62 142.24 0) (fields_autoplaced)
+  (label "5V_2" (at 261.62 142.24 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 9bd268a9-1315-4fbb-9ae6-acaa286d1db5)
   )
