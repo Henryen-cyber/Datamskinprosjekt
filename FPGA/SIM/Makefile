@@ -1,6 +1,6 @@
 SOURCES_SV := \
-    ../SRC/spi_interface.sv \
-    ../SRC/spi_tb.sv \
+    ../SRC/rtl/spi_interface.sv \
+    ../SRC/tb/spi_tb.sv \
 
 COMP_OPTS_SV := \
     --incr \
