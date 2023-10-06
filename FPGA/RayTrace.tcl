@@ -13,7 +13,7 @@ if {[llength $files] != 0} {
 }
 
 #Reference HDL and constraints source files
-read_verilog -library -sv [glob SRC/*.sv]
+read_verilog -sv [glob SRC/rtl/*.sv]
 #read_vhdl -library 	usrDefLib [glob ../SRC/*.vhdl]
 read_xdc XDC/Arty-Master.xdc
 
