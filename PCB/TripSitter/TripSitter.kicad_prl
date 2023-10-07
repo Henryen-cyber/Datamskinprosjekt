@@ -201,8 +201,8 @@
       "HDMI_SDA",
       "HDMI_CEC",
       "FPGA_DONE",
-      "/MCU EFM32GG11B420/PF10",
-      "/MCU EFM32GG11B420/PF11",
+      "/MCU EFM32GG11B420/PF11-",
+      "/MCU EFM32GG11B420/PF11+",
       "unconnected-(U1D-MGTPRXN0_216-PadA8)",
       "unconnected-(U1B-IO_L10N_T1_16-PadA14)",
       "unconnected-(U1A-IO_L8P_T1_13-PadAA9)",
@@ -401,7 +401,10 @@
       "unconnected-(U1B-IO_L10P_T1_16-PadA13)",
       "unconnected-(U1D-MGTPRXN2_216-PadA10)",
       "unconnected-(U1D-MGTPTXN2_216-PadA6)",
-      "unconnected-(U1D-MGTPTXN0_216-PadA4)"
+      "unconnected-(U1D-MGTPTXN0_216-PadA4)",
+      "unconnected-(J8-SSRX+-Pad10)",
+      "unconnected-(J8-SSRX--Pad9)",
+      "unconnected-(J8-SSTX+-Pad7)"
     ],
     "high_contrast_mode": 0,
     "net_color_mode": 1,
