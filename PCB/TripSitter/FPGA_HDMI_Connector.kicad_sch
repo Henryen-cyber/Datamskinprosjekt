@@ -533,11 +533,11 @@
         )
       )
     )
-    (symbol "power:+3V3" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "power:+3.3V" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -3.81 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "Value" "+3V3" (at 0 3.556 0)
+      (property "Value" "+3.3V" (at 0 3.556 0)
         (effects (font (size 1.27 1.27)))
       )
       (property "Footprint" "" (at 0 0 0)
@@ -549,10 +549,10 @@
       (property "ki_keywords" "global power" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "Power symbol creates a global label with name \"+3V3\"" (at 0 0 0)
+      (property "ki_description" "Power symbol creates a global label with name \"+3.3V\"" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (symbol "+3V3_0_1"
+      (symbol "+3.3V_0_1"
         (polyline
           (pts
             (xy -0.762 1.27)
@@ -578,9 +578,9 @@
           (fill (type none))
         )
       )
-      (symbol "+3V3_1_1"
+      (symbol "+3.3V_1_1"
         (pin power_in line (at 0 0 90) (length 0) hide
-          (name "+3V3" (effects (font (size 1.27 1.27))))
+          (name "+3.3V" (effects (font (size 1.27 1.27))))
           (number "1" (effects (font (size 1.27 1.27))))
         )
       )
@@ -1018,7 +1018,7 @@
     (stroke (width 0) (type default))
     (uuid 91ba90e8-6205-4b6f-be4f-cfb013ce887f)
   )
-  (wire (pts (xy 177.8 110.49) (xy 177.8 118.11))
+  (wire (pts (xy 177.8 100.33) (xy 177.8 118.11))
     (stroke (width 0) (type default))
     (uuid 92ea8417-bfbb-4bc8-bfc0-1eb7440eb769)
   )
@@ -1054,7 +1054,7 @@
     (stroke (width 0) (type default))
     (uuid a1e964f9-bc95-4f68-a5b9-9737cabb4364)
   )
-  (wire (pts (xy 250.19 168.91) (xy 250.19 175.26))
+  (wire (pts (xy 250.19 162.56) (xy 250.19 175.26))
     (stroke (width 0) (type default))
     (uuid a2a0a967-c6d2-4ae1-ba0a-2f294b43cab5)
   )
@@ -1262,17 +1262,17 @@
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "HDMI_CLKN" (shape input) (at 87.63 69.85 180) (fields_autoplaced)
+  (global_label "HDMI_CLK_N" (shape input) (at 87.63 69.85 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 37d00269-aae9-48b7-bbb2-af72cc3065e8)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 74.1219 69.85 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 73.1543 69.85 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "HDMI_TX2N" (shape input) (at 87.63 54.61 180) (fields_autoplaced)
+  (global_label "HDMI_TX2_N" (shape input) (at 87.63 54.61 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 52615055-11ba-4872-bb23-eb9e45d857ed)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 74.3034 54.61 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 73.3358 54.61 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
@@ -1290,31 +1290,31 @@
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
-  (global_label "HDMI_CLKP" (shape input) (at 87.63 67.31 180) (fields_autoplaced)
+  (global_label "HDMI_CLK_P" (shape input) (at 87.63 67.31 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 7f3e5070-fc83-4033-a6d1-48717d4255f9)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 74.1824 67.31 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 73.2148 67.31 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "HDMI_TX0P" (shape input) (at 87.63 62.23 180) (fields_autoplaced)
+  (global_label "HDMI_TX0_P" (shape input) (at 87.63 62.23 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 88466991-44a4-4efe-976f-4810ddcb1207)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 74.3639 62.23 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 73.3963 62.23 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "HDMI_TX0N" (shape input) (at 87.63 64.77 180) (fields_autoplaced)
+  (global_label "HDMI_TX0_N" (shape input) (at 87.63 64.77 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid a2472e72-611f-4ea9-8011-f811888fa1d4)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 74.3034 64.77 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 73.3358 64.77 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "HDMI_TX2P" (shape input) (at 87.63 52.07 180) (fields_autoplaced)
+  (global_label "HDMI_TX2_P" (shape input) (at 87.63 52.07 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid a40301aa-70d1-4c9b-9776-df146cc8f7ac)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 74.3639 52.07 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 73.3963 52.07 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
@@ -1325,10 +1325,10 @@
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "HDMI_TX1P" (shape input) (at 87.63 57.15 180) (fields_autoplaced)
+  (global_label "HDMI_TX1_P" (shape input) (at 87.63 57.15 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid ace287ef-eb53-4764-bf6a-f59d3d250e78)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 74.3639 57.15 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 73.3963 57.15 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
@@ -1346,10 +1346,10 @@
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "HDMI_TX1N" (shape input) (at 87.63 59.69 180) (fields_autoplaced)
+  (global_label "HDMI_TX1_N" (shape input) (at 87.63 59.69 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid d440b070-494a-45b3-913c-d369743e69a8)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 74.3034 59.69 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 73.3358 59.69 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
@@ -1376,8 +1376,8 @@
     (property "Datasheet" "~" (at 175.26 140.97 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 3010b643-6be4-4151-850c-528f82c6038c))
-    (pin "2" (uuid e2f27dc7-3975-4d0a-bde9-3137df98db93))
+    (pin "1" (uuid 8b5d5e17-6644-41f2-a169-4a401a5c028a))
+    (pin "2" (uuid 6b0e2d68-245b-4809-8f8e-89c65f1ef534))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1412,8 +1412,8 @@
     (property "Datasheet" "~" (at 195.58 167.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 1899de2a-f8b2-4372-bbf7-12632ff7b457))
-    (pin "2" (uuid 1b8ea5a6-548d-4a81-a29a-cd60d5018ae9))
+    (pin "1" (uuid ed194104-dacc-4326-8f9a-b387b27f61e4))
+    (pin "2" (uuid 107b0efe-08b9-47ba-893e-0c01b8032201))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1448,8 +1448,8 @@
     (property "Datasheet" "~" (at 261.62 208.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid b5fc1173-5b70-456e-8911-472c129036a7))
-    (pin "2" (uuid 5571e2cd-8c4f-4958-a1ce-dc67c46b08b9))
+    (pin "1" (uuid 4a94834a-0637-409b-8f3d-2693c349e2ad))
+    (pin "2" (uuid 8f5d77e1-6bf5-468e-8c8d-410a99acf63a))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1484,7 +1484,7 @@
     (property "Datasheet" "" (at 149.86 190.5 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 2ce8da55-39e9-4c2e-9b76-9a1d0bd302b1))
+    (pin "1" (uuid 87479213-9992-47d9-9730-d1d4add00794))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1519,8 +1519,8 @@
     (property "Datasheet" "~" (at 261.62 196.85 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 5586a3ef-3f0a-4b25-a978-59db7ea14d99))
-    (pin "2" (uuid 249318f0-af21-48bf-846b-a568687c9fcc))
+    (pin "1" (uuid cbd577aa-cf89-4fff-9636-6e52ec1da6db))
+    (pin "2" (uuid a0ad5da1-ec7b-4d86-a995-b66796b2f471))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1555,8 +1555,8 @@
     (property "Datasheet" "~" (at 186.69 161.29 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid b1ac655d-7b26-47bb-963e-b14c758c5fad))
-    (pin "2" (uuid 8f77af11-a36f-4887-a20c-6d50e709f66b))
+    (pin "1" (uuid f7e01cd5-0db4-4c2b-915e-0c1628259b40))
+    (pin "2" (uuid b7816f1b-7293-444b-bcca-709c84be3cd1))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1591,8 +1591,8 @@
     (property "Datasheet" "~" (at 261.62 186.69 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 738642f3-dc94-4a60-b887-cd721e1abf1b))
-    (pin "2" (uuid 8a7cfe00-dd55-4e5e-8594-628c0e1dbaf7))
+    (pin "1" (uuid d9dfcea0-4729-4d9e-b64d-31944e3ce96b))
+    (pin "2" (uuid 7c045d4d-09eb-46cd-acbf-a70cd2903842))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1627,26 +1627,26 @@
     (property "Datasheet" "https://en.wikipedia.org/wiki/HDMI" (at 225.425 72.39 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 7d37e94f-109b-4b32-bd09-046b0ff9babb))
-    (pin "10" (uuid 4b47282c-801a-490a-86e0-ae333f831f9f))
-    (pin "11" (uuid ad80f5fd-c79a-4d16-bc7c-b4348dde2dc0))
-    (pin "12" (uuid 888ab346-6464-4321-af78-e0e67a2ac26a))
-    (pin "13" (uuid d1a4211c-afe9-4795-a74a-2b7b15ac0668))
-    (pin "14" (uuid 6ba94eba-73e4-4520-935a-3886ebce3197))
-    (pin "15" (uuid d738adeb-2b09-46ed-912c-6d25283373b3))
-    (pin "16" (uuid ead3c828-441f-4ce7-9718-e10b50c68cb1))
-    (pin "17" (uuid f3ce886b-9fe7-4d5b-ba68-d671e70252d7))
-    (pin "18" (uuid a89e612a-a108-4e7a-a8a1-23adcab18fec))
-    (pin "19" (uuid fb8e3296-475f-49ee-86de-7e87ebab10d6))
-    (pin "2" (uuid 7de22863-5e27-430a-b978-51d4423047cc))
-    (pin "3" (uuid 579d135c-4caf-4f11-bec8-7156a8c69ee1))
-    (pin "4" (uuid 190c6777-058b-4beb-9b39-77a105e0365e))
-    (pin "5" (uuid 8ca085b5-274b-480b-afbf-148ae91cf083))
-    (pin "6" (uuid 36fe351e-9643-4f1b-9bb9-c29c8b3d7f3f))
-    (pin "7" (uuid 90f54843-6c1a-41a5-a69a-4bdf39de7849))
-    (pin "8" (uuid 98ce4e68-030b-4a68-b8ad-877d4e7bc976))
-    (pin "9" (uuid 2298fef7-cfbc-460e-815c-9d56c8181e2a))
-    (pin "SH" (uuid 12fa4958-2c40-4a42-9673-019abb3b0afa))
+    (pin "1" (uuid 099e73fa-b4cc-4534-9fa2-debd5b4b8832))
+    (pin "10" (uuid 0e92980d-947e-4cf8-b1f2-4be8acf9ad59))
+    (pin "11" (uuid aba08ec3-93a3-4df0-9575-8ff63c4de2c6))
+    (pin "12" (uuid e102d0ba-59e6-4c66-a6bf-18b700539f10))
+    (pin "13" (uuid 966abe57-667c-4d12-aa4a-8775f3e4e7b0))
+    (pin "14" (uuid 45c5a7b1-96ce-447b-81ba-72251ca47b11))
+    (pin "15" (uuid c58d685b-566b-4673-a578-27fb5a2bd520))
+    (pin "16" (uuid 246397e6-84e1-4fd7-8de7-33c850923967))
+    (pin "17" (uuid 377c1917-7bec-466b-a4a8-ea96de19263f))
+    (pin "18" (uuid 9d9988a3-cb82-4128-b902-45ad77e2473c))
+    (pin "19" (uuid 9176e5b8-aba9-4079-a8fe-952efbb1cca5))
+    (pin "2" (uuid 21935a36-ec59-41a7-ae33-23b17b2d2656))
+    (pin "3" (uuid 50f1bca7-f9fd-4773-912f-479b1dff2eec))
+    (pin "4" (uuid 8a042ab2-4a9b-403f-ac8f-650ee77dd6bb))
+    (pin "5" (uuid 507b9389-0efc-4aa0-b2c1-2da19bfe4c0b))
+    (pin "6" (uuid 1e6becc1-8f6a-480d-8002-c4ca910e7b31))
+    (pin "7" (uuid 70061b30-72dd-4117-8042-334b39d7a4a5))
+    (pin "8" (uuid 6777abc6-cb36-4051-b523-fdf389a32573))
+    (pin "9" (uuid 796a1ab6-b3fc-4c53-9216-e29fce9b5806))
+    (pin "SH" (uuid c9220b29-e79d-4806-90c1-6d72e8e9a9d0))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1681,7 +1681,7 @@
     (property "Datasheet" "" (at 250.19 38.1 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid a5bfbfe3-91d3-4cf0-ba57-e5dbdc1ded0f))
+    (pin "1" (uuid 4d1d7d0f-4226-4cea-918f-9ff2b5774175))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1696,41 +1696,6 @@
       (project "RayTracingPCB"
         (path "/e9047d94-28be-4266-894b-6ee25ef088bd/81518b75-edd1-4c8b-a158-389aac8d5196"
           (reference "#PWR062") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "power:+3V3") (at 250.19 168.91 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid 39ba4577-14a7-4206-aebf-47e0e31456a4)
-    (property "Reference" "#PWR073" (at 250.19 172.72 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "+3V3" (at 250.19 163.83 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 250.19 168.91 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 250.19 168.91 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid fc9b983d-d49f-4fb9-8057-b2a6d5fffd3c))
-    (instances
-      (project "hdmi_connector"
-        (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
-          (reference "#PWR073") (unit 1)
-        )
-      )
-      (project "TripSitter"
-        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/ae3612c6-9651-4a37-8de7-7277774520fa"
-          (reference "#PWR071") (unit 1)
-        )
-      )
-      (project "RayTracingPCB"
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/81518b75-edd1-4c8b-a158-389aac8d5196"
-          (reference "#PWR073") (unit 1)
         )
       )
     )
@@ -1751,8 +1716,8 @@
     (property "Datasheet" "~" (at 212.09 177.8 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 42e7bb47-70e8-4279-a5f7-4f2302cf0691))
-    (pin "2" (uuid 3284e417-6d82-4644-8ad2-591cd2114d3d))
+    (pin "1" (uuid d6d944d7-a7d3-4c51-864d-70e70393d266))
+    (pin "2" (uuid 0660646f-fad8-471f-9f79-190b3f3f4fd4))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1787,7 +1752,7 @@
     (property "Datasheet" "" (at 243.84 49.53 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 54b264d3-3405-4e99-90d5-997d4038f00e))
+    (pin "1" (uuid 81d2b134-1df2-42e9-8f51-6f32c97d4932))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1822,7 +1787,7 @@
     (property "Datasheet" "" (at 212.09 182.88 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid f347835c-b7ea-4b4b-88c0-18a3b5bbcae4))
+    (pin "1" (uuid 522bbd88-b556-4ac7-a596-09ba8f12392f))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1837,6 +1802,34 @@
       (project "RayTracingPCB"
         (path "/e9047d94-28be-4266-894b-6ee25ef088bd/81518b75-edd1-4c8b-a158-389aac8d5196"
           (reference "#PWR061") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:+3.3V") (at 177.8 100.33 0) (mirror y) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 5bde6fce-445f-4147-a50a-5bfa55b716c8)
+    (property "Reference" "#PWR011" (at 177.8 104.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+3.3V" (at 177.8 95.25 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 177.8 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 177.8 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 77143500-4d6e-4b55-b4d5-0a1cb82146b1))
+    (instances
+      (project "TripSitter"
+        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300"
+          (reference "#PWR011") (unit 1)
+        )
+        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/ae3612c6-9651-4a37-8de7-7277774520fa"
+          (reference "#PWR014") (unit 1)
         )
       )
     )
@@ -1857,8 +1850,8 @@
     (property "Datasheet" "~" (at 148.59 115.57 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid d6568712-cf05-4819-8a3b-ffb77f9d2404))
-    (pin "2" (uuid dca61e2e-c183-4a40-b8c3-27334e6b9400))
+    (pin "1" (uuid 44cc2ebe-e902-4aaf-ab1f-e5ce04a38e49))
+    (pin "2" (uuid cdc75099-9959-4ce8-b644-6373d5d27936))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1899,8 +1892,8 @@
     (property "Sim.Pins" "1=K 2=A" (at 252.73 142.24 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 295919b1-6654-4656-acc6-dcaf1c78b681))
-    (pin "2" (uuid ed0a9d57-858c-4b07-9c64-0b326a6da871))
+    (pin "1" (uuid 997155d7-457b-4231-a846-6e072abb62d0))
+    (pin "2" (uuid f41555f2-f8df-4376-852f-2776e4a8ee99))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1915,6 +1908,34 @@
       (project "RayTracingPCB"
         (path "/e9047d94-28be-4266-894b-6ee25ef088bd/81518b75-edd1-4c8b-a158-389aac8d5196"
           (reference "D1") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:+3.3V") (at 170.18 152.4 0) (mirror y) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 79dd1ae9-3a7d-48d1-841f-c589b93de47b)
+    (property "Reference" "#PWR011" (at 170.18 156.21 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+3.3V" (at 170.18 147.32 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 170.18 152.4 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 170.18 152.4 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 97de3b8a-d1c7-4465-9aaa-c48bdaeb5441))
+    (instances
+      (project "TripSitter"
+        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300"
+          (reference "#PWR011") (unit 1)
+        )
+        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/ae3612c6-9651-4a37-8de7-7277774520fa"
+          (reference "#PWR062") (unit 1)
         )
       )
     )
@@ -1935,7 +1956,7 @@
     (property "Datasheet" "" (at 226.06 106.68 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 7dcebd86-e529-46ff-9797-6fa1f1425653))
+    (pin "1" (uuid f9e57e3e-8836-4af8-8bcd-ca7a8d41f8fa))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -1970,8 +1991,8 @@
     (property "Datasheet" "~" (at 243.84 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid ffd31ee5-e187-47f7-8aa3-f8f9cc327e3f))
-    (pin "2" (uuid 48c08f0c-7db0-41f0-b473-ea92e56e5ada))
+    (pin "1" (uuid 1dc2ab1a-d93d-46b6-aae9-ef13987ab308))
+    (pin "2" (uuid 8ca27111-99c5-42d3-9665-52e8c7206dc4))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -2006,7 +2027,7 @@
     (property "Datasheet" "" (at 171.45 109.22 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid e71cbb2a-3508-4432-ab6f-00c7157ad6be))
+    (pin "1" (uuid 08b7f3c1-f682-460c-959d-9fa7e6424aa8))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -2041,8 +2062,8 @@
     (property "Datasheet" "~" (at 261.62 175.26 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 02705696-624e-4a29-bd74-542bce341699))
-    (pin "2" (uuid 1f2c786e-2980-4c50-a511-c24fbbbbbab4))
+    (pin "1" (uuid 0c6202e1-2776-4799-b741-6790b0b959df))
+    (pin "2" (uuid 4da7f145-e159-470c-8315-81f9a358bcd3))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -2077,7 +2098,7 @@
     (property "Datasheet" "" (at 175.26 146.05 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 4afcd0ba-df45-4c4c-8789-dfe778c56154))
+    (pin "1" (uuid 4c39ef09-8ccc-4396-aa59-f817ac7890c3))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -2112,8 +2133,8 @@
     (property "Datasheet" "~" (at 160.02 123.19 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 1c78d274-0fbf-42a9-badd-5c223cb6dddb))
-    (pin "2" (uuid b7a75aa8-6f2d-44aa-aff8-1238cf92ee20))
+    (pin "1" (uuid e4897af9-37b9-43d2-88b5-e3105ad1390a))
+    (pin "2" (uuid 41f7a61c-3ab3-4f44-b818-02f7e5ed9cb0))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -2148,7 +2169,7 @@
     (property "Datasheet" "~" (at 153.67 127 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 1937615d-190c-4def-af74-498bb54a52d9))
+    (pin "1" (uuid a7b711a1-f1bd-405b-87d7-3a11db3df0e9))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -2183,8 +2204,8 @@
     (property "Datasheet" "~" (at 170.18 156.21 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid c4bdf146-a7e9-4dcc-a1d3-36518d9b1ed6))
-    (pin "2" (uuid 2c118ee4-dfb5-4390-b74a-381b963dab19))
+    (pin "1" (uuid a67093e8-2c30-47a3-ad20-0767e2e0ac4e))
+    (pin "2" (uuid 90fb21e1-9ceb-4472-afac-70a9556f5861))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -2199,41 +2220,6 @@
       (project "RayTracingPCB"
         (path "/e9047d94-28be-4266-894b-6ee25ef088bd/81518b75-edd1-4c8b-a158-389aac8d5196"
           (reference "R36") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "power:+3V3") (at 177.8 110.49 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid d2a818fd-225f-4f58-a085-f38307cfd97d)
-    (property "Reference" "#PWR070" (at 177.8 114.3 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "+3V3" (at 177.8 105.41 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 177.8 110.49 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 177.8 110.49 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid b30993b0-008a-4d48-9ff0-27ea4572b853))
-    (instances
-      (project "hdmi_connector"
-        (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
-          (reference "#PWR070") (unit 1)
-        )
-      )
-      (project "TripSitter"
-        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/ae3612c6-9651-4a37-8de7-7277774520fa"
-          (reference "#PWR065") (unit 1)
-        )
-      )
-      (project "RayTracingPCB"
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/81518b75-edd1-4c8b-a158-389aac8d5196"
-          (reference "#PWR070") (unit 1)
         )
       )
     )
@@ -2254,44 +2240,44 @@
     (property "Datasheet" "http://www.ti.com/lit/ds/symlink/tpd12s520.pdf" (at 143.51 166.37 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid fd0ce4e7-7936-4b27-af8b-3f5b0ae1b927))
-    (pin "10" (uuid 793ba856-9e4b-40fa-a745-f1a0a4528949))
-    (pin "11" (uuid 473eb4ca-f0e1-4f0c-9b0e-568633d4f2d3))
-    (pin "12" (uuid 63d9e4f0-a024-472c-93d9-54b217c77aaa))
-    (pin "13" (uuid f8e12849-d997-4e20-9288-400cb529d1a5))
-    (pin "14" (uuid 648eeb52-edd4-4e5e-bdc9-b8976a1a801c))
-    (pin "15" (uuid 3c1b9f8f-c891-4092-acc7-3305bb714c3f))
-    (pin "16" (uuid d1f828bc-d7b9-4f14-9059-6af8b42f6ad4))
-    (pin "17" (uuid 14eb65a6-fa8f-4a8d-a09c-cd8305e3018f))
-    (pin "18" (uuid e8e4741a-3022-4bfe-8e0c-aa4ab98bafc2))
-    (pin "19" (uuid 6a6e48bf-2b53-4c04-a82d-b101159d21e6))
-    (pin "2" (uuid 1b514372-55b3-4666-a621-3116ab6b94a5))
-    (pin "20" (uuid ae6aa55b-e254-45d7-8399-ec5ddb6daf48))
-    (pin "21" (uuid 683cc788-bc4f-41fa-b486-98f25c0d73d3))
-    (pin "22" (uuid 142b38d8-3db7-44bb-b239-77c1fdbb1471))
-    (pin "23" (uuid 67480d12-6dee-45a0-a19a-237e31e7df50))
-    (pin "24" (uuid fe7042b6-d733-4976-b395-eae56b2197dd))
-    (pin "25" (uuid d9a91b8f-3338-4857-a324-44f5f1cc1dd4))
-    (pin "26" (uuid 13923d57-8ef5-4b43-8749-da6179766630))
-    (pin "27" (uuid 94c7b39d-4503-4cb0-b29b-92db617c120b))
-    (pin "28" (uuid 22a7b857-8b74-4c6e-acbf-fea243671f4b))
-    (pin "29" (uuid fd2a3377-c65a-4738-9f77-40039d70cd33))
-    (pin "3" (uuid 403ee581-83fe-4ddd-861c-f2390d432164))
-    (pin "30" (uuid 0c1022af-12fb-47dd-97e3-f1823a682254))
-    (pin "31" (uuid 2424e760-f043-4c6d-b789-84a5c2b962f5))
-    (pin "32" (uuid b6fec670-13ad-4e37-9d87-185c1ff8bcfb))
-    (pin "33" (uuid 3a17b387-2873-45c3-9874-118659b7c045))
-    (pin "34" (uuid 0793a43b-f755-43b6-a479-7da1206f0046))
-    (pin "35" (uuid 96d678c2-0149-4019-89b1-e53c683e072d))
-    (pin "36" (uuid c8a89b9b-37d2-4fc8-9513-f80bffe8571b))
-    (pin "37" (uuid a6e9e136-02da-4361-bfeb-77369978575c))
-    (pin "38" (uuid 1ec06247-c782-4021-9401-dd08fcc8723d))
-    (pin "4" (uuid cf5fe96e-26d8-4df3-801e-aa91e2dc4b34))
-    (pin "5" (uuid eb3e2ed6-83a9-490e-9e97-9462010eb216))
-    (pin "6" (uuid 3c743663-dacf-46f8-bfe2-892e515b38a5))
-    (pin "7" (uuid 16b276b6-32af-4dda-9e5a-8c26fc6e7798))
-    (pin "8" (uuid accd5cc2-48a4-4a1c-ab39-a1824db91ccf))
-    (pin "9" (uuid 8d75d4ad-3b81-4557-a685-e2ab4f67c620))
+    (pin "1" (uuid 4e41bfa8-dd08-4dfa-a203-843142943942))
+    (pin "10" (uuid 0bc13db4-452f-49fb-956e-59df387edecc))
+    (pin "11" (uuid 3ea58097-baf5-4b72-be3e-20882e6ffa34))
+    (pin "12" (uuid 6c8ec640-a37b-435b-a7ca-27ee9ae4aeee))
+    (pin "13" (uuid b79f8185-e1f0-4409-bf0a-1001773939f7))
+    (pin "14" (uuid ff0f82a1-8824-425b-acd7-c088f0c22cd7))
+    (pin "15" (uuid 9e9608af-bf26-410e-9216-d907c0ab3d17))
+    (pin "16" (uuid 4d9475d3-2a3d-4238-9045-47c3b2d848d5))
+    (pin "17" (uuid 5b2fc2a8-6a3d-417c-864e-56791e478176))
+    (pin "18" (uuid 9fbd1c9e-2716-40ab-934a-86238ee6555b))
+    (pin "19" (uuid 46406a6f-0c5e-42a0-a5c8-0e8714da7c4f))
+    (pin "2" (uuid 4a2ffe4c-14fd-4a98-9996-6dfc59106526))
+    (pin "20" (uuid 33ef35e6-b168-46a6-b367-1470a974e89e))
+    (pin "21" (uuid b408973c-ddda-4fed-9c22-ea33c1c0fd73))
+    (pin "22" (uuid 539472de-5cfb-4f10-8821-f5b8782b8aff))
+    (pin "23" (uuid 5d382a6a-08c1-44df-a9aa-5e022cff0bec))
+    (pin "24" (uuid 2b636936-f98a-4420-aa46-9370e18d0c18))
+    (pin "25" (uuid a423a1c0-255c-4326-ba3a-95d6521d07fb))
+    (pin "26" (uuid ae6220ae-67d4-465c-95c2-5cc307fed676))
+    (pin "27" (uuid 61dfa5db-bbfb-4985-b241-c90d03ad62c7))
+    (pin "28" (uuid 2f67c2c6-96d6-4c4d-9c50-395e4bc8b5cd))
+    (pin "29" (uuid c2e23220-cb74-454e-9f68-412d8d7eb837))
+    (pin "3" (uuid ed8fe5ae-f94e-47dc-b95e-42847364dcaa))
+    (pin "30" (uuid 33a8f4fa-c10d-4313-93f0-04c1195e6ccd))
+    (pin "31" (uuid 88c40d35-b495-491b-ab0b-0267ff6009fc))
+    (pin "32" (uuid e8ccab96-524b-48ce-9864-c95479fa0d7a))
+    (pin "33" (uuid acf4b069-a1d5-4029-8b11-96c3b9f66b5d))
+    (pin "34" (uuid c505cbe8-2523-450a-b329-44a26edb9d5e))
+    (pin "35" (uuid 6223837a-14aa-44f5-930f-ba5921e3db89))
+    (pin "36" (uuid 9b0b7040-2bc6-4b85-9d3b-fa39495e29a6))
+    (pin "37" (uuid 34244b6c-c70a-4943-a109-c583e85cd41b))
+    (pin "38" (uuid 7f5af9b7-7178-4fc1-b2b5-9c1b38e55ef4))
+    (pin "4" (uuid 82c5f301-662e-4f5c-a0d5-3a6f8996212c))
+    (pin "5" (uuid afb041fc-b476-49af-84d1-7f6883ba7bd3))
+    (pin "6" (uuid 167eba8e-c8e8-405c-838a-95d684e4771c))
+    (pin "7" (uuid f42cf4c7-8c1a-41ac-bca2-fdbff12a3cd2))
+    (pin "8" (uuid 9ea669a0-f145-4527-8da9-0240413b717d))
+    (pin "9" (uuid a71fb4f7-bcaf-487e-8d2b-c05a4d75c132))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -2306,6 +2292,34 @@
       (project "RayTracingPCB"
         (path "/e9047d94-28be-4266-894b-6ee25ef088bd/81518b75-edd1-4c8b-a158-389aac8d5196"
           (reference "U12") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:+3.3V") (at 250.19 162.56 0) (mirror y) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid dfe6ff2c-e1a3-48d4-8c29-2e1b1dafa84d)
+    (property "Reference" "#PWR011" (at 250.19 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+3.3V" (at 250.19 157.48 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 250.19 162.56 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 250.19 162.56 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 869c81b3-e7cc-44c6-a20a-7ed57ff73f5f))
+    (instances
+      (project "TripSitter"
+        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300"
+          (reference "#PWR011") (unit 1)
+        )
+        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/ae3612c6-9651-4a37-8de7-7277774520fa"
+          (reference "#PWR049") (unit 1)
         )
       )
     )
@@ -2326,8 +2340,8 @@
     (property "Datasheet" "~" (at 160.02 111.76 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 9f22195b-b2ec-4570-8b27-1265a4dc38d6))
-    (pin "2" (uuid fbf92357-f2b3-4e8a-beb9-f4b2d20aeaaf))
+    (pin "1" (uuid ce63f2e4-d97c-4c28-9c9a-5503e1b63475))
+    (pin "2" (uuid d519533f-d377-4f12-8c16-8e5258187c02))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -2362,7 +2376,7 @@
     (property "Datasheet" "" (at 245.11 133.35 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 586bd722-013a-46db-8bdc-d2945fa4839f))
+    (pin "1" (uuid 32a2d440-db16-4a51-95ff-81131ff4bf8e))
     (instances
       (project "hdmi_connector"
         (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
@@ -2377,41 +2391,6 @@
       (project "RayTracingPCB"
         (path "/e9047d94-28be-4266-894b-6ee25ef088bd/81518b75-edd1-4c8b-a158-389aac8d5196"
           (reference "#PWR05") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "power:+3V3") (at 170.18 152.4 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid fe7bb434-5e12-4607-bfd2-c8767d01a7e8)
-    (property "Reference" "#PWR071" (at 170.18 156.21 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "+3V3" (at 170.18 147.32 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 170.18 152.4 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 170.18 152.4 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 95713c20-2508-4754-9f19-5c2dadcb23ec))
-    (instances
-      (project "hdmi_connector"
-        (path "/402b0016-56b9-4470-870c-5895a0afd1d9"
-          (reference "#PWR071") (unit 1)
-        )
-      )
-      (project "TripSitter"
-        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/ae3612c6-9651-4a37-8de7-7277774520fa"
-          (reference "#PWR062") (unit 1)
-        )
-      )
-      (project "RayTracingPCB"
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/81518b75-edd1-4c8b-a158-389aac8d5196"
-          (reference "#PWR071") (unit 1)
         )
       )
     )

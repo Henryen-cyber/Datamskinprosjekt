@@ -341,52 +341,6 @@
         )
       )
     )
-    (symbol "fpga-rescue:+3.3V-power" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "#PWR" (at 0 -3.81 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Value" "+3.3V-power" (at 0 3.556 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "+3.3V-power_0_1"
-        (polyline
-          (pts
-            (xy -0.762 1.27)
-            (xy 0 2.54)
-          )
-          (stroke (width 0) (type solid))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 0)
-            (xy 0 2.54)
-          )
-          (stroke (width 0) (type solid))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 2.54)
-            (xy 0.762 1.27)
-          )
-          (stroke (width 0) (type solid))
-          (fill (type none))
-        )
-      )
-      (symbol "+3.3V-power_1_1"
-        (pin power_in line (at 0 0 90) (length 0) hide
-          (name "+3V3" (effects (font (size 1.27 1.27))))
-          (number "1" (effects (font (size 1.27 1.27))))
-        )
-      )
-    )
     (symbol "power:+3.3V" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -3.81 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -2512,6 +2466,9 @@
   (junction (at 147.32 44.45) (diameter 0) (color 0 0 0 0)
     (uuid 33283f4a-a48f-44bf-9ab6-9d9e2d0771d4)
   )
+  (junction (at 181.61 92.71) (diameter 0) (color 0 0 0 0)
+    (uuid 46d09fd1-3a8f-4c8a-8218-4f4579c7172d)
+  )
   (junction (at 101.6 57.15) (diameter 0) (color 0 0 0 0)
     (uuid 4942e2c8-4e35-4755-ba75-8279dea16a12)
   )
@@ -2535,9 +2492,6 @@
   )
   (junction (at 184.15 142.24) (diameter 0) (color 0 0 0 0)
     (uuid bd3aea41-148d-4f58-bb4d-4d46150253c4)
-  )
-  (junction (at 181.61 92.71) (diameter 0) (color 0 0 0 0)
-    (uuid ce0e6a37-a00b-4b00-8b3b-d305f1d35d40)
   )
   (junction (at 43.18 95.25) (diameter 0) (color 0 0 0 0)
     (uuid f6860c99-0487-4f70-9116-59ca515042fd)
@@ -3624,36 +3578,6 @@
     )
   )
 
-  (symbol (lib_id "fpga-rescue:+3.3V-power") (at 181.61 92.71 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
-    (uuid 97f6e975-abe4-4187-bc7c-2353d9c81ceb)
-    (property "Reference" "#PWR047" (at 181.61 96.52 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "+3.3V" (at 181.61 89.154 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 181.61 92.71 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 181.61 92.71 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 699d477d-baf5-4528-936c-c53ff78842f6))
-    (instances
-      (project "TripSitter"
-        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/a589e109-056b-42fc-a935-6e0e623ed03d"
-          (reference "#PWR047") (unit 1)
-        )
-      )
-      (project "fpga"
-        (path "/6f02ba16-07ff-46df-8179-c80a375dc867"
-          (reference "#PWR0302") (unit 1)
-        )
-      )
-    )
-  )
-
   (symbol (lib_id "Device:C_Small") (at 86.36 44.45 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid a5ebae56-58f9-4a9c-b86b-15df89a5f870)
@@ -3729,6 +3653,37 @@
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/a589e109-056b-42fc-a935-6e0e623ed03d"
           (reference "IC1") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:+3.3V") (at 181.61 92.71 0) (mirror y) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid b7977c3a-5bf2-4816-bcfc-a021ca26bea6)
+    (property "Reference" "#PWR011" (at 181.61 96.52 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+3.3V" (at 181.61 87.63 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 181.61 92.71 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 181.61 92.71 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 66d9e8cd-87ba-4808-86a2-18b3b678a09b))
+    (instances
+      (project "TripSitter"
+        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300"
+          (reference "#PWR011") (unit 1)
+        )
+        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/ae3612c6-9651-4a37-8de7-7277774520fa"
+          (reference "#PWR014") (unit 1)
+        )
+        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/a589e109-056b-42fc-a935-6e0e623ed03d"
+          (reference "#PWR065") (unit 1)
         )
       )
     )
