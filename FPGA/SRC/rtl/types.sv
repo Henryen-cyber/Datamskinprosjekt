@@ -25,3 +25,8 @@ typedef struct Pixel {
     logic signed[8:0] y;
     parameter z = 15;
     };
+
+typedef struct Ray {
+    Pixel direction;
+    Color color;
+    };
