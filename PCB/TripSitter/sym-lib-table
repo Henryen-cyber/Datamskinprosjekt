@@ -4,4 +4,5 @@
   (lib (name "xc7a100t-fgg484")(type "KiCad")(uri "${KIPRJMOD}/KiCadLibs/xc7a100t-fgg484.kicad_sym")(options "")(descr ""))
   (lib (name "MT41J128M16JT")(type "KiCad")(uri "C:/Users/siho/Downloads/Datamskinprosjekt-master/Datamskinprosjekt-master/PCB/KiCadLibs/MT41J128M16JT-125_K.kicad_sym")(options "")(descr ""))
   (lib (name "MT25QL256")(type "KiCad")(uri "C:/Users/siho/Downloads/Datamskinprosjekt-master/Datamskinprosjekt-master/PCB/KiCadLibs/MT25QL256ABA1EW9-0SIT.kicad_sym")(options "")(descr ""))
+  (lib (name "DSC1001DL5-100-0000T")(type "KiCad")(uri "${KIPRJMOD}/KiCadLibs/DSC1001DL5-100-0000T.kicad_sym")(options "")(descr ""))
 )
