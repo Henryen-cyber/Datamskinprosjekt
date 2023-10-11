@@ -958,9 +958,47 @@
     )
   )
 
+  (symbol (lib_id "power:GND") (at 101.6 115.57 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 48cd38ee-6a85-4315-aae1-e0ebcb7b7959)
+    (property "Reference" "#PWR0102" (at 101.6 121.92 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND" (at 101.6 120.65 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 101.6 115.57 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 101.6 115.57 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid e5ba3827-91bc-4b59-8484-3cc2521fc029))
+    (instances
+      (project "TripSitter"
+        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
+          (reference "#PWR0102") (unit 1)
+        )
+      )
+      (project "USB3_micro_ab"
+        (path "/aa8c6d6c-263c-4a63-9451-4860d8f398eb"
+          (reference "#PWR018") (unit 1)
+        )
+      )
+      (project "RayTracingPCB"
+        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53"
+          (reference "#PWR018") (unit 1)
+        )
+        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53/f8dfcd07-d713-410a-88b5-31ae3a6c85dd"
+          (reference "#PWR018") (unit 1)
+        )
+      )
+    )
+  )
+
   (symbol (lib_id "IP4220CZ6:IP4220CZ6") (at 129.54 107.95 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
-    (uuid 4956ebb0-0ed1-42a6-8307-7d69f2d2e893)
+    (uuid 4956ebb0-0ed1-42a6-8307-7d69f2d2e894)
     (property "Reference" "IC701" (at 144.78 100.33 0)
       (effects (font (size 1.27 1.27)))
     )
@@ -997,12 +1035,12 @@
     (property "Arrow Price/Stock" "" (at 156.21 128.27 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
-    (pin "1" (uuid 790ce0a1-ed40-452f-97da-03f281da36f4))
-    (pin "2" (uuid 82fda879-251d-4d8d-84be-82071e8b51fe))
-    (pin "3" (uuid 9706fdbc-9163-46ea-adc2-7e53f9610f15))
-    (pin "4" (uuid 410a5cab-b55b-4760-a016-c6b9c4d32fe8))
-    (pin "5" (uuid e8d54e4c-4751-47c8-bd7c-f7188f6fcbd8))
-    (pin "6" (uuid 6ab94b1e-da06-4a06-b9e9-8b5c760604d5))
+    (pin "1" (uuid bf9aaed5-b5a0-4dca-a854-5858111c4fe9))
+    (pin "2" (uuid 99ec5ef1-3951-4157-a282-fd2042e966c0))
+    (pin "3" (uuid 09f435cd-9488-4451-9b04-0ec396d21582))
+    (pin "4" (uuid 3ea8d044-01fd-4a74-8798-dd99ba3d74e6))
+    (pin "5" (uuid 50c066f9-1d4f-4464-9448-71695a11852f))
+    (pin "6" (uuid 3be44643-6995-4a96-be01-38f5aafb9dd2))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
@@ -1110,9 +1148,44 @@
     )
   )
 
+  (symbol (lib_id "power:GND") (at 121.92 116.84 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid a75cc8b7-9b0e-4a94-8560-34377fe2dee5)
+    (property "Reference" "#PWR0101" (at 121.92 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND" (at 121.92 121.92 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 121.92 116.84 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 121.92 116.84 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 417bb76e-9635-4aa8-ae33-e3313e495295))
+    (instances
+      (project "TripSitter"
+        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
+          (reference "#PWR0101") (unit 1)
+        )
+      )
+      (project "USB3_micro_ab"
+        (path "/aa8c6d6c-263c-4a63-9451-4860d8f398eb"
+          (reference "#PWR020") (unit 1)
+        )
+      )
+      (project "RayTracingPCB"
+        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53/f8dfcd07-d713-410a-88b5-31ae3a6c85dd"
+          (reference "#PWR020") (unit 1)
+        )
+      )
+    )
+  )
+
   (symbol (lib_id "Device:L") (at 168.91 76.2 270) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
-    (uuid b3e274d7-ec24-47a6-b785-68c5c8e41bd8)
+    (uuid b3e274d7-ec24-47a6-b785-68c5c8e41bd9)
     (property "Reference" "L4" (at 161.29 77.47 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -1125,8 +1198,8 @@
     (property "Datasheet" "~" (at 168.91 76.2 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 4980ce08-f78d-480f-8518-029f3e084e8c))
-    (pin "2" (uuid bed1c1c9-61a9-4817-8a25-bc0084e07469))
+    (pin "1" (uuid 3dfc748c-4ae6-46c0-a367-89ee1d30dfe3))
+    (pin "2" (uuid 0ce68b69-19cf-434d-a691-be37d658264e))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
@@ -1148,7 +1221,7 @@
 
   (symbol (lib_id "Connector:TestPoint") (at 139.7 68.58 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
-    (uuid b406bc7e-c02e-4238-8169-86663aaef6b1)
+    (uuid b406bc7e-c02e-4238-8169-86663aaef6b2)
     (property "Reference" "TP4" (at 139.7 63.5 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -1161,7 +1234,7 @@
     (property "Datasheet" "~" (at 144.78 68.58 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 587f2cc2-a0e3-474a-ae91-c2feaba41b9e))
+    (pin "1" (uuid 587f2cc2-a0e3-474a-ae91-c2feaba41b9f))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
@@ -1209,306 +1282,6 @@
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
           (reference "J3") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "Connector:TestPoint") (at 134.62 68.58 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
-    (uuid 2c637798-1ea0-47c2-a8c2-69d5efd80c44)
-    (property "Reference" "TP3" (at 134.62 63.5 90)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Value" "DM_Probe" (at 137.16 63.5 90)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Footprint" "TestPoint:TestPoint_Pad_2.5x2.5mm" (at 139.7 68.58 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "~" (at 139.7 68.58 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid e78d6c58-c536-4ec1-842b-cdfc1caf3d60))
-    (instances
-      (project "TripSitter"
-        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
-          (reference "TP3") (unit 1)
-        )
-      )
-      (project "USB3_micro_ab"
-        (path "/aa8c6d6c-263c-4a63-9451-4860d8f398eb"
-          (reference "TP11") (unit 1)
-        )
-      )
-      (project "RayTracingPCB"
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53"
-          (reference "TP11") (unit 1)
-        )
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53/f8dfcd07-d713-410a-88b5-31ae3a6c85dd"
-          (reference "TPJ1106") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "power:GND") (at 101.6 115.57 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid 48cd38ee-6a85-4315-aae1-e0ebcb7b7958)
-    (property "Reference" "#PWR072" (at 101.6 121.92 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "GND" (at 101.6 120.65 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 101.6 115.57 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 101.6 115.57 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid e5ba3827-91bc-4b59-8484-3cc2521fc028))
-    (instances
-      (project "TripSitter"
-        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
-          (reference "#PWR072") (unit 1)
-        )
-      )
-      (project "USB3_micro_ab"
-        (path "/aa8c6d6c-263c-4a63-9451-4860d8f398eb"
-          (reference "#PWR018") (unit 1)
-        )
-      )
-      (project "RayTracingPCB"
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53"
-          (reference "#PWR018") (unit 1)
-        )
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53/f8dfcd07-d713-410a-88b5-31ae3a6c85dd"
-          (reference "#PWR018") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "IP4220CZ6:IP4220CZ6") (at 129.54 107.95 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
-    (uuid 4956ebb0-0ed1-42a6-8307-7d69f2d2e893)
-    (property "Reference" "IC4" (at 144.78 100.33 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "IP4220CZ6" (at 144.78 102.87 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "Package_SO:SC-74-6_1.5x2.9mm_P0.95mm" (at 129.54 120.65 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/IP4220CZ6.pdf" (at 129.54 123.19 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (property "Description" "Dual Schmitt-Trigger Inverter" (at 129.54 125.73 0)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Height" "1.1" (at 129.54 128.27 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (property "Manufacturer_Name" "Nexperia" (at 129.54 130.81 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (property "Manufacturer_Part_Number" "IP4220CZ6" (at 129.54 133.35 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (property "Mouser Part Number" "N/A" (at 129.54 135.89 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nexperia/IP4220CZ6?qs=vHuUswq2%252Bsz%2FcpO1r84zKA%3D%3D" (at 129.54 138.43 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (property "Arrow Part Number" "" (at 156.21 125.73 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (property "Arrow Price/Stock" "" (at 156.21 128.27 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (pin "1" (uuid 790ce0a1-ed40-452f-97da-03f281da36f4))
-    (pin "2" (uuid 82fda879-251d-4d8d-84be-82071e8b51fe))
-    (pin "3" (uuid 9706fdbc-9163-46ea-adc2-7e53f9610f15))
-    (pin "4" (uuid 410a5cab-b55b-4760-a016-c6b9c4d32fe8))
-    (pin "5" (uuid e8d54e4c-4751-47c8-bd7c-f7188f6fcbd8))
-    (pin "6" (uuid 6ab94b1e-da06-4a06-b9e9-8b5c760604d5))
-    (instances
-      (project "TripSitter"
-        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
-          (reference "IC4") (unit 1)
-        )
-        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/8ae76c2e-e928-4bfb-9cc2-9dfcb5e6a658"
-          (reference "IC3") (unit 1)
-        )
-      )
-      (project "USB3_micro_ab"
-        (path "/aa8c6d6c-263c-4a63-9451-4860d8f398eb"
-          (reference "IC1108") (unit 1)
-        )
-      )
-      (project "RayTracingPCB"
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53/f8dfcd07-d713-410a-88b5-31ae3a6c85dd"
-          (reference "IC1108") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "Connector:USB3_B_Micro") (at 96.52 91.44 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid 49d5927f-fe2f-4b69-9b11-114720f17bc5)
-    (property "Reference" "J8" (at 96.52 72.39 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "USB3_B_Micro" (at 96.52 74.93 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "Connector_USB:USB_Micro-B_Wuerth_629105150521_CircularHoles" (at 100.33 87.63 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "~" (at 100.33 86.36 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid f22bafc8-97e3-4293-b25b-753bdce882e9))
-    (pin "10" (uuid 8fd7287a-d2d9-4170-97c8-1b6f56ff6adc))
-    (pin "11" (uuid 8a7e3ef5-f727-4fac-84f2-c55f8c33a75d))
-    (pin "2" (uuid 0dd31cf3-0a8d-49fa-80a7-535979f7b001))
-    (pin "3" (uuid 51fa1185-1b4d-4b96-a93a-dc55778b47c5))
-    (pin "4" (uuid 0cdf0a44-7a0f-42ac-9acc-e6916bd8c767))
-    (pin "5" (uuid 5279333d-75a1-4af5-a747-6477d956baa2))
-    (pin "6" (uuid e32d6aea-07e3-4995-82a2-514f99bd4b04))
-    (pin "7" (uuid 73999543-8525-4ade-a734-9584bae83bfd))
-    (pin "8" (uuid a03c907f-48d2-460c-b590-da3994c52e7b))
-    (pin "9" (uuid 9158472d-c6ed-450a-80e5-653ea93df930))
-    (instances
-      (project "TripSitter"
-        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
-          (reference "J8") (unit 1)
-        )
-      )
-      (project "USB3_micro_ab"
-        (path "/aa8c6d6c-263c-4a63-9451-4860d8f398eb"
-          (reference "J2") (unit 1)
-        )
-      )
-      (project "RayTracingPCB"
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53"
-          (reference "J2") (unit 1)
-        )
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53/f8dfcd07-d713-410a-88b5-31ae3a6c85dd"
-          (reference "P1100") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "power:GND") (at 121.92 116.84 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid a75cc8b7-9b0e-4a94-8560-34377fe2dee4)
-    (property "Reference" "#PWR074" (at 121.92 123.19 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "GND" (at 121.92 121.92 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 121.92 116.84 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 121.92 116.84 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 417bb76e-9635-4aa8-ae33-e3313e495294))
-    (instances
-      (project "TripSitter"
-        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
-          (reference "#PWR074") (unit 1)
-        )
-      )
-      (project "USB3_micro_ab"
-        (path "/aa8c6d6c-263c-4a63-9451-4860d8f398eb"
-          (reference "#PWR020") (unit 1)
-        )
-      )
-      (project "RayTracingPCB"
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53/f8dfcd07-d713-410a-88b5-31ae3a6c85dd"
-          (reference "#PWR020") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "Device:L") (at 168.91 76.2 270) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
-    (uuid b3e274d7-ec24-47a6-b785-68c5c8e41bd8)
-    (property "Reference" "L4" (at 161.29 77.47 90)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Value" "CBF221HC" (at 163.83 73.66 90)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Footprint" "Inductor_SMD:L_0805_2012Metric_Pad1.15x1.40mm_HandSolder" (at 168.91 76.2 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "~" (at 168.91 76.2 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 4980ce08-f78d-480f-8518-029f3e084e8c))
-    (pin "2" (uuid bed1c1c9-61a9-4817-8a25-bc0084e07469))
-    (instances
-      (project "TripSitter"
-        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
-          (reference "L4") (unit 1)
-        )
-      )
-      (project "USB3_micro_ab"
-        (path "/aa8c6d6c-263c-4a63-9451-4860d8f398eb"
-          (reference "L1103") (unit 1)
-        )
-      )
-      (project "RayTracingPCB"
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53/f8dfcd07-d713-410a-88b5-31ae3a6c85dd"
-          (reference "L1103") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "Connector:TestPoint") (at 139.7 68.58 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
-    (uuid b406bc7e-c02e-4238-8169-86663aaef6b1)
-    (property "Reference" "TP4" (at 139.7 63.5 90)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Value" "VBUS_Probe" (at 142.24 63.5 90)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Footprint" "TestPoint:TestPoint_Pad_2.5x2.5mm" (at 144.78 68.58 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "~" (at 144.78 68.58 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 587f2cc2-a0e3-474a-ae91-c2feaba41b9e))
-    (instances
-      (project "TripSitter"
-        (path "/5ab65702-9689-4dfd-8f10-6407062323a6/87bcf595-d251-4aa5-8b35-efc055826b19/750eb09f-8f96-43e9-bfb8-1e6e7cd9bea9"
-          (reference "TP4") (unit 1)
-        )
-      )
-      (project "USB3_micro_ab"
-        (path "/aa8c6d6c-263c-4a63-9451-4860d8f398eb"
-          (reference "TP11") (unit 1)
-        )
-      )
-      (project "RayTracingPCB"
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53"
-          (reference "TP11") (unit 1)
-        )
-        (path "/e9047d94-28be-4266-894b-6ee25ef088bd/f9a74965-bde5-47a2-9f66-243cb6fc0f53/f8dfcd07-d713-410a-88b5-31ae3a6c85dd"
-          (reference "TPJ1107") (unit 1)
         )
       )
     )
