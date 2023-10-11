@@ -8447,9 +8447,9 @@
       (effects (font (size 1.27 1.27) italic) hide)
     )
     (pin "1" (uuid c790bbb3-8893-4fd5-9582-c217b3630d52))
-    (pin "2" (uuid 0ad2a5d1-3ef1-4f6b-b325-c0f864806bdf))
     (pin "3" (uuid bc1b0fb9-74b5-4aae-8bdc-18f3bf7ec71c))
     (pin "4" (uuid 134f7cc5-4cff-4e9a-98c5-50da16876e0a))
+    (pin "2" (uuid 0ad2a5d1-3ef1-4f6b-b325-c0f864806bdf))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300"
