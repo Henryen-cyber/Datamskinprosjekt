@@ -3910,8 +3910,8 @@
     (property "Note" "" (at 233.68 85.09 90)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid daa33c18-a4d5-425f-aa00-4cc9fec5c7b2))
-    (pin "2" (uuid c99e3bd7-5a66-4086-b4a0-60387a4610c5))
+    (pin "1" (uuid 69a6a9a7-d515-4851-81c9-dd024419c709))
+    (pin "2" (uuid 8d462e10-cc59-442b-be6c-28a211283400))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -3947,8 +3947,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/en/products/detail/samsung-electro-mechanics/CL03A474KQ3NNNH/3894104" (at 288.29 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 0283de0e-964a-4038-9396-80f8d271bbef))
-    (pin "2" (uuid 0f1168fa-79a0-4fea-aa6b-02e004b8ed0e))
+    (pin "1" (uuid 28639c05-8440-4d47-906a-ed2cba3f2da5))
+    (pin "2" (uuid 4d17c858-c5c6-4d4e-a70f-8615ec1c9c07))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -3987,8 +3987,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/en/products/detail/samsung-electro-mechanics/CL21A475KAQNNNE/3886902" (at 318.77 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 23090b33-d7d7-4be1-8a9c-4fdedccfe897))
-    (pin "2" (uuid 566e3a60-bc19-40e5-9ea6-a05fd4e40056))
+    (pin "1" (uuid dd328f06-760f-44e5-a3fb-e4ce1fb32f17))
+    (pin "2" (uuid 26464e2d-ecb1-46d4-8852-d50a09269b5d))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -4084,8 +4084,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/en/products/detail/samsung-electro-mechanics/CL21A475KAQNNNE/3886902" (at 326.39 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 9c1542c3-b464-40de-8ad5-634da199ce41))
-    (pin "2" (uuid 66815321-03d7-4565-9cf4-f313771d0a23))
+    (pin "1" (uuid 42c00a1c-50f0-4380-b273-befa948a01dc))
+    (pin "2" (uuid 08a80b48-43c6-4c21-b046-8cc67784364a))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -4124,8 +4124,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/no/products/detail/samsung-electro-mechanics/CL05A475KQ5NRNC/3887139" (at 248.92 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 5e3a9972-9b69-43c8-97b1-416125a989a2))
-    (pin "2" (uuid dbdb737b-a837-4f4a-957d-c75daba45c87))
+    (pin "1" (uuid e31f223a-2949-4a0a-8fc8-c1aefd20e781))
+    (pin "2" (uuid b66b8eb8-bad9-4b7c-97d0-996f7f26dbcb))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -4164,8 +4164,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/no/products/detail/samsung-electro-mechanics/CL05A475KQ5NRNC/3887139" (at 256.54 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 403f3b1e-e5de-4bed-b61b-4f0edfebf28b))
-    (pin "2" (uuid 81eff49e-42cd-460a-82a7-8f7e4638c2c6))
+    (pin "1" (uuid 32e636e4-c7d7-4709-ae0e-13875aa6dc21))
+    (pin "2" (uuid a40e1a7c-024b-472d-86da-7ac90224d840))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -4388,8 +4388,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/en/products/detail/samsung-electro-mechanics/CL21A475KAQNNNE/3886902" (at 334.01 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 8d59605b-9e61-482d-ba9e-823aca6fd972))
-    (pin "2" (uuid 1a28944e-370c-43d1-bd61-29a48de442af))
+    (pin "1" (uuid 03f17cc8-5f48-4a02-83ea-abf62ba76cdf))
+    (pin "2" (uuid ba20580b-761c-4d29-8ad0-14855860a8ed))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -4425,8 +4425,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/no/products/detail/samsung-electro-mechanics/CL03A475MQ5C65C/16572790" (at 241.3 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid dcf28472-a376-406b-a31e-5a5a039c30a6))
-    (pin "2" (uuid 479aff96-37b3-4d0d-a640-f793d9be5e29))
+    (pin "1" (uuid 5cd0a63d-418e-4f1a-a6d3-580068a575ae))
+    (pin "2" (uuid 3df4f313-584f-4ab4-8162-e880c5d26da9))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -4499,8 +4499,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/en/products/detail/samsung-electro-mechanics/CL21A475KAQNNNE/3886902" (at 311.15 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 66fbabb3-cbae-499c-89b3-d2a777e56045))
-    (pin "2" (uuid 5a114bc3-f677-4596-b34c-01c772242ab1))
+    (pin "1" (uuid 662ac7b0-9710-40ce-bd93-7f4ab2db1492))
+    (pin "2" (uuid 46d9faa0-0d1d-4e02-a160-76ba0e7710e3))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -4597,7 +4597,7 @@
     (property "Datasheet" "" (at 233.68 88.9 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid e20a9863-0a46-4bd7-88b3-d0353c339abc))
+    (pin "1" (uuid c3e894e0-51e6-40d4-b241-67fb55a2b928))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -4673,8 +4673,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/no/products/detail/samsung-electro-mechanics/CL03A104KP3NNNC/3886773" (at 279.4 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 077275de-4c0d-44a8-adf9-0fc39447b944))
-    (pin "2" (uuid e074a913-e92d-4f02-98a1-7518c28aa5f9))
+    (pin "1" (uuid c3ed7b34-0760-443c-8d2d-c6d6cbf79110))
+    (pin "2" (uuid c6cf1177-8a88-41a7-9e37-2287e667ed1d))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -4772,8 +4772,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/en/products/detail/samsung-electro-mechanics/CL21A475KAQNNNE/3886902" (at 295.91 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid d5c795b8-6717-419b-ab3f-94cc14d1f525))
-    (pin "2" (uuid 6ece6492-d6f5-48cb-8f58-0cbc0951acbf))
+    (pin "1" (uuid ac666b1c-f7e4-4bcf-bb4c-96c375b9e6ca))
+    (pin "2" (uuid e12200e4-81eb-4f55-87bb-a7af579511dc))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -4812,8 +4812,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/no/products/detail/samsung-electro-mechanics/CL05A475KQ5NRNC/3887139" (at 264.16 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 2cdd62d1-cc47-4d8e-b14d-d995a689788c))
-    (pin "2" (uuid 0a0dea40-f1a8-412c-a653-74d142e79d34))
+    (pin "1" (uuid a8784c07-f7d4-4ea9-b2a9-625eaf8e77d7))
+    (pin "2" (uuid c54b1e0a-42fd-48bc-b4dd-2e3cceb2546b))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -4849,8 +4849,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/en/products/detail/samsung-electro-mechanics/CL21A475KAQNNNE/3886902" (at 341.63 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 6040f5a7-3a51-4b6e-82ca-7d79e6e8dcbd))
-    (pin "2" (uuid 15bbcbfc-3797-4c4a-8fd0-26fdbf7108d5))
+    (pin "1" (uuid ef4d437e-01e8-4740-8cc9-a1bceec3dbb2))
+    (pin "2" (uuid 4f68cc08-3cef-4211-8047-615e0d35d4c4))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -5397,8 +5397,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/en/products/detail/samsung-electro-mechanics/CL21A475KAQNNNE/3886902" (at 303.53 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid fcdae95d-5620-4aeb-a32a-8cf16982de5c))
-    (pin "2" (uuid b709defe-4e60-4d59-ace1-eb3b35ef2a4d))
+    (pin "1" (uuid cfbefbd2-304c-4af4-8a97-cac50753567d))
+    (pin "2" (uuid 89b77d31-f183-4303-a8d7-2bd2544e9b27))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
@@ -5566,8 +5566,8 @@
     (property "DK_Detail_Page" "https://www.digikey.no/no/products/detail/samsung-electro-mechanics/CL05A475KQ5NRNC/3887139" (at 271.78 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid df7ce4cb-eb78-437a-9947-ade218970c3a))
-    (pin "2" (uuid 40b12520-d063-460c-af4f-ae317f4db68e))
+    (pin "1" (uuid 09e1ee02-f161-403e-ba26-0a32094fa04c))
+    (pin "2" (uuid 2b455d2f-16af-4629-a0f6-e279b4deca55))
     (instances
       (project "TripSitter"
         (path "/5ab65702-9689-4dfd-8f10-6407062323a6/095fe883-dc50-4e06-a886-995eeb7c2300/e49a365b-9eac-4dee-92d3-4ef8a443c4af"
