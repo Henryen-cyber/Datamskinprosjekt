@@ -1,6 +1,6 @@
 {
   "board": {
-    "active_layer": 31,
+    "active_layer": 0,
     "active_layer_preset": "",
     "auto_track_width": false,
     "hidden_netclasses": [
@@ -498,7 +498,17 @@
       "unconnected-(U1C-VCCO_35-PadC1)",
       "unconnected-(U1C-IO_L2N_T0_AD12N_35-PadB2)",
       "unconnected-(U1C-IO_L1P_T0_AD4P_35-PadB1)",
-      "unconnected-(U1C-IO_L1N_T0_AD4N_35-PadA1)"
+      "unconnected-(U1C-IO_L1N_T0_AD4N_35-PadA1)",
+      "unconnected-(J801-Pin_10-Pad10)",
+      "Net-(U5-VFB1)",
+      "unconnected-(IC701-I{slash}O_2-Pad3)",
+      "Net-(J4-Pin_4)",
+      "Net-(J4-Pin_6)",
+      "Net-(J4-Pin_8)",
+      "Net-(J4-Pin_10)",
+      "unconnected-(J4-Pin_12-Pad12)",
+      "unconnected-(J4-Pin_14-Pad14)",
+      "Net-(D1-K)"
     ],
     "high_contrast_mode": 0,
     "net_color_mode": 1,
