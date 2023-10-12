@@ -1,6 +1,6 @@
 {
   "board": {
-    "active_layer": 37,
+    "active_layer": 2,
     "active_layer_preset": "",
     "auto_track_width": false,
     "hidden_netclasses": [
@@ -501,7 +501,17 @@
       "Net-(R202-Pad1)",
       "Net-(R204-Pad1)",
       "Net-(R206-Pad1)",
-      "Net-(R208-Pad1)"
+      "Net-(R208-Pad1)",
+      "Net-(D402-K)",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/FPGA_LED_INDICATOR_2",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/FPGA_PINOUT_1",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/FPGA_PINOUT_2",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/FPGA_PINOUT_3",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/FPGA_PINOUT_4",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/FPGA_PINOUT_5",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/FPGA_PINOUT_8",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/FPGA_PINOUT_7",
+      "/FPGA Artix-7 100T 1FGG484C/DDR3/FPGA_PINOUT_6"
     ],
     "high_contrast_mode": 0,
     "net_color_mode": 1,
