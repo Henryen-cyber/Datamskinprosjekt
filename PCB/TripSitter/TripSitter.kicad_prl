@@ -494,7 +494,6 @@
       "unconnected-(J4-Pin_12-Pad12)",
       "unconnected-(J4-Pin_14-Pad14)",
       "Net-(D1-K)",
-      "+3V3",
       "Net-(U201C-PF1)",
       "Net-(U201C-PF0)",
       "Net-(U201C-PF2)",
@@ -564,7 +563,7 @@
       36,
       40
     ],
-    "visible_layers": "fffffff_ffffffff",
+    "visible_layers": "fffffff_fffffffd",
     "zone_display_mode": 0
   },
   "meta": {
