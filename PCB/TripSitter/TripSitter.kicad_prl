@@ -1,6 +1,6 @@
 {
   "board": {
-    "active_layer": 2,
+    "active_layer": 0,
     "active_layer_preset": "",
     "auto_track_width": false,
     "hidden_netclasses": [
@@ -284,15 +284,6 @@
       "Net-(U201D-DECOUPLE)",
       "Net-(U201D-VREGO)",
       "unconnected-(J801-Pin_9-Pad9)",
-      "unconnected-(J201-VCC{slash}NC-Pad2)",
-      "unconnected-(J201-~{TRST}-Pad3)",
-      "Net-(J201-TDI)",
-      "Net-(J201-TMS{slash}SWDIO)",
-      "Net-(J201-TCK{slash}SWDCLK)",
-      "unconnected-(J201-RTCK-Pad11)",
-      "Net-(J201-TDO{slash}SWO)",
-      "unconnected-(J201-DBGRQ{slash}NC-Pad17)",
-      "unconnected-(J201-DBGACK{slash}NC-Pad19)",
       "unconnected-(J803-D--Pad2)",
       "unconnected-(J803-D+-Pad3)",
       "unconnected-(J803-ID-Pad4)",
@@ -502,7 +493,18 @@
       "Net-(J4-Pin_10)",
       "unconnected-(J4-Pin_12-Pad12)",
       "unconnected-(J4-Pin_14-Pad14)",
-      "Net-(D1-K)"
+      "Net-(D1-K)",
+      "+3V3",
+      "Net-(U201C-PF1)",
+      "Net-(U201C-PF0)",
+      "Net-(U201C-PF2)",
+      "unconnected-(J1-Pad10)",
+      "unconnected-(J1-Pad12)",
+      "unconnected-(J1-Pad14)",
+      "unconnected-(J1-Pad16)",
+      "unconnected-(J1-Pad18)",
+      "unconnected-(J1-Pad20)",
+      "unconnected-(U201C-PF5-Pad81)"
     ],
     "high_contrast_mode": 0,
     "net_color_mode": 1,
