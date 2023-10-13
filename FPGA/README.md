@@ -1,5 +1,5 @@
 # RayCore FSM
-| Inputs      |     | States        |            | Outputs |      |
+| Inputs      |      States        |             Outputs       |
 |-------------|-----|---------------|------------|---------|------|
 | In0         | In1 | CURRENT_STATE | NEXT_STATE | Out0    | Out1 |
 | start       |     | START         | TRACING    |         |      |
