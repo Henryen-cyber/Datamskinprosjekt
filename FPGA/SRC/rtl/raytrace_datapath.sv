@@ -1,5 +1,3 @@
-`include "types.sv"
-
 module RayTraceDatapath (
     
     // Clock
@@ -18,7 +16,7 @@ module RayTraceDatapath (
 
     enum int unsigned { START = 0, TRACING = 1 } CURRENT_STATE NEXT_STATE;
 
-    always @(posedge clk) begin
+    always_comb begin : data_logic
         case (CURRENT_STATE)
             START: begin
                 busy <= 0;
@@ -38,5 +36,9 @@ module RayTraceDatapath (
                end 
             end
         endcase
+    end
+
+    always @(posedge clk) begin : next_state_logic
+        CURRENT_STATE <= NEXT_STATE;
     end
 endmodule
