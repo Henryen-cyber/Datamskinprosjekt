@@ -2,3 +2,4 @@
 FPGA/OPT/
 RayTracingPCB-backups
 FPGA/.Xil
+*.wcfg
