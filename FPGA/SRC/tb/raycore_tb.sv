@@ -15,16 +15,16 @@ module raytrace_core_tb(
 
     initial begin
         clk <= 1;
-        world.sphere.origin.x <= 0;
-        world.sphere.origin.y <= 0;
-        world.sphere.origin.z <= 0;
-        world.sphere.radius <= 9'b000000111;
+        world.sphere.origin.x <= 4'hffff;
+        world.sphere.origin.y <= 14'b01111111111111;
+        world.sphere.origin.z <= 4'hffff;
+        world.sphere.radius <= 9'b111111111;
 
-        pixel.x <= -320;
+        pixel.x <= 320;
         pixel.y <= 240;
-        pixel.z <= 15;
+        pixel.z <= 31;
 
-        #200 $finish;
+        #10 $finish;
     end
 
     always #1 clk <= ~clk;

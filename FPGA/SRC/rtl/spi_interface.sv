@@ -2,12 +2,12 @@ module spi_interface(
 
     input clk,
 
-    input logic mosi,
-    input logic ssel_,
-    input logic sck,
-    output logic miso,
-    output logic[7:0] data_out,
-    output logic led
+    input  logic        mosi,
+    input  logic        ssel_,
+    input  logic        sck,
+    output logic        miso,
+    output logic[7:0]   data_out,
+    output logic        led
 );
 
     logic[2:0] sckr; always @(posedge clk) sckr <= {sckr[1:0], sck};

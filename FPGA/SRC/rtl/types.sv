@@ -17,9 +17,9 @@ typedef struct {
     } Sphere_s;
 
 typedef struct {
-    logic signed[15:0] x;
-    logic signed[15:0] y;
-    logic[4:0]         z;
+    logic signed[9:0] x;
+    logic signed[8:0] y;
+    logic       [4:0] z;
     } Pixel_s;
 
 typedef struct {
