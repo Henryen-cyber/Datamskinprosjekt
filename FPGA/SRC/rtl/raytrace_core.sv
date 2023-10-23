@@ -10,7 +10,8 @@ module RayTraceCore(
 
     );
 
-    // Pixel square registers
+    // Pixel square registers     All of these are much smaller due to Fixed
+    //                            Point representation!
     logic [16:0]    pixelx_sr; // Max possible value:                102'400
     logic [15:0]    pixely_sr; // Max possible value:                 57'600
     logic  [9:0]    pixelz_sr; // Max possible value:                    961
@@ -31,7 +32,7 @@ module RayTraceCore(
     logic signed[51:0] arcr_r;  // Max possible value: 1'425'683'980'107'004
     logic signed[51:0] dis_r;   // Max possible value: 1'425'683'980'107'004
 
-    always @(posedge clk) begin
+    always_ff @(posedge clk) begin
         pixelx_sr <= pixel.x ** 2;
         pixely_sr <= pixel.y ** 2;
         pixelz_sr <= pixel.z ** 2;
