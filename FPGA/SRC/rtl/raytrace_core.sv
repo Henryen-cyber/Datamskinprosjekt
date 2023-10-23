@@ -24,9 +24,9 @@ module RayTraceCore(
     logic signed[21:0] doty_r;  // Max possible value:               982'800
     logic signed[20:0] dotz_r;  // Max possible value:             1'048'544
     // Quadratic formula registers
-    logic       [26:0] a_r;     // Max possible value:               160'961
-    logic       [50:0] c_r;     // Max possible value:         2'214'331'391
-    logic signed[50:0] b_r;     // Max possible value:            25'033'568
+    logic       [17:0] a_r;     // Max possible value:               160'961
+    logic signed[32:0] c_r;     // Max possible value:         2'214'592'511
+    logic signed[25:0] b_r;     // Max possible value:            25'033'568
     logic       [49:0] br_sr;   // Max possible value:   626'679'526'810'624
     logic signed[51:0] arcr_r;  // Max possible value: 1'425'683'980'107'004
     logic signed[51:0] dis_r;   // Max possible value: 1'425'683'980'107'004
