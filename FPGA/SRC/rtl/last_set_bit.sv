@@ -16,6 +16,7 @@ module last_set#(parameter WIDTH=52)(
     logic[WIDTH-5:0] int_vector;
 
     always_ff @(posedge clk) begin
+
         if(start) begin
             int_vector <= fixed_point_vector >> 4; // We want the first set bit of the integer
                                                    // representation of the vector
@@ -36,4 +37,5 @@ module last_set#(parameter WIDTH=52)(
             end
         end
     end
+
 endmodule

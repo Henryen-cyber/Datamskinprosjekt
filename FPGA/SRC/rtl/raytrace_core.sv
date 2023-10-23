@@ -12,6 +12,7 @@ module RayTraceCore(
 
     // Pixel square registers     All of these are much smaller due to Fixed
     //                            Point representation!
+    //                            Needs to be updated accordingly
     logic [16:0]    pixelx_sr; // Max possible value:                102'400
     logic [15:0]    pixely_sr; // Max possible value:                 57'600
     logic  [9:0]    pixelz_sr; // Max possible value:                    961
