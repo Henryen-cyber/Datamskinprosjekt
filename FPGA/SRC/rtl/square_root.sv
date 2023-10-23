@@ -33,30 +33,31 @@ module SquareRoot#(parameter N=16)(
 
 
 
-    always_ff @(posedge clk) begin
+    always_comb @(posedge clk) begin
 
+        if(k == 0) begin
             A_norm <= A >> 2 * m;
             k <= 0;
             x_k <= 0;
             c_k <= 0;
+        end
+        if(c_k < A_norm) begin
+            d_k <= 1;
+        end
+        else if(c_k > A_norm) begin
+            d_k <= -1;
+        end
 
-            if(c_k < A_norm) begin
-                d_k <= 1;
-            end 
-            else if(c_k > A_norm) begin
-                d_k <= -1;
-            end
+        k <= k + 1;
+        x_k1 <= x_k + (d_k >> 2*k);
+        c_k1 <= c_k + d_k * (x_k >> 2*(k-1)) + (1 >> 2*k);
 
-            k <= k + 1;
-            x_k1 <= x_k + (d_k >> 2*k);
-            c_k1 <= c_k + d_k * (x_k >> 2*(k-1)) + (1 >> 2*k);
+        c_k <= c_k1;
+        x_k <= x_k1;
 
-            c_k <= c_k1;
-            x_k <= x_k1;
-
-            if(k == N) begin
-                Q <= x_k << m;
-            end
+        if(k == N) begin
+            Q <= x_k << m;
+        end
     end
     
 endmodule
