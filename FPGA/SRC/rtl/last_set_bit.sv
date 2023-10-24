@@ -3,7 +3,7 @@
 // https://github.com/gsw73/find_first_set
 //
 
-module last_set#(parameter WIDTH=52)(
+module last_set#(parameter WIDTH=12)(
 
     input  logic clk,
     input  logic rst_,

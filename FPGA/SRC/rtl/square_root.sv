@@ -9,31 +9,31 @@ module SquareRoot#(parameter N=16)(
     input  logic clk,
     input  logic rst_,
     input  logic start,
-    input  logic[51:0] A,
+    input  logic[11:0] A,
 
-    output logic[50:0] Q
+    output logic[11:0] Q
 
     );
 
-    logic[50:0] A_norm;
+    logic [11:0] A_norm;
 
     logic [5:0] m;
-    logic [3:0] k;
+    logic [3:0] k <= 3'b000;
     logic[15:0] x_k;
     logic[15:0] x_k1;
     logic[15:0] c_k;
     logic[15:0] c_k1;
     logic signed[15:0] d_k;
 
-    last_set find_m( .clk(clk),
-                .rst_(rst_),
-                .start(start),
-                .fixed_point_vector(A),
-                .location(m));
+    last_set find_m(.clk(clk),
+                    .rst_(rst_),
+                    .start(start),
+                    .fixed_point_vector(A),
+                    .location(m));
 
 
 
-    always_comb @(posedge clk) begin
+    always_ff @(posedge clk) begin
 
         if(k == 0) begin
             A_norm <= A >> 2 * m;
@@ -57,6 +57,7 @@ module SquareRoot#(parameter N=16)(
 
         if(k == N) begin
             Q <= x_k << m;
+            k <= 0;
         end
     end
     

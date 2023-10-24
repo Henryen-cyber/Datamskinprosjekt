@@ -1,6 +1,6 @@
 SOURCES_SV := \
-    ../SRC/rtl/raytrace_core.sv \
-    ../SRC/tb/raycore_tb.sv \
+    ../SRC/rtl/square_root.sv \
+    ../SRC/tb/square_root_tb.sv \
 
 COMP_OPTS_SV := \
     --incr \
@@ -9,7 +9,7 @@ COMP_OPTS_SV := \
 DEFINES_SV :=
 COMP_OPTS_VHDL := --incr --relax
 
-TB_TOP := raytrace_core_tb
+TB_TOP := SR_tb
 
 #==== Default target - running simulation without drawing waveforms ====#
 .PHONY : simulate
