@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="raytrace_core_tb_snapshot.wdb" id="1">
+         <top_modules>
+            <top_module name="\$unit_raytrace_core_sv_185064796 " />
+            <top_module name="raytrace_core_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0 ps"></ZoomStartTime>
+      <ZoomEndTime time="571 ps"></ZoomEndTime>
+      <Cursor1Time time="5,101 ps"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="376"></NameColumnWidth>
+      <ValueColumnWidth column_width="128"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="20" />
+   <wvobject type="logic" fp_name="/raytrace_core_tb/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/world">
+      <obj_property name="ElementShortName">world</obj_property>
+      <obj_property name="ObjectShortName">world</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/raytrace_core_tb/world.sphere">
+         <obj_property name="ElementShortName">.sphere</obj_property>
+         <obj_property name="ObjectShortName">.sphere</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject type="array" fp_name="/raytrace_core_tb/world.sphere.origin">
+            <obj_property name="ElementShortName">.origin</obj_property>
+            <obj_property name="ObjectShortName">.origin</obj_property>
+            <obj_property name="isExpanded"></obj_property>
+            <wvobject type="array" fp_name="/raytrace_core_tb/world.sphere.origin.x">
+               <obj_property name="ElementShortName">.x[15:0]</obj_property>
+               <obj_property name="ObjectShortName">.x[15:0]</obj_property>
+               <obj_property name="Radix">BINARYRADIX</obj_property>
+            </wvobject>
+            <wvobject type="array" fp_name="/raytrace_core_tb/world.sphere.origin.y">
+               <obj_property name="ElementShortName">.y[13:0]</obj_property>
+               <obj_property name="ObjectShortName">.y[13:0]</obj_property>
+               <obj_property name="Radix">BINARYRADIX</obj_property>
+            </wvobject>
+            <wvobject type="array" fp_name="/raytrace_core_tb/world.sphere.origin.z">
+               <obj_property name="ElementShortName">.z[15:0]</obj_property>
+               <obj_property name="ObjectShortName">.z[15:0]</obj_property>
+               <obj_property name="Radix">BINARYRADIX</obj_property>
+            </wvobject>
+         </wvobject>
+         <wvobject type="array" fp_name="/raytrace_core_tb/world.sphere.radius">
+            <obj_property name="ElementShortName">.radius[8:0]</obj_property>
+            <obj_property name="ObjectShortName">.radius[8:0]</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/raytrace_core_tb/world.sphere.color">
+            <obj_property name="ElementShortName">.color</obj_property>
+            <obj_property name="ObjectShortName">.color</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject type="array" fp_name="/raytrace_core_tb/world.pixel">
+         <obj_property name="ElementShortName">.pixel</obj_property>
+         <obj_property name="ObjectShortName">.pixel</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/raytrace_core_tb/world.sphere_amount">
+         <obj_property name="ElementShortName">.sphere_amount[1:0]</obj_property>
+         <obj_property name="ObjectShortName">.sphere_amount[1:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/raytrace_core_tb/world.sphere">
+         <obj_property name="ElementShortName">.sphere</obj_property>
+         <obj_property name="ObjectShortName">.sphere</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/raytrace_core_tb/world.pixel">
+         <obj_property name="ElementShortName">.pixel</obj_property>
+         <obj_property name="ObjectShortName">.pixel</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/raytrace_core_tb/world.sphere_amount">
+         <obj_property name="ElementShortName">.sphere_amount[1:0]</obj_property>
+         <obj_property name="ObjectShortName">.sphere_amount[1:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/pixel">
+      <obj_property name="ElementShortName">pixel</obj_property>
+      <obj_property name="ObjectShortName">pixel</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <wvobject type="array" fp_name="/raytrace_core_tb/pixel.x">
+         <obj_property name="ElementShortName">.x[9:0]</obj_property>
+         <obj_property name="ObjectShortName">.x[9:0]</obj_property>
+         <obj_property name="Radix">BINARYRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/raytrace_core_tb/pixel.y">
+         <obj_property name="ElementShortName">.y[8:0]</obj_property>
+         <obj_property name="ObjectShortName">.y[8:0]</obj_property>
+         <obj_property name="Radix">BINARYRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/raytrace_core_tb/pixel.z">
+         <obj_property name="ElementShortName">.z[4:0]</obj_property>
+         <obj_property name="ObjectShortName">.z[4:0]</obj_property>
+         <obj_property name="Radix">BINARYRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/raytrace_core_tb/pixel.x">
+         <obj_property name="ElementShortName">.x[9:0]</obj_property>
+         <obj_property name="ObjectShortName">.x[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/raytrace_core_tb/pixel.y">
+         <obj_property name="ElementShortName">.y[8:0]</obj_property>
+         <obj_property name="ObjectShortName">.y[8:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/raytrace_core_tb/pixel.z">
+         <obj_property name="ElementShortName">.z[4:0]</obj_property>
+         <obj_property name="ObjectShortName">.z[4:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="logic" fp_name="/raytrace_core_tb/less_than_zero">
+      <obj_property name="ElementShortName">less_than_zero</obj_property>
+      <obj_property name="ObjectShortName">less_than_zero</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/pixelx_sr">
+      <obj_property name="ElementShortName">pixelx_sr[16:0]</obj_property>
+      <obj_property name="ObjectShortName">pixelx_sr[16:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/pixely_sr">
+      <obj_property name="ElementShortName">pixely_sr[15:0]</obj_property>
+      <obj_property name="ObjectShortName">pixely_sr[15:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/pixelz_sr">
+      <obj_property name="ElementShortName">pixelz_sr[9:0]</obj_property>
+      <obj_property name="ObjectShortName">pixelz_sr[9:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/a_r">
+      <obj_property name="ElementShortName">a_r[17:0]</obj_property>
+      <obj_property name="ObjectShortName">a_r[17:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/dotx_r">
+      <obj_property name="ElementShortName">dotx_r[24:0]</obj_property>
+      <obj_property name="ObjectShortName">dotx_r[24:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/doty_r">
+      <obj_property name="ElementShortName">doty_r[21:0]</obj_property>
+      <obj_property name="ObjectShortName">doty_r[21:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/dotz_r">
+      <obj_property name="ElementShortName">dotz_r[20:0]</obj_property>
+      <obj_property name="ObjectShortName">dotz_r[20:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/b_r">
+      <obj_property name="ElementShortName">b_r[25:0]</obj_property>
+      <obj_property name="ObjectShortName">b_r[25:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/originx_sr">
+      <obj_property name="ElementShortName">originx_sr[30:0]</obj_property>
+      <obj_property name="ObjectShortName">originx_sr[30:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/originy_sr">
+      <obj_property name="ElementShortName">originy_sr[26:0]</obj_property>
+      <obj_property name="ObjectShortName">originy_sr[26:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/originz_sr">
+      <obj_property name="ElementShortName">originz_sr[30:0]</obj_property>
+      <obj_property name="ObjectShortName">originz_sr[30:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/originr_sr">
+      <obj_property name="ElementShortName">originr_sr[17:0]</obj_property>
+      <obj_property name="ObjectShortName">originr_sr[17:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/c_r">
+      <obj_property name="ElementShortName">c_r[32:0]</obj_property>
+      <obj_property name="ObjectShortName">c_r[32:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/arcr_r">
+      <obj_property name="ElementShortName">arcr_r[51:0]</obj_property>
+      <obj_property name="ObjectShortName">arcr_r[51:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/br_sr">
+      <obj_property name="ElementShortName">br_sr[49:0]</obj_property>
+      <obj_property name="ObjectShortName">br_sr[49:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/raytrace_core_tb/DUT/dis_r">
+      <obj_property name="ElementShortName">dis_r[51:0]</obj_property>
+      <obj_property name="ObjectShortName">dis_r[51:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+</wave_config>
