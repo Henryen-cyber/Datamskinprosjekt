@@ -1,4 +1,4 @@
 *.kicad_sch.lck
-FPGA/OPT/
+FPGA/OPT
 RayTracingPCB-backups
 FPGA/.Xil
