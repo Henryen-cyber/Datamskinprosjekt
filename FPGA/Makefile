@@ -7,4 +7,4 @@ program :
 
 .PHONY : clean
 clean : 
-	rm OPT/*.log OPT/*.jou OPT/*.xml OPT/*.html
+	rm OPT/*

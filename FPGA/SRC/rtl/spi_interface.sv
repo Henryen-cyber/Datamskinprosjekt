@@ -7,7 +7,7 @@ module spi_interface(
     input logic sck,
     output logic miso,
     output logic[7:0] data_out,
-    output logic led
+    output logic[7:0] led
 );
 
     logic[2:0] sckr; always @(posedge clk) sckr <= {sckr[1:0], sck};
@@ -22,7 +22,7 @@ module spi_interface(
     logic[1:0] mosir; always @(posedge clk) mosir <= {mosir[0], mosi};
     logic mosi_data = mosir[1];
     
-    logic[2:0] bit_cnt;
+    logic[3:0] bit_cnt;
 
     logic byte_recieved;
     logic[7:0] byte_data_recieved;
@@ -30,15 +30,21 @@ module spi_interface(
     always @(posedge clk)
     begin
         if(~ssel_active)
-            bit_cnt <= 3'b000;
+            bit_cnt <= 4'b000;
         else if(sck_risingedge)
         begin
-            bit_cnt <= bit_cnt + 3'b001;
+            bit_cnt <= bit_cnt + 4'b001;
             byte_data_recieved <= {byte_data_recieved[6:0], mosi_data};
         end
     end
 
-    always @(posedge clk) byte_recieved <= ssel_active && sck_risingedge && (bit_cnt == 3'b111);
+    always @(posedge clk) byte_recieved <= ssel_active && sck_risingedge && (bit_cnt == 4'b1000);
+
+    always_ff @(posedge clk) begin
+        if(byte_recieved) begin
+            led <= byte_data_recieved;
+        end
+    end
 
     logic[7:0] byte_data_sendt;
     logic[7:0] cnt;
@@ -48,7 +54,6 @@ module spi_interface(
     always @(posedge clk) begin
         if(ssel_active)
         begin
-            led <= 1;
             if(ssel_startmessage)
                 byte_data_sendt <= cnt;
             else if(sck_fallingedge)
@@ -58,8 +63,6 @@ module spi_interface(
                 else
                     byte_data_sendt <= {byte_data_sendt[6:0], 1'b0};
             end
-        end else begin
-                led <= 0;
         end
         miso <= byte_data_sendt[7];
 
