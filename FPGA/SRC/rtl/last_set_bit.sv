@@ -1,7 +1,7 @@
-//
-// Module retrieved from user gsw73 on github link:
-// https://github.com/gsw73/find_first_set
-//
+/////////////////////////////////////////////////////
+// Module retrieved from user gsw73 on github link://
+//     https://github.com/gsw73/find_first_set     //
+/////////////////////////////////////////////////////
 
 module last_set#(parameter WIDTH=12)(
 
