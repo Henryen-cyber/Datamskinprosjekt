@@ -7,6 +7,7 @@
 // NEEDS STATE-MACHINE //
 
 `include "last_set_bit.sv"
+`include "square_root_fsm.sv"
 
 module SquareRoot#(parameter N=16)(
 
@@ -20,14 +21,15 @@ module SquareRoot#(parameter N=16)(
     );
 
     logic [11:0] A_norm;
-
+    logic c_k_less_than_A_norm;
     logic [5:0] m;
     logic [3:0] k;
     logic[15:0] x_k;
     logic[15:0] x_k1;
     logic[15:0] c_k;
     logic[15:0] c_k1;
-    logic signed[15:0] d_k;
+    logic signed[1:0] d_k;
+    logic[1:0] state;
 
     last_set find_m(.clk(clk),
                     .rst_(rst_),
@@ -35,32 +37,54 @@ module SquareRoot#(parameter N=16)(
                     .fixed_point_vector(A),
                     .location(m));
 
-    always_ff @(posedge clk) begin
+    SquareRoot_FSM FSM(.start(start),
+                       .clk(clk),
+                       .rst_(rst_),
+                       .k(k),
+                       .state(state));
 
-        if(k == 0) begin
-            A_norm <= A >> 2 * m;
+    always_ff @(posedge clk) begin
+        if(state == 2'b00) begin
             k <= 0;
             x_k <= 0;
+            x_k1 <= 0;
             c_k <= 0;
-        end
-        if(c_k < A_norm) begin
-            d_k <= 1;
-        end
-        else if(c_k > A_norm) begin
-            d_k <= -1;
-        end
-
-        k <= k + 1;
-        x_k1 <= x_k + (d_k >> 2*k);
-        c_k1 <= c_k + d_k * (x_k >> 2*(k-1)) + (1 >> 2*k);
-
-        c_k <= c_k1;
-        x_k <= x_k1;
-
-        if(k == N) begin
-            Q <= x_k << m;
-            k <= 0;
+            c_k1 <= 0;
+            d_k <= 0;
         end
     end
 
+    always_ff @(posedge clk) begin
+        if(state == 2'b01) begin
+            k <= 0;
+            x_k <= 0;
+            x_k1 <= 0;
+            c_k <= 0;
+            c_k1 <= 0;
+            d_k <= 0;
+            A_norm <= A >> (2 * m);
+            c_k_less_than_A_norm <= c_k < A_norm;
+        end
+    end
+
+    always_ff @(posedge clk) begin
+        if(state == 2'b10) begin
+            if(c_k_less_than_A_norm) begin
+                d_k <= 1;
+            end else if(!c_k_less_than_A_norm) begin
+                d_k <= -1;
+            end
+            k <= k + 1;
+            x_k1 <= x_k + (d_k >> k);
+            c_k1 <= c_k + d_k * (x_k >> (k - 1)) + 1 >> (2 * k);
+            x_k <= x_k1;
+            c_k <= c_k1;
+        end
+    end
+
+    always_ff @(posedge clk) begin
+        if(state == 2'b11) begin
+            Q <= x_k << m;
+        end
+    end
 endmodule

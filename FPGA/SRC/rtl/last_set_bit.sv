@@ -26,10 +26,10 @@ module last_set#(parameter WIDTH=12)(
                 for(integer i = WIDTH - 1; i >= 0; i--) begin
                     if(int_vector[i]) begin
                         if(i[0]) begin
-                            location <= ((i >> 1) + 1) << 4; // Bit-shift to include fixed point bits
+                            location <= ((i >> 1) + 1); // Bit-shift to include fixed point bits
                             break;
                         end else begin
-                            location <= (i >> 1) << 4;
+                            location <= (i >> 1);
                             break;
                         end
                     end
