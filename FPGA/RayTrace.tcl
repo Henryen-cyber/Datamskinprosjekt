@@ -1,7 +1,8 @@
 #Define target part and create output directory
 set partNum xc7a35ticsg324-1L
 set outputDir OPT
-set topModule spi_interface
+set topModule Top
+
 file mkdir $outputDir
 set files [glob -nocomplain "$outputDir/*"]
 if {[llength $files] != 0} {
@@ -12,11 +13,15 @@ if {[llength $files] != 0} {
 	puts "### $outputDir is clear ###"
 }
 
+set_part $partNum
 #Reference HDL and constraints source files
+read_ip -verbose [glob SRC/rtl/ip/*.xci]
 read_verilog -sv [glob SRC/rtl/*.sv]
 #read_vhdl -library 	usrDefLib [glob ../SRC/*.vhdl]
 read_xdc XDC/Arty-Master.xdc
 
+generate_target all [get_ips clk_wiz_0]
+synth_ip [get_ips clk_wiz_0]
 #Run synthesis
 synth_design -top $topModule -part $partNum
 write_checkpoint -force $outputDir/post_synth.dcp
