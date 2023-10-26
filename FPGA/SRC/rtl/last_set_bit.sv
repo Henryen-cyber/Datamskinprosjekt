@@ -14,6 +14,7 @@ module last_set#(parameter WIDTH=12)(
     );
 
     logic[WIDTH-5:0] int_vector;
+    logic[5:0] temp_location;
 
     always_ff @(posedge clk) begin
 
@@ -25,11 +26,12 @@ module last_set#(parameter WIDTH=12)(
             end else begin
                 for(integer i = WIDTH - 1; i >= 0; i--) begin
                     if(int_vector[i]) begin
-                        if(i[0]) begin
-                            location <= ((i >> 1) + 1); // Bit-shift to include fixed point bits
+                        temp_location <= i;
+                        if(temp_location[0]) begin
+                            location <= ((temp_location + 1) >> 1);
                             break;
                         end else begin
-                            location <= (i >> 1);
+                            location <= (temp_location >> 1);
                             break;
                         end
                     end
@@ -37,5 +39,4 @@ module last_set#(parameter WIDTH=12)(
             end
         end
     end
-
 endmodule
