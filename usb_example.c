@@ -178,7 +178,7 @@ void usb_example( void )
 
           if (spi_send == 1) {
               spi_send = 0;
-              app_process_action(test);
+              spi_send_data(test);
           }
 
         }
