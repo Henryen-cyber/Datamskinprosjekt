@@ -6,7 +6,7 @@
 `include "last_set_bit.sv"
 `include "types.sv"
 
-module SquareRoot#(parameter N=16, parameter SR_ONE = 17'b10000000000000000)(
+module SquareRoot#(parameter N=16)(
 
     input  logic clk,
     input  logic rst_,
@@ -17,12 +17,14 @@ module SquareRoot#(parameter N=16, parameter SR_ONE = 17'b10000000000000000)(
 
     );
 
-    logic [11:0] A_norm;
+    logic m_valid;
+    logic [23:0] A_norm;
     logic c_k_less_than_A_norm;
     logic [5:0] m;
     logic [3:0] k;
     logic signed[23:0] x_k;
     logic signed[23:0] x_k1;
+    logic signed[39:0] x_k_padded;
     logic signed[39:0] c_k;
     logic signed[39:0] c_k1;
     logic signed[1:0] d_k;
@@ -31,9 +33,10 @@ module SquareRoot#(parameter N=16, parameter SR_ONE = 17'b10000000000000000)(
                     .rst_(rst_),
                     .start(start),
                     .fixed_point_vector(A),
-                    .location(m));
+                    .location(m),
+                    .location_valid(m_valid));
 
-    enum { IDLE, START, LOOP, UPDATE, DONE } CURRENT_STATE, NEXT_STATE;
+    enum { IDLE, START, LOOPSTART, LOOP, UPDATE, DONE } CURRENT_STATE, NEXT_STATE;
     
     always_comb begin : data_logic
         case(CURRENT_STATE)
@@ -62,23 +65,32 @@ module SquareRoot#(parameter N=16, parameter SR_ONE = 17'b10000000000000000)(
                 c_k <= 0;
                 c_k1 <= 0;
                 d_k <= 0;
-                A_norm <= A / ((2 ** (2 * m)) << 4);
+                if(m_valid && m) begin
+                    A_norm <= {A / ((2 ** (2 * m)) << 4), 12'b0};
+                    NEXT_STATE <= LOOP;
+                end else begin
+                    NEXT_STATE <= START;
+                end
                 c_k_less_than_A_norm <= 0;
-                NEXT_STATE <= LOOP;
                 Q <= 0;
             end
 
-            LOOP : begin
+            LOOPSTART : begin
                 c_k_less_than_A_norm <= c_k < A_norm;
                 if(c_k_less_than_A_norm) begin
                     d_k <= 1;
                 end else if(!c_k_less_than_A_norm) begin
                     d_k <= -1;
                 end
-                x_k1 <= x_k + (d_k * (SR_ONE >> k));
-                c_k1 <= c_k + (d_k * ((x_k >> (k - 1)))) + (SR_ONE >> ( 2 * k ));
-                x_k <= 0;
-                c_k <= 0;
+                NEXT_STATE <= LOOP;
+            end
+
+            LOOP : begin
+                x_k1 <= x_k + (d_k * (`SR_ONE >> k));
+                x_k_padded <= {x_k, 16'b0};
+                c_k1 <= c_k + (d_k * ((x_k_padded >> (k - 1)))) + (`SR_ONE >> ( 2 * k ));
+                x_k <= x_k;
+                c_k <= c_k;
                 A_norm <= A_norm;
                 Q <= 0;
                 NEXT_STATE <= UPDATE;
@@ -96,13 +108,13 @@ module SquareRoot#(parameter N=16, parameter SR_ONE = 17'b10000000000000000)(
                 if(k == (N - 1)) begin
                     NEXT_STATE <= DONE;
                 end else begin
-                    NEXT_STATE <= LOOP;
+                    NEXT_STATE <= LOOPSTART;
                 end
             end
 
             DONE : begin
                 // Needs some work to properly account for fixed point bits!
-                Q <= x_k * (2 ** m) >> (`SR_FIXED_POINT_BITS - `FIXED_POINT_BITS);
+                Q <= (x_k * (2 ** m) + 12'h800) >> (`SR_FIXED_POINT_BITS - `FIXED_POINT_BITS);
                 k <= 0;
                 x_k <= x_k;
                 x_k1 <= x_k1;
