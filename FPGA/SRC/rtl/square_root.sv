@@ -6,32 +6,36 @@
 `include "last_set_bit.sv"
 `include "types.sv"
 
-module SquareRoot#(parameter N=16, parameter SR_ONE = 17'b10000000000000000)(
+module SquareRoot#(parameter N=16)(
 
     input  logic clk,
     input  logic rst_,
-    input  logic start,
     input  logic[11:0] A, // Input value has 4 fixed point bits
+	input  logic start,
 
     output logic[23:0] Q // Output value has 16 fiex point bits
 
     );
 
-    logic [11:0] A_norm;
+    logic find_m_s;
+    logic m_valid;
+    logic [23:0] A_norm; // 16 Fixed point bits
     logic c_k_less_than_A_norm;
     logic [5:0] m;
-    logic [3:0] k;
-    logic signed[23:0] x_k;
-    logic signed[23:0] x_k1;
-    logic signed[39:0] c_k;
-    logic signed[39:0] c_k1;
+    logic [4:0] k;
+    logic signed[23:0] x_k; // 16 Fixed point bits
+    logic signed[23:0] x_k1;// 16 Fixed point bits
+    logic signed[39:0] x_k_padded; // 32 Fixed point bits
+    logic signed[39:0] c_k; // 32 Fixed point bits
+    logic signed[39:0] c_k1;// 32 Fixed point bits
     logic signed[1:0] d_k;
 
     last_set find_m(.clk(clk),
                     .rst_(rst_),
-                    .start(start),
+                    .start(find_m_s),
                     .fixed_point_vector(A),
-                    .location(m));
+                    .location(m),
+                    .location_valid(m_valid));
 
     enum { IDLE, START, LOOP, UPDATE, DONE } CURRENT_STATE, NEXT_STATE;
     
@@ -48,6 +52,7 @@ module SquareRoot#(parameter N=16, parameter SR_ONE = 17'b10000000000000000)(
                 A_norm <= 0;
                 c_k_less_than_A_norm <= 0;
                 Q <= 0;
+                find_m_s <= 0;
                 if(start) begin
                     NEXT_STATE <= START;
                 end else begin
@@ -62,29 +67,38 @@ module SquareRoot#(parameter N=16, parameter SR_ONE = 17'b10000000000000000)(
                 c_k <= 0;
                 c_k1 <= 0;
                 d_k <= 0;
-                A_norm <= A / ((2 ** (2 * m)) << 4);
+                find_m_s <= 1;
+                if(m_valid && m) begin
+                    A_norm <= {A >> (2 * m), 12'b0};
+                    NEXT_STATE <= LOOP;
+                end else begin
+                    NEXT_STATE <= START;
+					A_norm <= A_norm;
+                end
                 c_k_less_than_A_norm <= 0;
-                NEXT_STATE <= LOOP;
                 Q <= 0;
             end
 
             LOOP : begin
-                c_k_less_than_A_norm <= c_k < A_norm;
+                c_k_less_than_A_norm = c_k < {A_norm, 16'b0};
                 if(c_k_less_than_A_norm) begin
-                    d_k <= 1;
+                    d_k = 1;
                 end else if(!c_k_less_than_A_norm) begin
-                    d_k <= -1;
+                    d_k = -1;
                 end
-                x_k1 <= x_k + (d_k * (SR_ONE >> k));
-                c_k1 <= c_k + (d_k * ((x_k >> (k - 1)))) + (SR_ONE >> ( 2 * k ));
-                x_k <= 0;
-                c_k <= 0;
+                x_k1 = x_k + (d_k * (`SR_ONE >>> k));
+                x_k_padded = {x_k, 16'b0};
+                c_k1 = c_k + (d_k * ((x_k_padded >> (k - 1)))) + (`SR_ONE >>> ( 2 * k ));
+                x_k <= x_k;
+                c_k <= c_k;
                 A_norm <= A_norm;
                 Q <= 0;
+                find_m_s <= 0;
                 NEXT_STATE <= UPDATE;
             end
 
             UPDATE : begin
+                find_m_s <= 0;
                 k <= k;
                 c_k_less_than_A_norm <= c_k_less_than_A_norm;
                 d_k <= d_k;
@@ -93,7 +107,7 @@ module SquareRoot#(parameter N=16, parameter SR_ONE = 17'b10000000000000000)(
                 x_k <= x_k1;
                 c_k <= c_k1;
                 Q <= 0;
-                if(k == (N - 1)) begin
+                if(k == N) begin
                     NEXT_STATE <= DONE;
                 end else begin
                     NEXT_STATE <= LOOP;
@@ -102,7 +116,8 @@ module SquareRoot#(parameter N=16, parameter SR_ONE = 17'b10000000000000000)(
 
             DONE : begin
                 // Needs some work to properly account for fixed point bits!
-                Q <= x_k * (2 ** m) >> (`SR_FIXED_POINT_BITS - `FIXED_POINT_BITS);
+                Q <= x_k;
+                find_m_s <= 0;
                 k <= 0;
                 x_k <= x_k;
                 x_k1 <= x_k1;
