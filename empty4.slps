@@ -3,7 +3,7 @@
   <descriptors name="empty4">
     <properties key="projectCommon.sdkId" value="com.silabs.sdk.stack.super:3.2.8._640221276"/>
     <properties key="universalConfig.generationDirectory" value=""/>
-    <properties key="universalConfig.relativeWorkspacePath" value="..\empty3.slcw"/>
+    <properties key="universalConfig.relativeWorkspacePath" value="..\empty4.slcw"/>
     <properties key="universalConfig.toolchainCompatibility" value="iar gcc"/>
     <properties key="projectCommon.boardIds" value="brd2200a:0.0.0.A03"/>
     <properties key="projectCommon.kitId" value=""/>

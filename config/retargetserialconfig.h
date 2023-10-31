@@ -36,7 +36,7 @@
 /* Override if needed with commandline parameter -DRETARGET_xxx */
 
 #if !defined(RETARGET_USART1) && !defined(RETARGET_LEUART0) && !defined(RETARGET_UART0) && !defined(RETARGET_VCOM)
-#define RETARGET_USART1    /* Use USART1 by default. */
+#define RETARGET_UART0    /* Use USART1 by default. */
 #endif
 
 #if defined(RETARGET_USART1)

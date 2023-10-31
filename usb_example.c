@@ -5,8 +5,6 @@
  *      Author: stian
  */
 
-char test;
-char test2;
 
 /**************************************************************************//**
  * @file main.c
@@ -43,6 +41,7 @@ char test2;
  *
  *****************************************************************************/
 #include <stdio.h>
+#include "app.h"
 #include "em_device.h"
 #include "em_cmu.h"
 #include "bsp.h"
@@ -60,6 +59,10 @@ char test2;
 
 //#define DO_SUSPEND_CURRENT_TEST       /* For internal Energy Micro testing. */
 //#define DO_RESET_FROM_SUSPEND_TEST    /* For internal Energy Micro testing. */
+
+char test;
+char test2;
+int spi_send = 0;
 
 /* Timer indices. */
 #define KBD_LED_TIMER     1
@@ -88,7 +91,6 @@ typedef struct
 /*** Function prototypes. ***/
 
 static bool CheckDevice( void );
-static void ConsoleDebugInit( void );
 static void HidCheckKeyPress( void );
 static int  HidSetIdle( uint8_t duration, uint8_t reportId );
 static int  HidSetProtocol( void );
@@ -108,6 +110,7 @@ static volatile bool        ledTimerDone;
 static volatile bool        pollTimerDone;
 static volatile bool        suspendTimerDone;
 
+
 /**************************************************************************//**
  * @brief main - the entrypoint after reset.
  *****************************************************************************/
@@ -117,6 +120,8 @@ void usb_example( void )
   uint8_t hidReport;
   USBH_Init_TypeDef initstruct = USBH_INIT_DEFAULT;
 
+  test = 'a';
+  test2 = 'a';
 
   CMU_ClockSelectSet( cmuClock_HF, cmuSelect_HFXO );
   CMU_ClockEnable(cmuClock_GPIO, true);
@@ -170,6 +175,12 @@ void usb_example( void )
             USBTIMER_Start( KBD_POLL_TIMER, ep.epDesc.bInterval, PollTimeout );
           }
 
+
+          if (spi_send == 1) {
+              spi_send = 0;
+              app_process_action(test);
+          }
+
         }
         printf( "\n\nDevice removal detected...\n" );
         /*-------------------------------------------------------------------*/
@@ -179,10 +190,16 @@ void usb_example( void )
     USBTIMER_Stop( KBD_POLL_TIMER );
 
     /* Wait for malfunctional device or unknown HID keyboard removal. */
-    while ( USBH_DeviceConnected() ){}
+    if (test != 'd') {
+        while ( USBH_DeviceConnected() ){}
+    }
+
 
     /* Disable USB peripheral, power down USB port. */
     USBH_Stop();
+    if (test == 'd') {
+        break;
+    }
   }
 }
 
@@ -247,24 +264,29 @@ static bool CheckDevice( void )
  *   Check if a button has been pressed on the keyboard. Prints the ASCII
  *   equivalent of the keyboard scancode on the console.
  *****************************************************************************/
+int callBackFunc(USB_Status_TypeDef status, uint32_t xferred, uint32_t remaining) {
+  if ( tmpBuf[ 2 ] )
+      {
+        char c = USB_HidScancodeToAscii( tmpBuf[ 2 ] );
+        if ( c ) {
+            if (c == 'd') {
+                spi_send = 1;
+            } else {
+                test = c;
+            }
+
+        }
+      }
+}
+
 static void HidCheckKeyPress( void )
 {
   char c;
   test2 = 'b';
 
-  if ( USBH_ReadB( &ep, tmpBuf, ep.epDesc.wMaxPacketSize, 3 )
-       == KBD_IN_REPORT_LEN )
-  {
+  USBH_Read(&ep, tmpBuf, ep.epDesc.wMaxPacketSize, 3, callBackFunc);
 
-    if ( tmpBuf[ 2 ] )
-    {
-      c = USB_HidScancodeToAscii( tmpBuf[ 2 ] );
-      if ( c ) {
-        test = c;
-        printf("%c", c);
-      }
-    }
-  }
+
 }
 
 /**************************************************************************//**

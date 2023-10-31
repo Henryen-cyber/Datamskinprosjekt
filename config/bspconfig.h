@@ -36,7 +36,7 @@
 
 #define BSP_BCC_USART       UART0
 #define BSP_BCC_CLK         cmuClock_UART0
-#define BSP_BCC_LOCATION    UART_ROUTE_LOCATION_LOC1
+#define BSP_BCC_LOCATION    UART_ROUTE_LOCATION_LOC0
 #define BSP_BCC_TXPORT      gpioPortE
 #define BSP_BCC_TXPIN       0
 #define BSP_BCC_RXPORT      gpioPortE

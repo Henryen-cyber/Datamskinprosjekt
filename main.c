@@ -27,7 +27,7 @@
 #include "sl_system_process_action.h"
 #endif // SL_CATALOG_KERNEL_PRESENT
 
-
+char test3;
 
 int main(void)
 {
@@ -50,8 +50,13 @@ int main(void)
     sl_system_process_action();
 
     // Application process.
-    app_process_action();
+
+
     usb_example();
+    test3 = 'y';
+
+
+
 
 #if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
     // Let the CPU go to sleep if the system allows it.
