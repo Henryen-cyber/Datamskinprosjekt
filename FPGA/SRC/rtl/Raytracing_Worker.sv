@@ -25,7 +25,7 @@ module Raytracing_Worker(
     input activate,
     input signed[11:0] x,
     input signed[11:0] y,
-    input Types::Circle circle,
+    input Types::Sphere sphere,
     output logic busy,
     output Types::Color [JOBS_SUBDIVISION-1:0] buffer
 );
@@ -55,15 +55,15 @@ module Raytracing_Worker(
             busy <= (state == READY) ? HIGH : LOW;
         end
         else if (state == CALCULATING_1 && busy == HIGH) begin
-            dist_x_sqrd <= (local_x - circle.x) ** 2;
+            dist_x_sqrd <= (local_x - sphere.x) ** 2;
             state <= (state == CALCULATING_1) ? state + 1: state;
         end
         else if (state == CALCULATING_2 && busy == HIGH) begin
-            dist_x_sqrd <= dist_x_sqrd + (y - circle.y) ** 2; 
+            dist_x_sqrd <= dist_x_sqrd + (y - sphere.y) ** 2; 
             state <= (state == CALCULATING_2) ? state + 1: state;
         end
         else if (state == CALCULATING_3 && busy == HIGH) begin
-            r_sqrd <= circle.r ** 2;
+            r_sqrd <= sphere.r ** 2;
             state <= (state == CALCULATING_3) ? state + 1: state;
         end
         else if (state == COLORING && busy == HIGH) begin
