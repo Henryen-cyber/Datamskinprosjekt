@@ -22,7 +22,7 @@
 
 // Worker instantiation parameters
 localparam JOBS = 640;
-localparam JOBS_SUBDIVISION = 32; // Must be divisible with JOBS
+localparam JOBS_SUBDIVISION = 64; // Must be divisible with JOBS
 localparam N_WORKERS = JOBS / JOBS_SUBDIVISION;
 localparam HIGH = 1'b1;
 localparam LOW = 1'b0;
@@ -52,7 +52,7 @@ module Raytracing_Controller(
     );
     
     // World
-    Types::Sphere spherer =  {16'd0, 14'd0, 16'd0, 6'd10, 12'd0};
+    Types::Sphere spherer =  {16'd0, 14'd0, 16'd200, 6'd40, 12'd0};
     Types::Sphere sphere;
     assign sphere = spherer;
     
@@ -71,9 +71,12 @@ module Raytracing_Controller(
     // Raytracing workers //
     logic activate_workersr;
     logic signed [11:0] next_y;
+    logic signed [11:0] pixel_y;
+    logic next_line;
     
     logic [N_WORKERS - 1:0] worker_busyr;
-    logic worker_any_busy = (worker_busyr == 0) ? LOW : HIGH;
+    logic worker_any_busy;
+    assign worker_any_busy = (worker_busyr == '0) ? LOW : HIGH;
     
     generate
       genvar i;
@@ -81,7 +84,7 @@ module Raytracing_Controller(
       for (i=0; i<N_WORKERS; i=i+1) begin : worker_instantiation
         
         // Variables unique for each worker
-        logic [11:0] x_i = i;
+        logic signed [11:0] x_i = i - (JOBS / 2);
         
         // Connection to line buffer
         // Creates an evenly distributed interleaving pattern
@@ -93,8 +96,8 @@ module Raytracing_Controller(
         Raytracing_Worker worker_i(
            .activate(activate_workersr),
            .sphere(sphere),
-           .x(x_i),
-           .y(next_y),
+           .pixel_start_x(x_i),
+           .pixel_y(pixel_y),
            .busy(worker_busyr[i]),
            .buffer(worker_line_color_buffer),
            .clk(CLK100MHZ)
@@ -106,12 +109,11 @@ module Raytracing_Controller(
     
     always @ (posedge CLK100MHZ) begin
         if (~ck_rst_) begin
-            recv_64bitr <= {16'd10, 14'd10, 16'd0, 6'd10, 12'd0};
-                        recv_interrupt <= LOW;
-
+            recv_64bitr <= {16'd0, 14'd0, 16'd200, 6'd40, 12'd0};
+            recv_interrupt <= LOW;
         end
         if (recv_dv == HIGH) begin
-            recv_64bitr <= recv_64bit;
+            // recv_64bitr <= recv_64bit;
         end
         if (state == READY && next_line == LOW && recv_dv == LOW) begin
             recv_interrupt <= HIGH;
@@ -119,15 +121,16 @@ module Raytracing_Controller(
         end
         
         if (state == READY && next_line == HIGH) begin
-            recv_interrupt <= LOW;
             // Start writing a new line
             state <= (state == READY) ? state + 1: state;
         end
         else if (state == SETUP && activate_workersr == LOW && worker_any_busy == LOW) begin
+            pixel_y <= next_y - 12'd240;
             activate_workersr <= HIGH;
         end
         else if (state == SETUP && activate_workersr == HIGH && worker_any_busy == HIGH) begin
             state <= RENDERING;
+            recv_interrupt <= LOW;
         end
         else if (next_line == LOW) begin
             line_color <= line_color_buffer;

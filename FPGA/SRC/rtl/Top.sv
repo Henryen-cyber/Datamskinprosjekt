@@ -36,7 +36,7 @@ module Top(
     output ck_miso,
     input ck_ss,
     input ck_sck,
-    output ck_io0,
+    output ck_a0,
     
     output [3:0] led
     );
@@ -95,7 +95,7 @@ module Top(
     .vga_vs(vga_vs),
     .recv_dv(recv_dv),
     .recv_64bit(recv_64bit),
-    .recv_interrupt(ck_io0),
+    .recv_interrupt(ck_a0),
     // .tran_dv(tran_dv),
     // .tran_byte(tran_byte),
     .led(led)
