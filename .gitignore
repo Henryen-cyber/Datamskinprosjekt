@@ -1,5 +1,6 @@
 *.kicad_sch.lck
 FPGA/OPT/
+FPGA/HLC
 RayTracingPCB-backups
 FPGA/.Xil
 *.wcfg
