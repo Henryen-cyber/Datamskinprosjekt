@@ -37,7 +37,7 @@ module SquareRoot#(parameter N=16)(
                     .location(m),
                     .location_valid(m_valid));
 
-    enum { IDLE, START, LOOP, UPDATE, DONE } CURRENT_STATE, NEXT_STATE;
+    enum { IDLE, START, LOOPSTART, LOOP, UPDATE, DONE } CURRENT_STATE, NEXT_STATE;
     
     always_comb begin : data_logic
         case(CURRENT_STATE)
@@ -110,7 +110,7 @@ module SquareRoot#(parameter N=16)(
                 if(k == N) begin
                     NEXT_STATE <= DONE;
                 end else begin
-                    NEXT_STATE <= LOOP;
+                    NEXT_STATE <= LOOPSTART;
                 end
             end
 
