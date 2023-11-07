@@ -4,3 +4,10 @@ FPGA/HLC
 RayTracingPCB-backups
 FPGA/.Xil
 *.wcfg
+*.gen
+
+FPGA/SIM/xsim.dir
+FPGA/SIM/*.timestamp
+FPGA/SIM/*.log
+FPGA/SIM/*.pb
+FPGA/SIM/*.jou
