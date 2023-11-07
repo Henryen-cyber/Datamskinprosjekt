@@ -21,10 +21,12 @@
 package Types;
 
 typedef struct packed {
-    logic signed [11:0] x;
-    logic signed [11:0] y;
-    logic signed [11:0] r;
-} Circle;
+    logic signed [15:0] x;
+    logic signed [13:0] y;
+    logic signed [15:0] z;
+    logic signed [5:0] r;
+    logic signed [11:0] c;
+} Sphere;
 
 typedef struct packed {
     logic [3:0] r;

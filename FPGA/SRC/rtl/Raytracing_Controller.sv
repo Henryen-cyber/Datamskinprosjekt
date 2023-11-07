@@ -22,7 +22,7 @@
 
 // Worker instantiation parameters
 localparam JOBS = 640;
-localparam JOBS_SUBDIVISION = 32; // Must be divisible with JOBS
+localparam JOBS_SUBDIVISION = 64; // Must be divisible with JOBS
 localparam N_WORKERS = JOBS / JOBS_SUBDIVISION;
 localparam HIGH = 1'b1;
 localparam LOW = 1'b0;
@@ -38,7 +38,8 @@ module Raytracing_Controller(
     
     // SPI
     input recv_dv,
-    input [7:0] recv_byte,
+    input [63:0] recv_64bit,
+    output logic recv_interrupt,
     // output tran_dv,
     // output [7:0] tran_byte,
     
@@ -51,11 +52,11 @@ module Raytracing_Controller(
     );
     
     // World
-    Types::Circle circler =  {12'd0, 12'd0, 12'd20};
-    Types::Circle circle;
-    assign circle = circler;
+    Types::Sphere spherer =  {16'd0, 14'd0, 16'd200, 6'd40, 12'd0};
+    Types::Sphere sphere;
+    assign sphere = spherer;
     
-    logic [7:0] recv_byter;
+    logic [63:0] recv_64bitr;
     
     // Raytracing controller //
     
@@ -64,14 +65,18 @@ module Raytracing_Controller(
     localparam SETUP = 2'd1;
     localparam RENDERING = 2'd2;
     
-    Types::Color [JOBS- 1:0] line_color_buffer; // Buffer filled by workers
+    Types::Color [JOBS - 1:0] line_color_buffer; // Buffer filled by workers
     Types::Color [JOBS - 1: 0] line_color; // Line sent to vga
     
     // Raytracing workers //
     logic activate_workersr;
+    logic signed [11:0] next_y;
+    logic signed [11:0] pixel_y;
+    logic next_line;
     
     logic [N_WORKERS - 1:0] worker_busyr;
-    logic worker_any_busy = (worker_busyr == 0) ? LOW : HIGH;
+    logic worker_any_busy;
+    assign worker_any_busy = (worker_busyr == '0) ? LOW : HIGH;
     
     generate
       genvar i;
@@ -79,7 +84,7 @@ module Raytracing_Controller(
       for (i=0; i<N_WORKERS; i=i+1) begin : worker_instantiation
         
         // Variables unique for each worker
-        logic [11:0] x_i = i;
+        logic signed [11:0] x_i = i - (JOBS / 2);
         
         // Connection to line buffer
         // Creates an evenly distributed interleaving pattern
@@ -90,9 +95,9 @@ module Raytracing_Controller(
         
         Raytracing_Worker worker_i(
            .activate(activate_workersr),
-           .circle(circle),
-           .x(x_i),
-           .y(next_y),
+           .sphere(sphere),
+           .pixel_start_x(x_i),
+           .pixel_y(pixel_y),
            .busy(worker_busyr[i]),
            .buffer(worker_line_color_buffer),
            .clk(CLK100MHZ)
@@ -104,13 +109,15 @@ module Raytracing_Controller(
     
     always @ (posedge CLK100MHZ) begin
         if (~ck_rst_) begin
-            recv_byter <= 0;
+            recv_64bitr <= {16'd0, 14'd0, 16'd200, 6'd40, 12'd0};
+            recv_interrupt <= LOW;
         end
         if (recv_dv == HIGH) begin
-            recv_byter <= recv_byte;
+            // recv_64bitr <= recv_64bit;
         end
-        if (state == READY && next_line == LOW) begin
-            circler.x <= {4'b0, recv_byter};
+        if (state == READY && next_line == LOW && recv_dv == LOW) begin
+            recv_interrupt <= HIGH;
+            spherer <= recv_64bitr;
         end
         
         if (state == READY && next_line == HIGH) begin
@@ -118,10 +125,12 @@ module Raytracing_Controller(
             state <= (state == READY) ? state + 1: state;
         end
         else if (state == SETUP && activate_workersr == LOW && worker_any_busy == LOW) begin
+            pixel_y <= next_y - 12'd240;
             activate_workersr <= HIGH;
         end
         else if (state == SETUP && activate_workersr == HIGH && worker_any_busy == HIGH) begin
             state <= RENDERING;
+            recv_interrupt <= LOW;
         end
         else if (next_line == LOW) begin
             line_color <= line_color_buffer;
@@ -149,6 +158,6 @@ module Raytracing_Controller(
     
     // Debugging //
     
-    assign led = recv_byter[3:0];
+    assign led = recv_64bitr[3:0];
     
 endmodule
