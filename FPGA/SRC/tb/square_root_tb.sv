@@ -14,7 +14,7 @@ module SR_tb();
 
     initial begin
         clk <= 1'b1;
-        A <= 12'b110100000000;
+        A <= 12'b111100000000;
         start <= 1'b1;
         rst_ <= 1'b1;
         #150 $finish;

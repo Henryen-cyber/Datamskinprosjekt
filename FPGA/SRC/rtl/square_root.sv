@@ -28,7 +28,6 @@ module SquareRoot#(parameter N=16)(
     logic signed[39:0] x_k_padded; // 32 Fixed point bits
     logic signed[39:0] c_k; // 32 Fixed point bits
     logic signed[39:0] c_k1;// 32 Fixed point bits
-    logic signed[1:0] d_k;
 
     last_set find_m(.clk(clk),
                     .rst_(rst_),
@@ -37,7 +36,7 @@ module SquareRoot#(parameter N=16)(
                     .location(m),
                     .location_valid(m_valid));
 
-    enum { IDLE, START, LOOPSTART, LOOP, UPDATE, DONE } CURRENT_STATE, NEXT_STATE;
+    enum { IDLE, START, LOOP, UPDATE, DONE } CURRENT_STATE, NEXT_STATE;
     
     always_comb begin : data_logic
         case(CURRENT_STATE)
@@ -48,7 +47,6 @@ module SquareRoot#(parameter N=16)(
                 x_k1 <= 0;
                 c_k <= 0;
                 c_k1 <= 0;
-                d_k <= 0;
                 A_norm <= 0;
                 c_k_less_than_A_norm <= 0;
                 Q <= 0;
@@ -66,7 +64,6 @@ module SquareRoot#(parameter N=16)(
                 x_k1 <= 0;
                 c_k <= 0;
                 c_k1 <= 0;
-                d_k <= 0;
                 find_m_s <= 1;
                 if(m_valid && m) begin
                     A_norm <= {A >> (2 * m), 12'b0};
@@ -81,14 +78,14 @@ module SquareRoot#(parameter N=16)(
 
             LOOP : begin
                 c_k_less_than_A_norm = c_k < {A_norm, 16'b0};
-                if(c_k_less_than_A_norm) begin
-                    d_k = 1;
-                end else if(!c_k_less_than_A_norm) begin
-                    d_k = -1;
-                end
-                x_k1 = x_k + (d_k * (`SR_ONE >>> k));
                 x_k_padded = {x_k, 16'b0};
-                c_k1 = c_k + (d_k * ((x_k_padded >> (k - 1)))) + (`SR_ONE >>> ( 2 * k ));
+                if(c_k_less_than_A_norm) begin
+                    x_k1 = x_k + (`SR_ONE >>> (k + 1));
+                    c_k1 = c_k + ((x_k_padded >>> (k))) + (`SR_ONE >>> (2 * (k + 1)));
+                end else if(!c_k_less_than_A_norm || c_k == A_norm) begin
+                    x_k1 = x_k - (`SR_ONE >>> (k + 1));
+                    c_k1 = c_k - ((x_k_padded >>> (k))) + (`SR_ONE >>> (2 * (k + 1)));
+                end
                 x_k <= x_k;
                 c_k <= c_k;
                 A_norm <= A_norm;
@@ -101,29 +98,27 @@ module SquareRoot#(parameter N=16)(
                 find_m_s <= 0;
                 k <= k;
                 c_k_less_than_A_norm <= c_k_less_than_A_norm;
-                d_k <= d_k;
                 x_k1 <= x_k1;
                 c_k1 <= c_k1;
                 x_k <= x_k1;
                 c_k <= c_k1;
                 Q <= 0;
-                if(k == N) begin
+                if(k == N - 1) begin
                     NEXT_STATE <= DONE;
                 end else begin
-                    NEXT_STATE <= LOOPSTART;
+                    NEXT_STATE <= LOOP;
                 end
             end
 
             DONE : begin
                 // Needs some work to properly account for fixed point bits!
-                Q <= x_k;
+                Q <= x_k <<< m;
                 find_m_s <= 0;
-                k <= 0;
+                k <= k;
                 x_k <= x_k;
                 x_k1 <= x_k1;
                 c_k <= c_k;
                 c_k1 <= c_k1;
-                d_k <= d_k;
                 A_norm <= A_norm;
                 c_k_less_than_A_norm <= c_k_less_than_A_norm;
                 NEXT_STATE <= IDLE;
@@ -132,7 +127,7 @@ module SquareRoot#(parameter N=16)(
         endcase
     end
 
-    always_ff @(posedge clk) begin : next_state_logic
+    always_ff @(posedge clk, negedge rst_) begin : next_state_logic
         if(rst_) begin
             CURRENT_STATE <= NEXT_STATE;
         end else if(!rst_) begin
