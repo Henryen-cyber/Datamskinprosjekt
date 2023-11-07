@@ -1,5 +1,10 @@
 #Define target part and create output directory
-set partNum xc7a35ticsg324-1L
+
+# 35T
+#set partNum xc7a35ticsg324-1L 
+# 100T
+set partNum xc7a100tcsg324-1 
+
 set outputDir OPT
 set topModule Top
 
@@ -14,14 +19,19 @@ if {[llength $files] != 0} {
 }
 
 set_part $partNum
+set_property board_part digilentinc.com:arty-a7-100:part0:1.1 [current_project]
 #Reference HDL and constraints source files
-read_ip -verbose [glob SRC/rtl/ip/*.xci]
+read_ip -verbose [glob SRC/rtl/ip/clk_100MHz_25MHz_100T/*.xci]
 read_verilog -sv [glob SRC/rtl/*.sv]
 #read_vhdl -library 	usrDefLib [glob ../SRC/*.vhdl]
 read_xdc XDC/Arty-Master.xdc
 
-generate_target all [get_ips clk_wiz_0]
-synth_ip [get_ips clk_wiz_0]
+# generate_target all [get_ips clk_wiz_0]
+# synth_ip [get_ips clk_wiz_0]
+generate_target all [get_ips clk_100MHz_25MHz_100T]
+synth_ip [get_ips clk_100MHz_25MHz_100T]
+
+
 #Run synthesis
 synth_design -top $topModule -part $partNum
 write_checkpoint -force $outputDir/post_synth.dcp

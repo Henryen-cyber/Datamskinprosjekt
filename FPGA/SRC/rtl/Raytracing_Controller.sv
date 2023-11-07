@@ -62,8 +62,9 @@ module Raytracing_Controller(
     
     logic [1:0] state;
     localparam READY = 2'd0;
-    localparam SETUP = 2'd1;
-    localparam RENDERING = 2'd2;
+    localparam SETUP_1 = 2'd1;
+    localparam SETUP_2 = 2'd2;
+    localparam RENDERING = 2'd3;
     
     Types::Color [JOBS - 1:0] line_color_buffer; // Buffer filled by workers
     Types::Color [JOBS - 1: 0] line_color; // Line sent to vga
@@ -72,6 +73,9 @@ module Raytracing_Controller(
     logic activate_workersr;
     logic signed [11:0] next_y;
     logic signed [11:0] pixel_y;
+    logic signed[21:0] doty_r;  // Max possible value:               982'800
+    logic [15:0]    pixely_sr; // Max possible value:                 57'600
+    logic [26:0]    originy_sr; // Max possible value:            67'108'864
     logic next_line;
     
     logic [N_WORKERS - 1:0] worker_busyr;
@@ -97,7 +101,10 @@ module Raytracing_Controller(
            .activate(activate_workersr),
            .sphere(sphere),
            .pixel_start_x(x_i),
-           .pixel_y(pixel_y),
+        //    .pixel_y(pixel_y),
+           .pixely_sr(pixely_sr),
+           .doty_r(doty_r),
+           .originy_sr(originy_sr),
            .busy(worker_busyr[i]),
            .buffer(worker_line_color_buffer),
            .clk(CLK100MHZ)
@@ -109,7 +116,7 @@ module Raytracing_Controller(
     
     always @ (posedge CLK100MHZ) begin
         if (~ck_rst_) begin
-            recv_64bitr <= {16'd0, 14'd0, 16'd200, 6'd40, 12'd0};
+            recv_64bitr <= {16'd100, -14'd100, 16'd200, 6'd40, 12'd0};
             recv_interrupt <= LOW;
         end
         if (recv_dv == HIGH) begin
@@ -124,13 +131,21 @@ module Raytracing_Controller(
             // Start writing a new line
             state <= (state == READY) ? state + 1: state;
         end
-        else if (state == SETUP && activate_workersr == LOW && worker_any_busy == LOW) begin
+        else if (state == SETUP_1 && activate_workersr == LOW && worker_any_busy == LOW) begin
             pixel_y <= next_y - 12'd240;
+            originy_sr <= sphere.y ** 2;
+            state <= (state == SETUP_1) ? state + 1: state;
+        end
+        else if (state == SETUP_2 && activate_workersr == LOW && worker_any_busy == LOW) begin
+            pixely_sr <= pixel_y ** 2;
+            doty_r <= 22'(14'(pixel_y) * sphere.y);
+            
+            recv_interrupt <= LOW;
             activate_workersr <= HIGH;
         end
-        else if (state == SETUP && activate_workersr == HIGH && worker_any_busy == HIGH) begin
-            state <= RENDERING;
+        else if (state == SETUP_2 && activate_workersr == HIGH && worker_any_busy == HIGH) begin
             recv_interrupt <= LOW;
+            state <= RENDERING;
         end
         else if (next_line == LOW) begin
             line_color <= line_color_buffer;
