@@ -25,7 +25,11 @@ module Raytracing_Worker(
     input clk,
     input activate,
     input signed[11:0] pixel_start_x,
-    input signed[11:0] pixel_y,
+    // input signed[11:0] pixel_y,
+    logic signed[21:0] doty_r,  // Max possible value:               982'800
+    logic [15:0]    pixely_sr, // Max possible value:                 57'600
+    logic [26:0]    originy_sr, // Max possible value:            67'108'864
+    
     input Types::Sphere sphere,
     output logic busy,
     output Types::Color [JOBS_SUBDIVISION-1:0] buffer
@@ -57,12 +61,12 @@ module Raytracing_Worker(
     // logic  [9:0]    pixelz_sr; // Max possible value:                    961
     // Origin square registers
     logic [30:0]    originx_sr; // Max possible value:         1'073'741'824
-    logic [26:0]    originy_sr; // Max possible value:            67'108'864
+    // logic [26:0]    originy_sr; // Max possible value:            67'108'864
     logic [30:0]    originz_sr; // Max possible value:         1'073'741'824
     logic [17:0]    originr_sr; // Max possible value:               261'121
     // Dot-product registers
     logic signed[24:0] dotx_r;  // Max possible value:            10'485'440
-    logic signed[21:0] doty_r;  // Max possible value:               982'800
+    // logic signed[21:0] doty_r;  // Max possible value:               982'800
     logic signed[20:0] dotz_r;  // Max possible value:             1'048'544
     // Quadratic formula registers
     logic       [19:0] a_r;     // Max possible value:               160'961
@@ -87,14 +91,14 @@ module Raytracing_Worker(
         end
         else if (state == CALCULATING_1 && busy == HIGH) begin
             pixelx_sr <= pixel_x ** 2;
-            pixely_sr <= pixel_y ** 2;
-            originr_sr <= sphere.r ** 2;
+            // pixely_sr <= pixel_y ** 2;
+            originr_sr <= (10'(sphere.r) << 3) ** 2;
             state <= (state == CALCULATING_1) ? state + 1: state;
         end
         else if (state == CALCULATING_2 && busy == HIGH) begin
             a_r <= pixelx_sr + pixely_sr + pixelz_sr;
             dotx_r <= 25'(pixel_x * sphere.x);
-            doty_r <= 22'(14'(pixel_y) * sphere.y);
+            // doty_r <= 22'(14'(pixel_y) * sphere.y);
             dotz_r <= 21'(pixel_z * sphere.z);
         
             state <= (state == CALCULATING_2) ? state + 1: state;
@@ -102,7 +106,7 @@ module Raytracing_Worker(
         else if (state == CALCULATING_3 && busy == HIGH) begin
             b_r <= (dotx_r + doty_r + dotz_r) << 1;
             originx_sr <= sphere.x ** 2;
-            originy_sr <= sphere.y ** 2;
+            // originy_sr <= sphere.y ** 2;
             originz_sr <= sphere.z ** 2;
         
             state <= (state == CALCULATING_3) ? state + 1: state;
