@@ -34,14 +34,16 @@ module Raytracing_Worker(
     output logic busy,
     output Types::Color [JOBS_SUBDIVISION-1:0] buffer
 );
-    logic [2:0] state;
-    localparam [2:0] READY = 3'd0;
-    localparam [2:0] CALCULATING_1 = 3'd1;
-    localparam [2:0] CALCULATING_2 = 3'd2;
-    localparam [2:0] CALCULATING_3 = 3'd3;
-    localparam [2:0] CALCULATING_4 = 3'd4;
-    localparam [2:0] COLORING = 3'd5;
-    localparam [2:0] FINISHED = 3'd6;
+    logic [3:0] state;
+    localparam [3:0] READY = 3'd0;
+    localparam [3:0] CALCULATING_1 = 3'd1;
+    localparam [3:0] CALCULATING_2 = 3'd2;
+    localparam [3:0] CALCULATING_3 = 3'd3;
+    localparam [3:0] CALCULATING_4 = 3'd4;
+    localparam [3:0] CALCULATING_5 = 3'd5;
+    localparam [3:0] CALCULATING_6 = 3'd6;
+    localparam [3:0] COLORING = 3'd7;
+    localparam [3:0] FINISHED = 3'd8;
     
     // Calculation registers
     logic[5:0] current_job;
@@ -79,6 +81,23 @@ module Raytracing_Worker(
     localparam pixel_z = 100;
     localparam pixelz_sr = pixel_z ** 2;
 
+    logic rst_ = 1;
+
+    // Square root somehting
+    logic [23:0] dis_sqrt;
+    logic [23:0] dist_r;
+    logic sqrt_start;
+    logic sqrt_busy;
+    SquareRoot square_root_instance
+    (
+        .clk(clk),
+        .rst_(rst_),
+        .A(dis_r),
+        .Q(dis_sqrt),
+        .start(sqrt_start),
+        .busy(sqrt_busy)
+    );
+
 
     // Raytracing Worker State-machine //
     always @ (posedge clk) begin
@@ -88,6 +107,7 @@ module Raytracing_Worker(
             state <= (state == READY) ? state + 1: state;
             busy <= (state == READY) ? HIGH : LOW;
             buffer[current_job] <= 0;
+            sqrt_start <= 0;
         end
         else if (state == CALCULATING_1 && busy == HIGH) begin
             pixelx_sr <= pixel_x ** 2;
@@ -118,9 +138,20 @@ module Raytracing_Worker(
             dis_r <= (br_sr - arcr_r);
             state <= (state == CALCULATING_4) ? state + 1: state;
         end
+        else if (state == CALCULATING_5 && busy == HIGH && sqrt_busy == LOW) begin
+            sqrt_start <= HIGH;
+        end
+        else if (state == CALCULATING_5 && busy == HIGH && sqrt_busy == HIGH) begin
+            sqrt_start <= LOW;
+            state <= (state == CALCULATING_5) ? state + 1: state;
+        end
+        else if (state == CALCULATING_6 && busy == HIGH && sqrt_busy == LOW) begin
+            dist_r <= (b_r - dis_sqrt) / (2 * a_r);
+            state <= (state == CALCULATING_6) ? state + 1: state;
+        end
         else if (state == COLORING && busy == HIGH) begin
-            buffer[current_job] <= (dis_r >= 0) ? buffer[current_job] + 1 : 0;
-            dis_r <= (dis_r == 0) ? -1 : (dis_r > 0) ? dis_r >> 1 : -1;
+            buffer[current_job] <= (dist_r >= 0) ? buffer[current_job] + 1 : 0;
+            dist_r <= (dist_r == 0) ? -1 : (dist_r > 0) ? dist_r >> 1 : -1;
 
             state <= (state == COLORING && dis_r <= 0) ? state + 1: state;
         end

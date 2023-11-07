@@ -4,7 +4,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 `include "last_set_bit.sv"
-`include "types.sv"
+`include "Types.sv"
 
 module SquareRoot#(parameter N=16)(
 
@@ -13,7 +13,8 @@ module SquareRoot#(parameter N=16)(
     input  logic[11:0] A, // Input value has 4 fixed point bits
 	input  logic start,
 
-    output logic[23:0] Q // Output value has 16 fiex point bits
+    output logic[23:0] Q, // Output value has 16 fiex point bits
+    output logic busy
 
     );
 
@@ -42,7 +43,7 @@ module SquareRoot#(parameter N=16)(
         case(CURRENT_STATE)
 
             IDLE : begin
-                k <= 0;
+                // k <= 0;
                 x_k <= 0;
                 x_k1 <= 0;
                 c_k <= 0;
@@ -51,6 +52,7 @@ module SquareRoot#(parameter N=16)(
                 c_k_less_than_A_norm <= 0;
                 Q <= 0;
                 find_m_s <= 0;
+                busy <= 0;
                 if(start) begin
                     NEXT_STATE <= START;
                 end else begin
@@ -59,12 +61,13 @@ module SquareRoot#(parameter N=16)(
             end
 
             START : begin
-                k <= 0;
+                // k <= 0;
                 x_k <= 0;
                 x_k1 <= 0;
                 c_k <= 0;
                 c_k1 <= 0;
                 find_m_s <= 1;
+                busy <= 1;
                 if(m_valid && m) begin
                     A_norm <= {A >> (2 * m), 12'b0};
                     NEXT_STATE <= LOOP;
@@ -96,7 +99,7 @@ module SquareRoot#(parameter N=16)(
 
             UPDATE : begin
                 find_m_s <= 0;
-                k <= k;
+                // k <= k;
                 c_k_less_than_A_norm <= c_k_less_than_A_norm;
                 x_k1 <= x_k1;
                 c_k1 <= c_k1;
@@ -114,26 +117,30 @@ module SquareRoot#(parameter N=16)(
                 // Needs some work to properly account for fixed point bits!
                 Q <= x_k <<< m;
                 find_m_s <= 0;
-                k <= k;
+                // k <= k;
                 x_k <= x_k;
                 x_k1 <= x_k1;
                 c_k <= c_k;
                 c_k1 <= c_k1;
                 A_norm <= A_norm;
                 c_k_less_than_A_norm <= c_k_less_than_A_norm;
+                busy <= 0;
                 NEXT_STATE <= IDLE;
             end
 
         endcase
     end
 
-    always_ff @(posedge clk, negedge rst_) begin : next_state_logic
+    always_ff @(posedge clk) begin : next_state_logic
         if(rst_) begin
             CURRENT_STATE <= NEXT_STATE;
         end else if(!rst_) begin
             CURRENT_STATE <= IDLE;
         end
-        if(CURRENT_STATE == UPDATE) begin
+        if(CURRENT_STATE == IDLE) begin
+            k <= 0;
+        end
+        else if(CURRENT_STATE == UPDATE) begin
             k <= k + 1;
         end
     end
