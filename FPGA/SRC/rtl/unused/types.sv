@@ -1,3 +1,14 @@
+//////////////////////////////////
+//  Definitions and parameters  //
+//////////////////////////////////
+`define SR_FIXED_POINT_BITS 16
+`define FIXED_POINT_BITS 4
+`define SR_ONE 17'b10000000000000000
+
+//////////////////////////////////
+// Data collections and structs //
+//////////////////////////////////
+
 typedef struct {
     logic[3:0] red;
     logic[3:0] green;
