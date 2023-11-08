@@ -35,16 +35,16 @@ module Raytracing_Worker(
     output Types::Color [JOBS_SUBDIVISION-1:0] buffer
 );
     logic [3:0] state;
-    localparam [3:0] READY = 3'd0;
-    localparam [3:0] CALCULATING_1 = 3'd1;
-    localparam [3:0] CALCULATING_2 = 3'd2;
-    localparam [3:0] CALCULATING_3 = 3'd3;
-    localparam [3:0] CALCULATING_4 = 3'd4;
-    localparam [3:0] CALCULATING_5 = 3'd5;
-    localparam [3:0] CALCULATING_6 = 3'd6;
-    localparam [3:0] CALCULATING_7 = 3'd7;
-    localparam [3:0] COLORING = 3'd8;
-    localparam [3:0] FINISHED = 3'd9;
+    localparam [3:0] READY = 0;
+    localparam [3:0] CALCULATING_1 = 1;
+    localparam [3:0] CALCULATING_2 = 2;
+    localparam [3:0] CALCULATING_3 = 3;
+    localparam [3:0] CALCULATING_4 = 4;
+    localparam [3:0] CALCULATING_5 = 5;
+    localparam [3:0] CALCULATING_6 = 6;
+    localparam [3:0] CALCULATING_7 = 7;
+    localparam [3:0] COLORING = 8;
+    localparam [3:0] FINISHED = 9;
     
     // Calculation registers
     logic[5:0] current_job;
@@ -65,7 +65,7 @@ module Raytracing_Worker(
         .Q(dis_sqrt_r)
     );
 
-    logic unsigned [`PX_X_B-2:0] pixel_offset_x;
+    logic [`PX_X_B-1:0] pixel_offset_x;
     logic signed [`PX_X_B-1:0] pixel_x;
 
     // Pixel square registers     All of these are much smaller due to Fixed
@@ -114,14 +114,14 @@ module Raytracing_Worker(
         end
         else if (state == CALCULATING_2 && busy == HIGH) begin
             a_times_two_r <= (pixel_x_sqrd + pixel_y_sqrd + pixel_z_sqrd) << 1;
-            dotx_r <= `DOT_X_B'({pixel_x, 3'b0} * sphere.x);
+            dotx_r <= `DOT_X_B'(`DOT_X_B'(pixel_x) * `DOT_X_B'(sphere.x));
             // doty_r <= 22'(14'(pixel_y) * sphere.y);
-            dotz_r <= `DOT_Z_B'({pixel_z, 3'b0} * sphere.z);
+            dotz_r <= `DOT_Z_B'(`DOT_Z_B'(pixel_z) * `DOT_Z_B'(sphere.z));
         
             state <= (state == CALCULATING_2) ? state + 1: state;
         end
         else if (state == CALCULATING_3 && busy == HIGH) begin
-            b_r <= `B_B'(dotx_r + doty_r + dotz_r) <<< 1;
+            b_r <= (`B_B'(dotx_r) + `B_B'(doty_r) + `B_B'(dotz_r)) <<< 1;
             sphere_x_sqrd <= (sphere.x ** 2) >>> `FP_B;
             // sphere_y_sqrd <= sphere.y ** 2;
             sphere_z_sqrd <= (sphere.z ** 2) >>> `FP_B;
@@ -129,32 +129,32 @@ module Raytracing_Worker(
             state <= (state == CALCULATING_3) ? state + 1: state;
         end
         else if (state == CALCULATING_4 && busy == HIGH) begin
-            c_times_two_r <= (`TWO_C_B'(sphere_x_sqrd + sphere_y_sqrd + sphere_z_sqrd) - (`TWO_C_B'(sphere_r_sqrd) <<< `FP_B)) <<< 1;
-            br_sr <= (b_r ** 2) >>> `FP_B;
+            c_times_two_r <= (`TWO_C_B'(sphere_x_sqrd + sphere_y_sqrd + sphere_z_sqrd) - (`TWO_C_B'(sphere_r_sqrd) << `FP_B)) <<< 1;
+            br_sr <= (b_r ** 2) >> `FP_B;
             state <= (state == CALCULATING_4) ? state + 1: state;
-            a_times_c_r <= `A_TIMES_C_B'((a_times_two_r * c_times_two_r));
         end
         else if (state == CALCULATING_5 && busy == HIGH) begin
-            a_times_c_r <= `A_TIMES_C_B'((a_times_two_r * c_times_two_r));
+            a_times_c_r <= `A_TIMES_C_B'(a_times_two_r) * `A_TIMES_C_B'(c_times_two_r);
             state <= (state == CALCULATING_5) ? state + 1: state;
         end
-        else if (state == CALCULATING_6 && busy == HIGH && sqrt_busy == LOW) begin
+        else if (state == CALCULATING_6 && busy == HIGH) begin // && sqrt_busy == LOW
             dis_r <= (`DIS_B'(br_sr) - `DIS_B'(a_times_c_r));
             sqrt_start <= HIGH;
-        end
-        else if (state == CALCULATING_6 && busy == HIGH && sqrt_start == HIGH && sqrt_busy == HIGH) begin
-            sqrt_start <= LOW;
             state <= (state == CALCULATING_6) ? state + 1: state;
         end
-        else if (state == CALCULATING_7 && busy == HIGH && sqrt_busy == LOW) begin
-            dist_r <= (((b_r - dis_sqrt_r) >>> `FP_B) / (a_times_two_r)) <<< `FP_B;
+        else if (state == CALCULATING_6 && busy == HIGH) begin // && sqrt_start == HIGH && sqrt_busy == HIGH) begin
+            // sqrt_start <= LOW;
+            state <= (state == CALCULATING_6) ? state + 1: state;
+        end
+        else if (state == CALCULATING_7 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
+            // dist_r <= (((b_r - dis_sqrt_r) >>> `FP_B) / (a_times_two_r)) <<< `FP_B;
             state <= (state == CALCULATING_7) ? state + 1: state;
         end
         else if (state == COLORING && busy == HIGH) begin
-            buffer[current_job] <= (dis_r >= 0) ? {4'((1-dis_r) * 16), 4'b0, 4'b0} : 0;
+            buffer[current_job] <= (dis_r >= 0) ? {4'b1111, 4'b0, 4'b0} : 0;
             // dis_r <= (dis_r == 0) ? -1 : (dis_r > 0) ? dis_r >> 1 : -1;
 
-            state <= (state == COLORING && dis_r <= 0) ? state + 1: state;
+            state <= (state == COLORING) ? state + 1: state;
         end
         else if (state == FINISHED && busy == HIGH) begin
             current_job <= (state == FINISHED && current_job == JOBS_SUBDIVISION - 1) ? 0 : current_job + 1;

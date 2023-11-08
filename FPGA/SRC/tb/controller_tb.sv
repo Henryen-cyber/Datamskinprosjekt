@@ -47,7 +47,7 @@ module controller_tb(
     
     initial begin 
         #3 ck_rst_ = 1'b1;
-        #5000000 $finish;
+        #10000000 $finish;
     end
     
     always #1 CLK100MHZ = ~CLK100MHZ;

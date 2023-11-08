@@ -52,7 +52,7 @@ module Raytracing_Controller(
     );
     
     // World
-    Types::Sphere spherer =  {- {`S_X_INT_B'd300, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd120, `S_Z_FP_B'd0}, 6'd10, 12'd0};
+    Types::Sphere spherer =  {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd10, 12'd0};
     Types::Sphere sphere;
     assign sphere = spherer;
     
@@ -116,7 +116,7 @@ module Raytracing_Controller(
     
     always @ (posedge CLK100MHZ) begin
         if (~ck_rst_) begin
-            recv_64bitr <= {- {`S_X_INT_B'd300, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd150, `S_Z_FP_B'd0}, 6'd5, 12'd0};
+            recv_64bitr <= {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd10, 12'd0};
             recv_interrupt <= LOW;
         end
         if (recv_dv == HIGH) begin
@@ -137,7 +137,7 @@ module Raytracing_Controller(
         end
         else if (state == SETUP_2 && activate_workersr == LOW && worker_any_busy == LOW) begin
             pixely_sr <= pixel_y ** 2;
-            doty_r <= `DOT_Y_B'(pixel_y) * `DOT_Y_B'(sphere.y);
+            doty_r <= `DOT_Y_B'(`DOT_Y_B'(pixel_y) * `DOT_Y_B'(sphere.y));
             
             recv_interrupt <= LOW;
             activate_workersr <= HIGH;
@@ -171,7 +171,7 @@ module Raytracing_Controller(
     );
     
     // Debugging //
-    
-    assign led = recv_64bitr[3:0];
+
+    assign led[0] = spherer === 64'b10000000111000001000001010000000000010;
     
 endmodule
