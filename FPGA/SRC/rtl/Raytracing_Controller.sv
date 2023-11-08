@@ -52,7 +52,7 @@ module Raytracing_Controller(
     );
     
     // World
-    Types::Sphere spherer =  {16'd0, 14'd0, 16'd200, 6'd40, 12'd0};
+    Types::Sphere spherer =  {- {`S_X_INT_B'd300, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd120, `S_Z_FP_B'd0}, 6'd10, 12'd0};
     Types::Sphere sphere;
     assign sphere = spherer;
     
@@ -102,9 +102,9 @@ module Raytracing_Controller(
            .sphere(sphere),
            .pixel_start_x(x_i),
         //    .pixel_y(pixel_y),
-           .pixely_sr(pixely_sr),
+           .pixel_y_sqrd(pixely_sr),
            .doty_r(doty_r),
-           .originy_sr(originy_sr),
+           .sphere_y_sqrd(originy_sr),
            .busy(worker_busyr[i]),
            .buffer(worker_line_color_buffer),
            .clk(CLK100MHZ)
@@ -116,11 +116,11 @@ module Raytracing_Controller(
     
     always @ (posedge CLK100MHZ) begin
         if (~ck_rst_) begin
-            recv_64bitr <= {16'd100, -14'd100, 16'd200, 6'd40, 12'd0};
+            recv_64bitr <= {- {`S_X_INT_B'd300, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd150, `S_Z_FP_B'd0}, 6'd5, 12'd0};
             recv_interrupt <= LOW;
         end
         if (recv_dv == HIGH) begin
-            // recv_64bitr <= recv_64bit;
+            recv_64bitr <= recv_64bit;
         end
         if (state == READY && next_line == LOW && recv_dv == LOW) begin
             recv_interrupt <= HIGH;
@@ -128,17 +128,16 @@ module Raytracing_Controller(
         end
         
         if (state == READY && next_line == HIGH) begin
-            // Start writing a new line
             state <= (state == READY) ? state + 1: state;
         end
         else if (state == SETUP_1 && activate_workersr == LOW && worker_any_busy == LOW) begin
             pixel_y <= next_y - 12'd240;
-            originy_sr <= sphere.y ** 2;
+            originy_sr <= (sphere.y ** 2) >>> `FP_B;
             state <= (state == SETUP_1) ? state + 1: state;
         end
         else if (state == SETUP_2 && activate_workersr == LOW && worker_any_busy == LOW) begin
             pixely_sr <= pixel_y ** 2;
-            doty_r <= 22'(14'(pixel_y) * sphere.y);
+            doty_r <= `DOT_Y_B'(pixel_y) * `DOT_Y_B'(sphere.y);
             
             recv_interrupt <= LOW;
             activate_workersr <= HIGH;

@@ -1,6 +1,9 @@
 SOURCES_SV := \
+    ../SRC/rtl/Types.sv \
     ../SRC/rtl/Raytracing_Controller.sv \
     ../SRC/rtl/VGA.sv \
+    ../SRC/rtl/last_set_bit.sv \
+    ../SRC/rtl/SquareRoot.sv \
     ../SRC/rtl/Raytracing_Worker.sv \
     ../SRC/tb/controller_tb.sv \
 
