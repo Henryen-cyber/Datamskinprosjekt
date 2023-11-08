@@ -114,9 +114,9 @@ module Raytracing_Worker(
         end
         else if (state == CALCULATING_2 && busy == HIGH) begin
             a_times_two_r <= (pixel_x_sqrd + pixel_y_sqrd + pixel_z_sqrd) << 1;
-            dotx_r <= `DOT_X_B'(pixel_x * sphere.x);
+            dotx_r <= `DOT_X_B'({pixel_x, 3'b0} * sphere.x);
             // doty_r <= 22'(14'(pixel_y) * sphere.y);
-            dotz_r <= `DOT_Z_B'(pixel_z * sphere.z);
+            dotz_r <= `DOT_Z_B'({pixel_z, 3'b0} * sphere.z);
         
             state <= (state == CALCULATING_2) ? state + 1: state;
         end

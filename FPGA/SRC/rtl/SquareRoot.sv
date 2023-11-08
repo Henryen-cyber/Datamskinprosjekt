@@ -7,7 +7,7 @@
 `include "Types.sv"
 
 module SquareRoot#(parameter N=16, parameter A_INT_B=8, parameter A_FP_B=4, parameter A_NORM_FP_B=16,
-parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B
+parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
 )(
 
     input  logic clk,
@@ -22,13 +22,13 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B
 
     logic find_m_s;
     logic m_valid;
-    logic [23:0] A_norm; // 16 Fixed point bits
+    logic [A_NORM_FP_B:0] A_norm; // 16 Fixed point bits
     logic c_k_less_than_A_norm;
     logic [5:0] two_times_m;
     logic [4:0] k;
-    logic signed[23:0] x_k; // 16 Fixed point bits
-    logic signed[23:0] x_k1;// 16 Fixed point bits
-    logic signed[39:0] x_k_padded; // 32 Fixed point bits
+    logic signed[A_NORM_FP_B:0] x_k; // 16 Fixed point bits
+    logic signed[A_NORM_FP_B:0] x_k1;// 16 Fixed point bits
+    logic signed[A_NORM_FP_B + PADDED_FB_BITS:0] x_k_padded; // 32 Fixed point bits
     logic signed[39:0] c_k; // 32 Fixed point bits
     logic signed[39:0] c_k1;// 32 Fixed point bits
 
@@ -63,7 +63,6 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B
             end
 
             START : begin
-                
                 x_k <= 0;
                 x_k1 <= 0;
                 c_k <= 0;
@@ -101,7 +100,6 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B
 
             UPDATE : begin
                 find_m_s <= 0;
-                
                 c_k_less_than_A_norm <= c_k_less_than_A_norm;
                 x_k1 <= x_k1;
                 c_k1 <= c_k1;
@@ -117,9 +115,8 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B
 
             DONE : begin
                 // Needs some work to properly account for fixed point bits!
-                Q <= {x_k <<< ((two_times_m >> 1) + 1), A_FP_B'('b0)};
+                Q <= (x_k <<< ((two_times_m >> 1) + 1)) >>> A_FP_DIFF_B;
                 find_m_s <= 0;
-                
                 x_k <= x_k;
                 x_k1 <= x_k1;
                 c_k <= c_k;
