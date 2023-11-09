@@ -66,16 +66,16 @@ module Top(
     );
     
     
-    logic recv_dv;
+    logic recv_byte_dv;
+    logic [7:0] recv_byte;
+    logic recv_64bit_dv;
     logic [63:0] recv_64bit;
-    // logic tran_dv;
-    // logic [7:0] tran_byte;
     
-    SPI_Slave_64 SPI_Slave_instance (
+    SPI_Slave SPI_Slave_instance (
     .i_Rst_L(ck_rst_),
     .i_Clk(CLK100MHZ),
     .o_RX_DV(recv_dv),
-    .o_RX_64Bit(recv_64bit),
+    .o_RX_Byte(recv_byte),
     // .i_TX_DV(tran_dv),
     // .i_TX_Byte(tran_byte),
     .i_SPI_Clk(i_SPI_Clk),
@@ -84,6 +84,14 @@ module Top(
     .i_SPI_CS_n(i_SPI_CS_n)
     );
     
+    SPI_Slave_Acc SPI_Slave_Acc_instance (
+        .clk(CLK100MHZ),
+        .i_RX_DV(recv_dv),
+        .i_RX_Byte(recv_byte),
+        .o_Acc_Bytes(recv_64bit),
+        .o_Acc_DV(recv_64bit_dv)
+    );
+
     Raytracing_Controller controller_instance (    
     .CLK100MHZ(CLK100MHZ), 
     .CLK25MHZ(CLK25MHZ),
@@ -93,7 +101,7 @@ module Top(
     .vga_b(vga_b),
     .vga_hs(vga_hs),
     .vga_vs(vga_vs),
-    .recv_dv(recv_dv),
+    .recv_dv(recv_64bit_dv),
     .recv_64bit(recv_64bit),
     .recv_interrupt(ck_a0),
     // .tran_dv(tran_dv),

@@ -5,6 +5,10 @@ SOURCES_SV := \
     ../SRC/rtl/last_set_bit.sv \
     ../SRC/rtl/SquareRoot.sv \
     ../SRC/rtl/Raytracing_Worker.sv \
+	../SRC/rtl/SPI_Slave_64.sv \
+	../SRC/rtl/SPI_Slave.sv \
+	../SRC/rtl/SPI_Slave_Acc.sv \
+    ../SRC/tb/spi_64_tb.sv \
     ../SRC/tb/controller_tb.sv \
 
 COMP_OPTS_SV := \
@@ -14,7 +18,7 @@ COMP_OPTS_SV := \
 DEFINES_SV :=
 COMP_OPTS_VHDL := --incr --relax
 
-TB_TOP := controller_tb
+TB_TOP := spi_64_tb
 
 #==== Default target - running simulation without drawing waveforms ====#
 .PHONY : simulate
