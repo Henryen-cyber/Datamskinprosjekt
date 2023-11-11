@@ -42,9 +42,11 @@ module Raytracing_Worker(
     localparam [3:0] CALCULATING_5 = 5;
     localparam [3:0] CALCULATING_6 = 6;
     localparam [3:0] CALCULATING_7 = 7;
-    localparam [3:0] COLORING = 8;
-    localparam [3:0] FINISHED = 9;
-    
+    localparam [3:0] CALCULATING_8 = 8;
+    localparam [3:0] CALCULATING_9 = 9;
+    localparam [3:0] COLORING = 10;
+    localparam [3:0] FINISHED = 11;
+
     // Calculation registers
     logic[5:0] current_job;
 
@@ -89,8 +91,24 @@ module Raytracing_Worker(
     logic       [`B_SQRD_B-1:0]     br_sr;          // Max possible value:   626'679'526'810'624
     logic signed[`A_TIMES_C_B-1:0]  a_times_c_r;    // Max possible value: 1'425'683'980'107'004
     logic signed[`DIS_B-1:0]        dis_r;          // Max possible value: 1'425'683'980'107'004
-    
-    logic signed [`DIST_B-1:0]      dist_r;
+
+    logic signed[`DIST_B-1:0]       dist_r;
+    // Normal vector registers
+    logic signed[`PX_X_B-1:0]       x_param_r;
+    logic signed[`PX_X_B-1:0]       y_param_r;
+    logic signed[`PX_X_B-1:0]       z_param_r;
+
+    logic signed[`PX_X_B-1:0]       x1_r;
+    logic signed[`PX_X_B-1:0]       y1_r;
+    logic signed[`PX_X_B-1:0]       z1_r;
+
+    logic signed[`PX_X_B-1:0]       x2_r;
+    logic signed[`PX_X_B-1:0]       y2_r;
+    logic signed[`PX_X_B-1:0]       z2_r;
+
+    logic signed[`PX_X_B-1:0]       normal_x;
+    logic signed[`PX_X_B-1:0]       normal_y;
+    logic signed[`PX_X_B-1:0]       normal_z;
 
     localparam pixel_z = 320;
     localparam pixel_z_sqrd = pixel_z ** 2;
@@ -146,13 +164,24 @@ module Raytracing_Worker(
             state <= (state == CALCULATING_6) ? state + 1: state;
         end
         else if (state == CALCULATING_7 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
-            // dist_r <= (((b_r - dis_sqrt_r) >>> `FP_B) / (a_times_two_r)) <<< `FP_B;
+            dist_r <= (b_r - dis_sqrt_r) / a_times_two_r;
             state <= (state == CALCULATING_7) ? state + 1: state;
         end
+        else if(state == CALCULATING_8 && busy == HIGH) begin
+            x_param_r <= x1_r + dist_r * (x2_r - x1_r);
+            y_param_r <= y1_r + dist_r * (y2_r - y1_r);
+            z_param_r <= z1_r + dist_r * (z2_r - z1_r);
+            state <= (state == CALCULATING_8) ? state + 1 : state;
+        end
+        else if(state == CALCULATING_9 && busy == HIGH) begin
+            normal_x <= x_param_r / sphere.r;
+            normal_y <= y_param_r / sphere.r;
+            normal_z <= z_param_r / sphere.r;
+            state <= (state == CALCULATING_9) ? state + 1 : state;
+        end
         else if (state == COLORING && busy == HIGH) begin
-            buffer[current_job] <= (dis_r >= 0) ? {4'b1111, 4'b0, 4'b0} : 0;
+            buffer[current_job] <= (dis_r >= 0) ? {normal_x / 16, normal_y / 16, normal_z / 16} : 0;
             // dis_r <= (dis_r == 0) ? -1 : (dis_r > 0) ? dis_r >> 1 : -1;
-
             state <= (state == COLORING) ? state + 1: state;
         end
         else if (state == FINISHED && busy == HIGH) begin
