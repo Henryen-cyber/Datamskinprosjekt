@@ -20,18 +20,17 @@
 //////////////////////////////////////////////////////////////////////////////////
 `include "Types.sv"
 
-
 module Raytracing_Worker(
-    input clk,
-    input activate,
-    input signed[11:0] pixel_start_x,
-    // input signed[11:0] pixel_y,
-    logic signed[21:0] doty_r,  // Max possible value:               982'800
-    logic [`PX_Y_SQRD_B-1:0]    pixel_y_sqrd, // Max possible value:                 57'600
-    logic [`S_Y_SQRD_B-1:0]    sphere_y_sqrd, // Max possible value:            67'108'864
+    input                       clk,
+    input                       activate,
+    input signed[11:0]          pixel_start_x,
+    // input signed[11:0]       pixel_y,
+    logic signed[21:0]          doty_r,         // Max possible value:               982'800
+    logic [`PX_Y_SQRD_B-1:0]    pixel_y_sqrd,   // Max possible value:                 57'600
+    logic [`S_Y_SQRD_B-1:0]     sphere_y_sqrd,  // Max possible value:            67'108'864
     
-    input Types::Sphere sphere,
-    output logic busy,
+    input Types::Sphere         sphere,
+    output logic                busy,
     output Types::Color [JOBS_SUBDIVISION-1:0] buffer
 );
     logic [3:0] state;
@@ -65,33 +64,33 @@ module Raytracing_Worker(
         .Q(dis_sqrt_r)
     );
 
-    logic [`PX_X_B-1:0] pixel_offset_x;
-    logic signed [`PX_X_B-1:0] pixel_x;
+    logic [`PX_X_B-1:0]             pixel_offset_x;
+    logic signed [`PX_X_B-1:0]      pixel_x;
 
-    // Pixel square registers     All of these are much smaller due to Fixed
-    //                            Point representation!
-    //                            Needs to be updated accordingly
-    logic [`PX_X_SQRD_B-1:0]    pixel_x_sqrd; // Max possible value:                102'400
-    // logic [`PX_Y_SQRD_B-1:0]    pixel_y_sqrd; // Max possible value:                 57'600
-    // logic  [9:0]    pixel_z_sqrd; // Max possible value:                    961
+    // Pixel square registers       All of these are much smaller due to Fixed
+    //                              Point representation!
+    //                              Needs to be updated accordingly
+    logic [`PX_X_SQRD_B-1:0]        pixel_x_sqrd;   // Max possible value:                102'400
+    // logic [`PX_Y_SQRD_B-1:0]     pixel_y_sqrd;   // Max possible value:                 57'600
+    // logic [9:0]                  pixel_z_sqrd;   // Max possible value:                    961
     // Origin square registers
-    logic [`S_X_SQRD_B-1:0]    sphere_x_sqrd; // Max possible value:         1'073'741'824
-    // logic [26:0]    sphere_y_sqrd; // Max possible value:            67'108'864
-    logic [`S_Z_SQRD_B-1:0]    sphere_z_sqrd; // Max possible value:         1'073'741'824
-    logic [`S_R_SQRD_B-1:0]    sphere_r_sqrd; // Max possible value:               261'121
+    logic [`S_X_SQRD_B-1:0]         sphere_x_sqrd;  // Max possible value:         1'073'741'824
+    // logic [26:0]                 sphere_y_sqrd   // Max possible value:            67'108'864
+    logic [`S_Z_SQRD_B-1:0]         sphere_z_sqrd;  // Max possible value:         1'073'741'824
+    logic [`S_R_SQRD_B-1:0]         sphere_r_sqrd;  // Max possible value:               261'121
     // Dot-product registers
-    logic signed[`DOT_X_B-1:0] dotx_r;  // Max possible value:            10'485'440
-    // logic signed[21:0] doty_r;  // Max possible value:               982'800
-    logic [`DOT_Z_B-1:0] dotz_r;  // Max possible value:             1'048'544
+    logic signed[`DOT_X_B-1:0]      dotx_r;         // Max possible value:            10'485'440
+    // logic signed[21:0]           doty_r;         // Max possible value:               982'800
+    logic [`DOT_Z_B-1:0]            dotz_r;         // Max possible value:             1'048'544
     // Quadratic formula registers
-    logic       [`TWO_A_B-1:0] a_times_two_r;     // Max possible value:               160'961
-    logic signed[`TWO_C_B-1:0] c_times_two_r;     // Max possible value:         2'214'592'511
-    logic signed[`B_B-1:0] b_r;     // Max possible value:            25'033'568
-    logic       [`B_SQRD_B-1:0] br_sr;   // Max possible value:   626'679'526'810'624
-    logic signed[`A_TIMES_C_B-1:0] a_times_c_r;  // Max possible value: 1'425'683'980'107'004
-    logic signed[`DIS_B-1:0] dis_r;   // Max possible value: 1'425'683'980'107'004
+    logic       [`TWO_A_B-1:0]      a_times_two_r;  // Max possible value:               160'961
+    logic signed[`TWO_C_B-1:0]      c_times_two_r;  // Max possible value:         2'214'592'511
+    logic signed[`B_B-1:0]          b_r;            // Max possible value:            25'033'568
+    logic       [`B_SQRD_B-1:0]     br_sr;          // Max possible value:   626'679'526'810'624
+    logic signed[`A_TIMES_C_B-1:0]  a_times_c_r;    // Max possible value: 1'425'683'980'107'004
+    logic signed[`DIS_B-1:0]        dis_r;          // Max possible value: 1'425'683'980'107'004
     
-    logic signed [`DIST_B-1:0] dist_r;
+    logic signed [`DIST_B-1:0]      dist_r;
 
     localparam pixel_z = 320;
     localparam pixel_z_sqrd = pixel_z ** 2;

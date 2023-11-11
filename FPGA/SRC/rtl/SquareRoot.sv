@@ -16,7 +16,7 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
 	input  logic start,
 
     output logic busy,
-    output logic[`DIS_SQRT_B-1:0] Q // Output value has 16 fiex point bits
+    output logic[`DIS_SQRT_B-1:0] Q // Output value has 16 fixed point bits
 
     );
 
