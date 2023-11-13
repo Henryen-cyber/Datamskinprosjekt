@@ -1,22 +1,22 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
+// Company:
+// Engineer:
+//
 // Create Date: 10/24/2023 09:20:07 AM
-// Design Name: 
+// Design Name:
 // Module Name: ray_worker
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
+// Project Name:
+// Target Devices:
+// Tool Versions:
+// Description:
+//
+// Dependencies:
+//
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
-// 
+//
 //////////////////////////////////////////////////////////////////////////////////
 `include "Types.sv"
 
@@ -28,7 +28,7 @@ module Raytracing_Worker(
     logic signed[21:0]          doty_r,         // Max possible value:               982'800
     logic [`PX_Y_SQRD_B-1:0]    pixel_y_sqrd,   // Max possible value:                 57'600
     logic [`S_Y_SQRD_B-1:0]     sphere_y_sqrd,  // Max possible value:            67'108'864
-    
+
     input Types::Sphere         sphere,
     output logic                busy,
     output Types::Color [JOBS_SUBDIVISION-1:0] buffer
@@ -53,9 +53,9 @@ module Raytracing_Worker(
     logic sqrt_start;
     logic sqrt_busy;
     logic [`DIS_SQRT_B-1:0] dis_sqrt_r;
-    
+
     SquareRoot#(
-        .A_INT_B(`DIS_B - `FP_B), 
+        .A_INT_B(`DIS_B - `FP_B),
         .A_FP_B(`FP_B)
     ) square_root_instance (
         .clk(clk),
@@ -134,7 +134,7 @@ module Raytracing_Worker(
             dotx_r <= `DOT_X_B'(`DOT_X_B'(pixel_x) * `DOT_X_B'(sphere.x));
             // doty_r <= 22'(14'(pixel_y) * sphere.y);
             dotz_r <= `DOT_Z_B'(`DOT_Z_B'(pixel_z) * `DOT_Z_B'(sphere.z));
-        
+
             state <= (state == CALCULATING_2) ? state + 1: state;
         end
         else if (state == CALCULATING_3 && busy == HIGH) begin
@@ -142,7 +142,7 @@ module Raytracing_Worker(
             sphere_x_sqrd <= (sphere.x ** 2) >>> `FP_B;
             // sphere_y_sqrd <= sphere.y ** 2;
             sphere_z_sqrd <= (sphere.z ** 2) >>> `FP_B;
-        
+
             state <= (state == CALCULATING_3) ? state + 1: state;
         end
         else if (state == CALCULATING_4 && busy == HIGH) begin
