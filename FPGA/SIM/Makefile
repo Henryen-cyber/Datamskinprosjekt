@@ -18,7 +18,7 @@ COMP_OPTS_SV := \
 DEFINES_SV :=
 COMP_OPTS_VHDL := --incr --relax
 
-TB_TOP := spi_64_tb
+TB_TOP := controller_tb
 
 #==== Default target - running simulation without drawing waveforms ====#
 .PHONY : simulate

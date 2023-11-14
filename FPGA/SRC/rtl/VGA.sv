@@ -1,22 +1,22 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
+// Company:
+// Engineer:
+//
 // Create Date: 10/03/2023 12:17:37 PM
-// Design Name: 
+// Design Name:
 // Module Name: vga
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
+// Project Name:
+// Target Devices:
+// Tool Versions:
+// Description:
+//
+// Dependencies:
+//
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
-// 
+//
 //////////////////////////////////////////////////////////////////////////////////
 `include "Types.sv"
 
@@ -32,8 +32,7 @@ module VGA (
     output signed [11:0] next_y,
     output next_line
     );
-   
-    
+
     // Horizontal parameters (measured in clock cycles)
     parameter [9:0] H_ACTIVE  = 10'd639 ;
     parameter [9:0] H_FRONT   = 10'd15 ;
@@ -60,7 +59,7 @@ module VGA (
     parameter[7:0] V_FRONT_STATE  = 8'd1 ;
     parameter[7:0] V_PULSE_STATE  = 8'd2 ;
     parameter[7:0] V_BACK_STATE   = 8'd3 ;
-    
+
     // Clocked registers
     logic      hysncr ;
     logic      vsyncr ;
@@ -76,13 +75,12 @@ module VGA (
 
     logic[7:0] h_state ;
     logic[7:0] v_state ;
-    
+
     // logic inter_offset = 1'b0 ;
-    
+
     logic [9:0] next_x;
-    
     // State machine
-    always@(posedge CLK25MHZ) begin 
+    always@(posedge CLK25MHZ) begin
         // At reset . . .
         if (~ck_rst_) begin
             // Zero the counters
@@ -125,7 +123,7 @@ module VGA (
                 hysncr <= LOW ;
                 // State transition
                 h_state <= (h_counter == H_PULSE)?H_BACK_STATE:H_PULSE_STATE ;
-                
+
             end
             if (h_state == H_BACK_STATE) begin
                 // Iterate horizontal counter, zero at end of H_BACK mode
@@ -183,7 +181,7 @@ module VGA (
             bluer<=(h_state==H_ACTIVE_STATE && v_state==V_ACTIVE_STATE && next_x < 640)?(inter?{color_in[next_x][3:0]} :4'd0):4'd0 ;
         end
     end
-    
+
 //    always @ (negedge next_y[8]) begin
 //        inter_offset = inter_offset + 1'b1;
 //    end
@@ -197,6 +195,5 @@ module VGA (
     assign next_x = (h_state==H_ACTIVE_STATE)?h_counter:10'd0 ;
     assign inter = 1; // (v_state==V_ACTIVE_STATE)?v_counter[0] + inter_offset:1'b0 ;
     assign next_line = next_liner;
-    
-    
+
 endmodule

@@ -4,6 +4,7 @@
 `define SR_FIXED_POINT_BITS 16
 `define FIXED_POINT_BITS 4
 `define SR_ONE 17'b10000000000000000
+`define SR_C_ONE 33'b100000000000000000000000000000000
 
 `define FP_B 3
 `define PX_X_B 10
@@ -39,7 +40,13 @@
 `define DIS_B 51
 `define DIS_SQRT_B 27
 
-`define DIST_B 6
+`define DIST_B 25
+
+`define INTERSECT_X_B 31
+`define INTERSECT_Y_B 30
+`define INTERSECT_Z_B 31
+
+`define BACKGROUND_COLOR 12'h036
 
 //////////////////////////////////
 // Data collections and structs //
@@ -48,7 +55,7 @@
 package Types;
 
 typedef struct packed {
-    logic signed [`S_X_INT_B + `S_X_FP_B - 1:0] x; 
+    logic signed [`S_X_INT_B + `S_X_FP_B - 1:0] x;
     logic signed [`S_Y_INT_B + `S_Y_FP_B - 1:0] y;
     logic signed [`S_Z_INT_B + `S_Z_FP_B - 1:0] z;
     logic signed [5:0] r;

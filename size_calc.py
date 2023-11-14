@@ -53,7 +53,11 @@ a_times_c_bits = bits(max_of(a_times_two_bits) * max_of(c_times_two_bits))
 dis_bits = b_sqrd_bits
 dis_sqrt_bits = bits(max_of(dis_bits - fp_bits)**0.5) + fp_bits
 
-dist_bits = bits(max_of(b_bits - fp_bits) / max_of(a_times_two_bits))
+s_dist_bits = bits(max_of(b_bits - fp_bits))
+
+s_intersect_x = bits(max_of(s_dist_bits - 1 - fp_bits) * max_of(s_pixel_x_bits - 1)) + 1
+s_intersect_y = bits(max_of(s_dist_bits - 1 - fp_bits) * max_of(s_pixel_y_bits - 1)) + 1
+s_intersect_z = bits(max_of(s_dist_bits - 1 - fp_bits) * viewport_focal_length) + 1
 
 print(f"""
 Sphere: 
@@ -123,6 +127,10 @@ print(f"""
 `define DIS_B {b_sqrd_bits}
 `define DIS_SQRT_B {dis_sqrt_bits}
 
-`define DIST_B {dist_bits}
+`define DIST_B {s_dist_bits}
+
+`define INTERSECT_X_B {s_intersect_x}
+`define INTERSECT_Y_B {s_intersect_y}
+`define INTERSECT_Z_B {s_intersect_z}
 """)
 

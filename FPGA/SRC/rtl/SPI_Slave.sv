@@ -2,9 +2,9 @@
 // Description: SPI (Serial Peripheral Interface) Slave
 //              Creates slave based on input configuration.
 //              Receives a byte one bit at a time on MOSI
-//              Will also push out byte data one bit at a time on MISO.  
+//              Will also push out byte data one bit at a time on MISO.
 //              Any data on input byte will be shipped out on MISO.
-//              Supports multiple bytes per transaction when CS_n is kept 
+//              Supports multiple bytes per transaction when CS_n is kept
 //              low during the transaction.
 //
 // Note:        i_Clk must be at least 4x faster than i_SPI_Clk
@@ -45,7 +45,7 @@ module SPI_Slave
   wire w_CPHA;     // Clock phase
   wire w_SPI_Clk;  // Inverted/non-inverted depending on settings
   wire w_SPI_MISO_Mux;
-  
+
   reg [2:0] r_RX_Bit_Count;
   reg [2:0] r_TX_Bit_Count;
   reg [7:0] r_Temp_RX_Byte;
@@ -85,7 +85,7 @@ module SPI_Slave
 
       // Receive in LSB, shift up to MSB
       r_Temp_RX_Byte <= {r_Temp_RX_Byte[6:0], i_SPI_MOSI};
-    
+
       if (r_RX_Bit_Count == 3'b111)
       begin
         r_RX_Done <= 1'b1;
@@ -93,7 +93,7 @@ module SPI_Slave
       end
       else if (r_RX_Bit_Count == 3'b010)
       begin
-        r_RX_Done <= 1'b0;        
+        r_RX_Done <= 1'b0;
       end
 
     end // else: !if(i_SPI_CS_n)
@@ -170,7 +170,7 @@ module SPI_Slave
   end // always @ (negedge w_SPI_Clk or posedge i_SPI_CS_n_SW)
 
 
-  // Purpose: Register TX Byte when DV pulse comes.  Keeps registed byte in 
+  // Purpose: Register TX Byte when DV pulse comes.  Keeps registed byte in
   // this module to get serialized and sent back to master.
   always @(posedge i_Clk or negedge i_Rst_L)
   begin
@@ -182,7 +182,7 @@ module SPI_Slave
     begin
       if (i_TX_DV)
       begin
-        r_TX_Byte <= i_TX_Byte; 
+        r_TX_Byte <= i_TX_Byte;
       end
     end // else: !if(~i_Rst_L)
   end // always @ (posedge i_Clk or negedge i_Rst_L)
