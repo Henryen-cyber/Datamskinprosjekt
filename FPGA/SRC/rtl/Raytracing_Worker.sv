@@ -66,6 +66,23 @@ module Raytracing_Worker(
         .Q(dis_sqrt_r)
     );
 
+    logic div_start, div_busy, div_done, div_valid, dbz, div_ovf;
+    logic signed[`PX_X_B-1:0] div_a, div_b, div_result;
+
+    div division_instance (
+        .clk(clk),
+        .rst(rst_),
+        .start(div_start),
+        .busy(div_busy),
+        .done(div_done),
+        .valid(div_valid),
+        .dbz(dbz),
+        .ovf(div_ovf),
+        .a(div_a),
+        .b(div_b),
+        .val(div_result)
+    );
+
     logic [`PX_X_B-1:0]             pixel_offset_x;
     logic signed [`PX_X_B-1:0]      pixel_x;
 
