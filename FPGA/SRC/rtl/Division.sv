@@ -1,8 +1,8 @@
 // Project F Library - Division: Signed Fixed-Point with Gaussian Rounding
 // (C)2023 Will Green, Open source hardware released under the MIT License
 // Learn more at https://projectf.io/verilog-lib/
-`timescale 1ns / 1ps
 `include "Types.sv"
+`timescale 1ns / 1ps
 
 module div #(
     parameter WIDTH=12,                  // width of numbers in bits (integer and fractional)

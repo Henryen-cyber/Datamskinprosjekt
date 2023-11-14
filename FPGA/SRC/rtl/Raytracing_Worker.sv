@@ -55,7 +55,7 @@ module Raytracing_Worker(
     localparam N_WORKERS = JOBS / JOBS_SUBDIVISION;
     localparam HIGH = 1'b1;
     localparam LOW = 1'b0;
-    
+
     // Calculation registers
     logic[5:0] current_job;
 
@@ -212,7 +212,6 @@ module Raytracing_Worker(
         end
         else if (state == CALCULATING_7 && busy == HIGH && sqrt_busy == LOW) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
             dist_r <= (((b_r - dis_sqrt_r) <<< `FP_B ) / (a_times_two_r));
-
             state <= (state == CALCULATING_7) ? state + 1: state;
         end
         else if (state == CALCULATING_8 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
