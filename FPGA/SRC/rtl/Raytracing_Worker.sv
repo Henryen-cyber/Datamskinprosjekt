@@ -27,7 +27,7 @@ module Raytracing_Worker(
     // input signed[11:0] pixel_y,
     input logic signed[`DOT_Y_B-1:0] doty_r,  // Max possible value:               982'800
     input logic signed [`PX_Y_B-1:0] pixel_y,
-    input logic [`PX_Y_SQRD_B-1:0]    pixel_y_sqrd, // Max possible value:                 57'600
+    input logic [`PX_Y_SQRD_B-1:0]   pixel_y_sqrd, // Max possible value:                 57'600
     input logic [`S_Y_SQRD_B-1:0]    sphere_y_sqrd, // Max possible value:            67'108'864
     
     input Types::Sphere sphere,
@@ -49,6 +49,12 @@ module Raytracing_Worker(
     localparam [3:0] CALCULATING_11 = 11;
     localparam [3:0] COLORING = 12;
     localparam [3:0] FINISHED = 13;
+
+    localparam JOBS = 640;
+    localparam JOBS_SUBDIVISION = 64; // Must be divisible with JOBS
+    localparam N_WORKERS = JOBS / JOBS_SUBDIVISION;
+    localparam HIGH = 1'b1;
+    localparam LOW = 1'b0;
     
     // Calculation registers
     logic[5:0] current_job;
@@ -69,22 +75,55 @@ module Raytracing_Worker(
         .Q(dis_sqrt_r)
     );
 
+    logic div_x_start, div_x_busy, div_x_done, div_x_valid, x_dbz, div_x_ovf;
+    logic signed[`PX_X_B-1:0] div_x_a, div_b, div_x_result;
 
-    logic div_start, div_busy, div_done, div_valid, dbz, div_ovf;
-    logic signed[`PX_X_B-1:0] div_a, div_b, div_result;
-
-    div division_instance (
+    div division_x_instance (
         .clk(clk),
         .rst(rst_),
-        .start(div_start),
-        .busy(div_busy),
-        .done(div_done),
-        .valid(div_valid),
-        .dbz(dbz),
-        .ovf(div_ovf),
-        .a(div_a),
+        .start(div_x_start),
+        .busy(div_x_busy),
+        .done(div_x_done),
+        .valid(div_x_valid),
+        .dbz(x_dbz),
+        .ovf(div_x_ovf),
+        .a(div_x_a),
         .b(div_b),
-        .val(div_result)
+        .val(div_x_result)
+    );
+
+    logic div_y_start, div_y_busy, div_y_done, div_y_valid, y_dbz, div_y_ovf;
+    logic signed[`PX_X_B-1:0] div_y_a, div_y_result;
+
+    div division_y_instance (
+        .clk(clk),
+        .rst(rst_),
+        .start(div_y_start),
+        .busy(div_y_busy),
+        .done(div_y_done),
+        .valid(div_y_valid),
+        .dbz(y_dbz),
+        .ovf(div_y_ovf),
+        .a(div_y_a),
+        .b(div_b),
+        .val(div_y_result)
+    );
+
+    logic div_z_start, div_z_busy, div_z_done, div_z_valid, z_dbz, div_z_ovf;
+    logic signed[`PX_X_B-1:0] div_z_a, div_z_result;
+
+    div division_z_instance (
+        .clk(clk),
+        .rst(rst_),
+        .start(div_z_start),
+        .busy(div_z_busy),
+        .done(div_z_done),
+        .valid(div_z_valid),
+        .dbz(z_dbz),
+        .ovf(div_z_ovf),
+        .a(div_z_a),
+        .b(div_b),
+        .val(div_z_result)
     );
 
     logic        [`PX_X_B-1:0]        pixel_offset_x;
@@ -110,7 +149,7 @@ module Raytracing_Worker(
     // Quadratic formula registers
     logic        [`TWO_A_B-1:0]       a_times_two_r;     // Max possible value:               160'961
     logic signed [`TWO_C_B-1:0]       c_times_two_r;     // Max possible value:         2'214'592'511
-    logic signed [`B_B-1:0] b_r;     // Max possible value:            25'033'568
+    logic signed [`B_B-1:0]           b_r;     // Max possible value:            25'033'568
     logic        [`B_SQRD_B-1:0]      br_sr;   // Max possible value:   626'679'526'810'624
     logic signed [`A_TIMES_C_B-1:0]   a_times_c_r;  // Max possible value: 1'425'683'980'107'004
     logic signed [`DIS_B-1:0]         dis_r;   // Max possible value: 1'425'683'980'107'004
@@ -189,15 +228,33 @@ module Raytracing_Worker(
             state <= (state == CALCULATING_9) ? state + 1: state;
         end
         else if (state == CALCULATING_10 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
-            intersect_x <= intersect_x >>> (sphere.r);
-            intersect_y <= intersect_y >>> (sphere.r);
-            intersect_z <= intersect_z >>> (sphere.r);
+            if(!div_x_busy) begin
+                div_x_a <= intersect_x;
+                div_b <= sphere.r;
+                div_x_start <= HIGH;
+            end
+            if(!div_y_busy) begin
+                div_y_a <= intersect_y;
+                div_b <= sphere.r;
+                div_y_start <= HIGH;
+            end
+            if(!div_z_busy) begin
+                div_z_a <= intersect_z;
+                div_b <= sphere.r;
+                div_z_start <= HIGH;
+            end
             state <= (state == CALCULATING_10) ? state + 1: state;
         end
         else if (state == CALCULATING_11 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
-            intersect_x <= (((intersect_x * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
-            intersect_y <= (((intersect_y * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
-            intersect_z <= (((intersect_z * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
+            if(div_x_done && div_x_valid) begin
+                intersect_x <= (((div_x_result * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
+            end
+            if(div_y_done && div_y_valid) begin
+                intersect_y <= (((div_y_result * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
+            end
+            if(div_z_done && div_z_valid) begin
+                intersect_z <= (((div_z_result * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
+            end
             state <= (state == CALCULATING_11) ? state + 1: state;
         end
         else if (state == COLORING && busy == HIGH) begin
