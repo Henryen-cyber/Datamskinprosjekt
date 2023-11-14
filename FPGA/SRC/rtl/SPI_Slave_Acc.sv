@@ -1,5 +1,3 @@
-
-
 module SPI_Slave_Acc#(N_BYTES=8) (
     input logic rst_,
     input logic clk,
@@ -13,7 +11,7 @@ module SPI_Slave_Acc#(N_BYTES=8) (
 
     logic [N_BYTES*8-1:0] Temp_Acc_Bytes;
 
-    always @(posedge clk) 
+    always @(posedge clk)
     begin
         if (~rst_) begin
             RX_Byte_Count <= 0;
@@ -33,7 +31,7 @@ module SPI_Slave_Acc#(N_BYTES=8) (
             o_Acc_DV <= 0;
             RX_Byte_Count <= 0;
         end
-        
+
     end
 
 

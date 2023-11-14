@@ -48,7 +48,7 @@
 package Types;
 
 typedef struct packed {
-    logic signed [`S_X_INT_B + `S_X_FP_B - 1:0] x; 
+    logic signed [`S_X_INT_B + `S_X_FP_B - 1:0] x;
     logic signed [`S_Y_INT_B + `S_Y_FP_B - 1:0] y;
     logic signed [`S_Z_INT_B + `S_Z_FP_B - 1:0] z;
     logic signed [5:0] r;

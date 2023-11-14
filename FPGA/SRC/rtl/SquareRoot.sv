@@ -40,12 +40,12 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
                     .location_valid(m_valid));
 
     enum { IDLE, START, LOOP, UPDATE, DONE } CURRENT_STATE, NEXT_STATE;
-    
+
     always_comb begin : data_logic
         case(CURRENT_STATE)
 
             IDLE : begin
-                
+
                 x_k <= 0;
                 x_k1 <= 0;
                 c_k <= 0;
