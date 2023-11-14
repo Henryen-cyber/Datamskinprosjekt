@@ -30,11 +30,16 @@ module Raytracing_Worker(
     input logic [`PX_Y_SQRD_B-1:0]    pixel_y_sqrd, // Max possible value:                 57'600
     input logic [`S_Y_SQRD_B-1:0]    sphere_y_sqrd, // Max possible value:            67'108'864
     
-    input Types::Sphere sphere,
+    input Types::Sphere sphere_1,
+    input Types::Sphere sphere_2,
+    input Types::Sphere sphere_3,
+    input Types::Sphere sphere_4,
     output logic busy,
-    output Types::Color [JOBS_SUBDIVISION-1:0] buffer
+    output Types::Color [JOBS_SUBDIVISION-1:0] buffer,
+    output logic next_sphere
 );
     logic [3:0] state;
+    logic [1:0] index;
     localparam [3:0] READY = 0;
     localparam [3:0] CALCULATING_1 = 1;
     localparam [3:0] CALCULATING_2 = 2;
@@ -165,7 +170,12 @@ module Raytracing_Worker(
         end
         else if (state == CALCULATING_6 && busy == HIGH && sqrt_busy == LOW) begin 
             dis_r <= (`DIS_B'(br_sr) - `DIS_B'(a_times_c_r));
-            sqrt_start <= HIGH;
+            if(dis_r < 0) begin
+                next_sphere <= HIGH;
+                break;
+            end else begin
+                sqrt_start <= HIGH;
+            end
         end
         else if (state == CALCULATING_6 && busy == HIGH && sqrt_start == HIGH && sqrt_busy == HIGH) begin
             sqrt_start <= LOW;
@@ -173,7 +183,6 @@ module Raytracing_Worker(
         end
         else if (state == CALCULATING_7 && busy == HIGH && sqrt_busy == LOW) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
             dist_r <= (((b_r - dis_sqrt_r) <<< `FP_B ) / (a_times_two_r));
-
             state <= (state == CALCULATING_7) ? state + 1: state;
         end
         else if (state == CALCULATING_8 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin

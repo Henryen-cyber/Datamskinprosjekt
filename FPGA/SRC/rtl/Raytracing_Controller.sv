@@ -52,9 +52,15 @@ module Raytracing_Controller(
     );
 
     // World
-    Types::Sphere spherer =  {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
+    Types::Sphere spheres[];
+    Types::Sphere sphere_1 =  {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
+    Types::Sphere sphere_2 =  {- {`S_X_INT_B'd50, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
+    //Types::Sphere sphere_1 =  {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
+    //Types::Sphere sphere_1 =  {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
     Types::Sphere sphere;
     assign sphere = spherer;
+    assign spheres[0] = sphere_1;
+    assign spheres[1] = sphere_2;
 
     logic [63:0] recv_64bitr;
 
@@ -99,7 +105,7 @@ module Raytracing_Controller(
 
         Raytracing_Worker worker_i(
            .activate(activate_workersr),
-           .sphere(sphere),
+           .spheres(spheres),
            .pixel_start_x(x_i),
            .pixel_y(pixel_y),
            .pixel_y_sqrd(pixely_sr),
