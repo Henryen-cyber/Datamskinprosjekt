@@ -52,7 +52,7 @@ module Raytracing_Controller(
     );
 
     // World
-    Types::Sphere spherer =  {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd10, 12'd0};
+    Types::Sphere spherer =  {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
     Types::Sphere sphere;
     assign sphere = spherer;
 
@@ -72,10 +72,10 @@ module Raytracing_Controller(
     // Raytracing workers //
     logic activate_workersr;
     logic signed [11:0] next_y;
-    logic signed [11:0] pixel_y;
-    logic signed[21:0] doty_r;  // Max possible value:               982'800
-    logic [15:0]    pixely_sr; // Max possible value:                 57'600
-    logic [26:0]    originy_sr; // Max possible value:            67'108'864
+    logic signed [`PX_X_B-1:0] pixel_y;
+    logic signed[`DOT_Y_B-1:0] doty_r;  // Max possible value:               982'800
+    logic [`PX_Y_SQRD_B-1:0]    pixely_sr; // Max possible value:                 57'600
+    logic [`S_Y_SQRD_B-1:0]    originy_sr; // Max possible value:            67'108'864
     logic next_line;
 
     logic [N_WORKERS - 1:0] worker_busyr;
@@ -101,7 +101,7 @@ module Raytracing_Controller(
            .activate(activate_workersr),
            .sphere(sphere),
            .pixel_start_x(x_i),
-        //    .pixel_y(pixel_y),
+           .pixel_y(pixel_y),
            .pixel_y_sqrd(pixely_sr),
            .doty_r(doty_r),
            .sphere_y_sqrd(originy_sr),
@@ -116,7 +116,7 @@ module Raytracing_Controller(
 
     always @ (posedge CLK100MHZ) begin
         if (~ck_rst_) begin
-            recv_64bitr <= {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd10, 12'd0};
+            recv_64bitr <= {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
             recv_interrupt <= LOW;
         end
         if (recv_dv == HIGH) begin
@@ -131,7 +131,7 @@ module Raytracing_Controller(
             state <= (state == READY) ? state + 1: state;
         end
         else if (state == SETUP_1 && activate_workersr == LOW && worker_any_busy == LOW) begin
-            pixel_y <= next_y - 12'd240;
+            pixel_y <= next_y - `PX_Y_B'd240;
             originy_sr <= (sphere.y ** 2) >>> `FP_B;
             state <= (state == SETUP_1) ? state + 1: state;
         end

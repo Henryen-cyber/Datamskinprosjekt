@@ -37,8 +37,8 @@ module Top(
     input ck_ss,
     input ck_sck,
     output ck_a0,
-
-    output [3:0] led
+    
+    output [7:0] led
     );
 
     logic i_SPI_Clk;
@@ -70,7 +70,7 @@ module Top(
     SPI_Slave SPI_Slave_instance (
     .i_Rst_L(ck_rst_),
     .i_Clk(CLK100MHZ),
-    .o_RX_DV(recv_dv),
+    .o_RX_DV(recv_byte_dv),
     .o_RX_Byte(recv_byte),
     // .i_TX_DV(tran_dv),
     // .i_TX_Byte(tran_byte),
@@ -80,16 +80,21 @@ module Top(
     .i_SPI_CS_n(i_SPI_CS_n)
     );
 
+
+    assign led = recv_byte[7:0];
+    
     SPI_Slave_Acc SPI_Slave_Acc_instance (
+        .rst_(ck_rst_),
         .clk(CLK100MHZ),
-        .i_RX_DV(recv_dv),
+        .i_RX_DV(recv_byte_dv),
         .i_RX_Byte(recv_byte),
-        .o_Acc_Bytes(recv_64bit),
-        .o_Acc_DV(recv_64bit_dv)
+        .o_Acc_DV(recv_64bit_dv),
+        .o_Acc_Bytes(recv_64bit)
     );
 
-    Raytracing_Controller controller_instance (
-    .CLK100MHZ(CLK100MHZ),
+
+    Raytracing_Controller controller_instance (    
+    .CLK100MHZ(CLK100MHZ), 
     .CLK25MHZ(CLK25MHZ),
     .ck_rst_(ck_rst_),
     .vga_r(vga_r),
@@ -99,9 +104,8 @@ module Top(
     .vga_vs(vga_vs),
     .recv_dv(recv_64bit_dv),
     .recv_64bit(recv_64bit),
-    .recv_interrupt(ck_a0),
-    // .tran_dv(tran_dv),
-    // .tran_byte(tran_byte),
-    .led(led)
+    .recv_interrupt(ck_a0)
+    // .led(led)
     );
+
 endmodule

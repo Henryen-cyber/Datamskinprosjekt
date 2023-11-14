@@ -26,11 +26,11 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
     logic c_k_less_than_A_norm;
     logic [5:0] two_times_m;
     logic [4:0] k;
-    logic signed[A_NORM_FP_B:0] x_k; // 16 Fixed point bits
-    logic signed[A_NORM_FP_B:0] x_k1;// 16 Fixed point bits
-    logic signed[A_NORM_FP_B + PADDED_FB_BITS:0] x_k_padded; // 32 Fixed point bits
-    logic signed[39:0] c_k; // 32 Fixed point bits
-    logic signed[39:0] c_k1;// 32 Fixed point bits
+    logic signed[A_NORM_FP_B+1:0] x_k; // 16 Fixed point bits
+    logic signed[A_NORM_FP_B+1:0] x_k1;// 16 Fixed point bits
+    logic signed[2*A_NORM_FP_B + 1:0] x_k_padded; // 32 Fixed point bits
+    logic signed[2*A_NORM_FP_B + 1:0] c_k; // 32 Fixed point bits
+    logic signed[2*A_NORM_FP_B + 1:0] c_k1;// 32 Fixed point bits
 
     last_set#(.WIDTH(A_INT_B + A_FP_B), .FP_B(A_FP_B)) find_m(.clk(clk),
                     .rst_(rst_),
@@ -70,7 +70,7 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
                 find_m_s <= 1;
                 busy <= 1;
                 if(m_valid && two_times_m) begin
-                    A_norm <= {A, A_FP_DIFF_B'('b0)} >> (two_times_m + 1);
+                    A_norm <= {A, A_FP_DIFF_B'('b0)} >> (two_times_m);
                     NEXT_STATE <= LOOP;
                 end else begin
                     NEXT_STATE <= START;
@@ -81,14 +81,14 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
             end
 
             LOOP : begin
-                c_k_less_than_A_norm = c_k < {A_norm, A_NORM_FP_B'('b0)};
+                c_k_less_than_A_norm = c_k < {1'b0, A_norm, A_NORM_FP_B'('b0)};
                 x_k_padded = {x_k, A_NORM_FP_B'('b0)};
                 if(c_k_less_than_A_norm) begin
                     x_k1 = x_k + (`SR_ONE >>> (k + 1));
-                    c_k1 = c_k + ((x_k_padded >>> (k))) + (`SR_ONE >>> (2 * (k + 1)));
-                end else if(!c_k_less_than_A_norm || c_k == A_norm) begin
+                    c_k1 = c_k + ((x_k_padded >>> (k))) + (`SR_C_ONE >>> (2 * (k + 1)));
+                end else if(~c_k_less_than_A_norm) begin
                     x_k1 = x_k - (`SR_ONE >>> (k + 1));
-                    c_k1 = c_k - ((x_k_padded >>> (k))) + (`SR_ONE >>> (2 * (k + 1)));
+                    c_k1 = c_k - ((x_k_padded >>> (k))) + (`SR_C_ONE >>> (2 * (k + 1)));
                 end
                 x_k <= x_k;
                 c_k <= c_k;
@@ -115,7 +115,7 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
 
             DONE : begin
                 // Needs some work to properly account for fixed point bits!
-                Q <= (x_k <<< ((two_times_m >> 1) + 1)) >>> A_FP_DIFF_B;
+                Q <= (x_k <<< ((two_times_m >> 1) - A_FP_DIFF_B));
                 find_m_s <= 0;
                 x_k <= x_k;
                 x_k1 <= x_k1;
