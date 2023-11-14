@@ -5,6 +5,7 @@ SOURCES_SV := \
     ../SRC/rtl/last_set_bit.sv \
     ../SRC/rtl/SquareRoot.sv \
     ../SRC/rtl/Raytracing_Worker.sv \
+	../SRC/rtl/Division.sv \
 	../SRC/rtl/SPI_Slave_64.sv \
 	../SRC/rtl/SPI_Slave.sv \
 	../SRC/rtl/SPI_Slave_Acc.sv \

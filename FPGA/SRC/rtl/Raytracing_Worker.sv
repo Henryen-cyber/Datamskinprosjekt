@@ -230,30 +230,30 @@ module Raytracing_Worker(
         else if (state == CALCULATING_10 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
             if(!div_x_busy) begin
                 div_x_a <= intersect_x;
-                div_b <= sphere.r;
+                div_b <= dist_r;
                 div_x_start <= HIGH;
             end
             if(!div_y_busy) begin
                 div_y_a <= intersect_y;
-                div_b <= sphere.r;
+                div_b <= dist_r;
                 div_y_start <= HIGH;
             end
             if(!div_z_busy) begin
                 div_z_a <= intersect_z;
-                div_b <= sphere.r;
+                div_b <= dist_r;
                 div_z_start <= HIGH;
             end
             state <= (state == CALCULATING_10) ? state + 1: state;
         end
         else if (state == CALCULATING_11 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
             if(div_x_done && div_x_valid) begin
-                intersect_x <= (((div_x_result * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
+                intersect_x <= intersect_x * 16;
             end
             if(div_y_done && div_y_valid) begin
-                intersect_y <= (((div_y_result * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
+                intersect_y <= intersect_y * 16;
             end
             if(div_z_done && div_z_valid) begin
-                intersect_z <= (((div_z_result * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
+                intersect_z <= intersect_z * 16;
             end
             state <= (state == CALCULATING_11) ? state + 1: state;
         end
