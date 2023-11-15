@@ -52,41 +52,38 @@ module Raytracing_Controller(
     );
 
     // World
-    Types::Sphere spheres[];
-    Types::Sphere sphere_1 =  {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
-    Types::Sphere sphere_2 =  {- {`S_X_INT_B'd50, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
-    //Types::Sphere sphere_1 =  {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
-    //Types::Sphere sphere_1 =  {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
-    Types::Sphere sphere;
-    assign sphere = spherer;
-    assign spheres[0] = sphere_1;
-    assign spheres[1] = sphere_2;
+    World world_r;
+    assign world_r.spheres[0] = {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
+    assign world_r.spheres[1] = {- {`S_X_INT_B'd50, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
 
     logic [63:0] recv_64bitr;
 
     // Raytracing controller //
 
     logic [1:0] state;
-    localparam READY = 2'd0;
-    localparam SETUP_1 = 2'd1;
-    localparam SETUP_2 = 2'd2;
-    localparam RENDERING = 2'd3;
+    localparam READY        = 2'd0;
+    localparam SETUP_1      = 2'd1;
+    localparam SETUP_2      = 2'd2;
+    localparam RENDERING    = 2'd3;
 
-    Types::Color [JOBS - 1:0] line_color_buffer; // Buffer filled by workers
-    Types::Color [JOBS - 1: 0] line_color; // Line sent to vga
+    Color [JOBS - 1:0]   line_color_buffer;  // Buffer filled by workers
+    Color [JOBS - 1:0]   line_color;         // Line sent to vga
 
     // Raytracing workers //
-    logic activate_workersr;
-    logic signed [11:0] next_y;
-    logic signed [`PX_X_B-1:0] pixel_y;
-    logic signed[`DOT_Y_B-1:0] doty_r;  // Max possible value:               982'800
-    logic [`PX_Y_SQRD_B-1:0]    pixely_sr; // Max possible value:                 57'600
-    logic [`S_Y_SQRD_B-1:0]    originy_sr; // Max possible value:            67'108'864
-    logic next_line;
+    logic                       activate_workersr;
+    logic signed [11:0]         next_y;
+    logic signed [`PX_X_B-1:0]  pixel_y;
+    logic signed [`DOT_Y_B-1:0] doty_r;             // Max possible value:               982'800
+    logic [`PX_Y_SQRD_B-1:0]    pixely_sr;          // Max possible value:                57'600
+    logic [`S_Y_SQRD_B-1:0]     sphere0y_sr;        // Max possible value:            67'108'864
+    logic [`S_Y_SQRD_B-1:0]     sphere1y_sr;        // Max possible value:            67'108'864
+    logic [`S_Y_SQRD_B-1:0]     sphere2y_sr;        // Max possible value:            67'108'864
+    logic [`S_Y_SQRD_B-1:0]     sphere3y_sr;        // Max possible value:            67'108'864
+    logic                       next_line;
 
-    logic [N_WORKERS - 1:0] worker_busyr;
-    logic worker_any_busy;
-    assign worker_any_busy = (worker_busyr == '0) ? LOW : HIGH;
+    logic [N_WORKERS - 1:0]     worker_busyr;
+    logic                       worker_any_busy;
+    assign                      worker_any_busy = (worker_busyr == '0) ? LOW : HIGH;
 
     generate
       genvar i;
@@ -98,19 +95,18 @@ module Raytracing_Controller(
 
         // Connection to line buffer
         // Creates an evenly distributed interleaving pattern
-        Types::Color [JOBS_SUBDIVISION-1:0] worker_line_color_buffer = 0;
+        Color [JOBS_SUBDIVISION-1:0] worker_line_color_buffer = 0;
         for (j=0; j<JOBS_SUBDIVISION; j=j+1) begin : thread_jobs
             assign line_color_buffer[i + j * N_WORKERS] = worker_line_color_buffer[j];
         end
 
         Raytracing_Worker worker_i(
            .activate(activate_workersr),
-           .spheres(spheres),
+           .world(world_r),
+           .num_spheres(2'b10),
            .pixel_start_x(x_i),
            .pixel_y(pixel_y),
            .pixel_y_sqrd(pixely_sr),
-           .doty_r(doty_r),
-           .sphere_y_sqrd(originy_sr),
            .busy(worker_busyr[i]),
            .buffer(worker_line_color_buffer),
            .clk(CLK100MHZ)
@@ -130,7 +126,8 @@ module Raytracing_Controller(
         end
         if (state == READY && next_line == LOW && recv_dv == LOW) begin
             recv_interrupt <= HIGH;
-            spherer <= recv_64bitr;
+            // TODO: Update next sphere in world
+            world_r.spheres[0] <= recv_64bitr;
         end
 
         if (state == READY && next_line == HIGH) begin
@@ -138,13 +135,10 @@ module Raytracing_Controller(
         end
         else if (state == SETUP_1 && activate_workersr == LOW && worker_any_busy == LOW) begin
             pixel_y <= next_y - `PX_Y_B'd240;
-            originy_sr <= (sphere.y ** 2) >>> `FP_B;
             state <= (state == SETUP_1) ? state + 1: state;
         end
         else if (state == SETUP_2 && activate_workersr == LOW && worker_any_busy == LOW) begin
             pixely_sr <= pixel_y ** 2;
-            doty_r <= `DOT_Y_B'(`DOT_Y_B'(pixel_y) * `DOT_Y_B'(sphere.y));
-
             recv_interrupt <= LOW;
             activate_workersr <= HIGH;
         end
@@ -178,6 +172,6 @@ module Raytracing_Controller(
 
     // Debugging //
 
-    assign led[0] = spherer === 64'b10000000111000001000001010000000000010;
+    assign led[0] = world_r.spheres[0] === 64'b10000000111000001000001010000000000010;
 
 endmodule

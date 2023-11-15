@@ -1,3 +1,4 @@
+`ifndef TYPES
 //////////////////////////////////
 //  Definitions and parameters  //
 //////////////////////////////////
@@ -52,7 +53,11 @@
 // Data collections and structs //
 //////////////////////////////////
 
-package Types;
+typedef struct packed {
+    logic [3:0] r;
+    logic [3:0] g;
+    logic [3:0] b;
+} Color;
 
 typedef struct packed {
     logic signed [`S_X_INT_B + `S_X_FP_B - 1:0] x;
@@ -62,17 +67,20 @@ typedef struct packed {
     logic signed [11:0] c;
 } Sphere;
 
-typedef struct packed {
-    logic [3:0] r;
-    logic [3:0] g;
-    logic [3:0] b;
-} Color;
+//typedef struct {
+//    Sphere sphere_0;
+//    Sphere sphere_1;
+//    Sphere sphere_2;
+//    Sphere sphere_3;
+//} World;
 
-endpackage
-
-
+typedef struct {
+    Sphere spheres[4];
+} World;
 // SIZES
 
 // Viewport width: 640
 // Viewport height: 480
 // VIewport focal length: 640 / 2 = 320 (90 deg)
+`define TYPES
+`endif

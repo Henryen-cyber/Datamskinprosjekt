@@ -2,7 +2,6 @@
 // (C)2023 Will Green, Open source hardware released under the MIT License
 // Learn more at https://projectf.io/verilog-lib/
 `include "Types.sv"
-`default_nettype none
 `timescale 1ns / 1ps
 
 module div #(

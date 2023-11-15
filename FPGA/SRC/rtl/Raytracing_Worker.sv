@@ -22,24 +22,25 @@
 
 module Raytracing_Worker(
     input clk,
-    input activate,
-    input signed[11:0] pixel_start_x,
-    // input signed[11:0] pixel_y,
-    input logic signed[`DOT_Y_B-1:0] doty_r,  // Max possible value:               982'800
-    input logic signed [`PX_Y_B-1:0] pixel_y,
-    input logic [`PX_Y_SQRD_B-1:0]    pixel_y_sqrd, // Max possible value:                 57'600
-    input logic [`S_Y_SQRD_B-1:0]    sphere_y_sqrd, // Max possible value:            67'108'864
-    
-    input Types::Sphere sphere_1,
-    input Types::Sphere sphere_2,
-    input Types::Sphere sphere_3,
-    input Types::Sphere sphere_4,
-    output logic busy,
-    output Types::Color [JOBS_SUBDIVISION-1:0] buffer,
-    output logic next_sphere
+    input                               activate,
+    input signed[11:0]                  pixel_start_x,
+    // input signed[11:0]               pixel_y,
+    input logic signed [`PX_Y_B-1:0]    pixel_y,
+    input logic [`PX_Y_SQRD_B-1:0]      pixel_y_sqrd,   // Max possible value:                 57'600
+    output logic                        busy,
+
+    input                               World world,
+    input logic [1:0]                   num_spheres,
+
+    output Color [JOBS_SUBDIVISION-1:0] buffer
 );
-    logic [3:0] state;
+    // Closest sphere logic
     logic [1:0] index;
+    logic next_sphere;
+    logic [1:0] closest_index;
+    logic [`DIST_B-1:0] closest_dist;
+
+    logic [3:0] state;
     localparam [3:0] READY = 0;
     localparam [3:0] CALCULATING_1 = 1;
     localparam [3:0] CALCULATING_2 = 2;
@@ -54,7 +55,13 @@ module Raytracing_Worker(
     localparam [3:0] CALCULATING_11 = 11;
     localparam [3:0] COLORING = 12;
     localparam [3:0] FINISHED = 13;
-    
+
+    localparam JOBS = 640;
+    localparam JOBS_SUBDIVISION = 64; // Must be divisible with JOBS
+    localparam N_WORKERS = JOBS / JOBS_SUBDIVISION;
+    localparam HIGH = 1'b1;
+    localparam LOW = 1'b0;
+
     // Calculation registers
     logic[5:0] current_job;
 
@@ -67,66 +74,48 @@ module Raytracing_Worker(
         .A_FP_B(`FP_B)
     ) square_root_instance (
         .clk(clk),
-        .rst_(1),
+        .rst_(1'b1),
         .A(dis_r),
         .start(sqrt_start),
         .busy(sqrt_busy),
         .Q(dis_sqrt_r)
     );
 
-
-    logic div_start, div_busy, div_done, div_valid, dbz, div_ovf;
-    logic signed[`PX_X_B-1:0] div_a, div_b, div_result;
-
-    div division_instance (
-        .clk(clk),
-        .rst(rst_),
-        .start(div_start),
-        .busy(div_busy),
-        .done(div_done),
-        .valid(div_valid),
-        .dbz(dbz),
-        .ovf(div_ovf),
-        .a(div_a),
-        .b(div_b),
-        .val(div_result)
-    );
-
-    logic        [`PX_X_B-1:0]        pixel_offset_x;
-    logic signed [`PX_X_B-1:0]        pixel_x;
-    localparam signed                 pixel_z = 320;
-    localparam                        pixel_z_sqrd = pixel_z ** 2;
+    logic        [`PX_X_B-1:0]          pixel_offset_x;
+    logic signed [`PX_X_B-1:0]          pixel_x;
+    localparam signed                   pixel_z = 320;
+    localparam                          pixel_z_sqrd = pixel_z ** 2;
 
 
     // Pixel square registers     All of these are much smaller due to Fixed
     //                            Point representation!
     //                            Needs to be updated accordingly
-    logic        [`PX_X_SQRD_B-1:0]   pixel_x_sqrd; // Max possible value:                102'400
-    
+    logic        [`PX_X_SQRD_B-1:0]     pixel_x_sqrd;   // Max possible value:                102'400
+
     // Origin square registers
-    logic        [`S_X_SQRD_B-1:0]    sphere_x_sqrd; // Max possible value:         1'073'741'824
-    logic        [`S_Z_SQRD_B-1:0]    sphere_z_sqrd; // Max possible value:         1'073'741'824
-    logic        [`S_R_SQRD_B-1:0]    sphere_r_sqrd; // Max possible value:               261'121
-    
+    logic        [`S_X_SQRD_B-1:0]      sphere_x_sqrd;  // Max possible value:         1'073'741'824
+    logic        [`S_Z_SQRD_B-1:0]      sphere_z_sqrd;  // Max possible value:         1'073'741'824
+    logic        [`S_Y_SQRD_B-1:0]      sphere_y_sqrd;  // Max possible value:               261'121
+    logic        [`S_R_SQRD_B-1:0]      sphere_r_sqrd;  // Max possible value:               261'121
+
     // Dot-product registers
-    logic signed [`DOT_X_B-1:0]       dotx_r;  // Max possible value:            10'485'440
-    logic        [`DOT_Z_B-1:0]       dotz_r;  // Max possible value:             1'048'544
-    
+    logic signed [`DOT_X_B-1:0]         dotx_r;         // Max possible value:            10'485'440
+    logic signed [`DOT_Y_B-1:0]         doty_r;         // Max possible value:             1'048'544
+    logic        [`DOT_Z_B-1:0]         dotz_r;         // Max possible value:             1'048'544
+
     // Quadratic formula registers
-    logic        [`TWO_A_B-1:0]       a_times_two_r;     // Max possible value:               160'961
-    logic signed [`TWO_C_B-1:0]       c_times_two_r;     // Max possible value:         2'214'592'511
-    logic signed [`B_B-1:0] b_r;     // Max possible value:            25'033'568
-    logic        [`B_SQRD_B-1:0]      br_sr;   // Max possible value:   626'679'526'810'624
-    logic signed [`A_TIMES_C_B-1:0]   a_times_c_r;  // Max possible value: 1'425'683'980'107'004
-    logic signed [`DIS_B-1:0]         dis_r;   // Max possible value: 1'425'683'980'107'004
-    
-    logic signed [`DIST_B-1:0]        dist_r;
+    logic        [`TWO_A_B-1:0]         a_times_two_r;  // Max possible value:               160'961
+    logic signed [`TWO_C_B-1:0]         c_times_two_r;  // Max possible value:         2'214'592'511
+    logic signed [`B_B-1:0]             b_r;            // Max possible value:            25'033'568
+    logic        [`B_SQRD_B-1:0]        br_sr;          // Max possible value:   626'679'526'810'624
+    logic signed [`A_TIMES_C_B-1:0]     a_times_c_r;    // Max possible value: 1'425'683'980'107'004
+    logic signed [`DIS_B-1:0]           dis_r;          // Max possible value: 1'425'683'980'107'004
 
-    logic signed [`INTERSECT_X_B-1:0] intersect_x;
-    logic signed [`INTERSECT_Y_B-1:0] intersect_y;
-    logic signed [`INTERSECT_Z_B-1:0] intersect_z;
+    logic [`DIST_B-1:0]                 dist_r;
 
-
+    logic signed [`INTERSECT_X_B-1:0]   intersect_x;
+    logic signed [`INTERSECT_Y_B-1:0]   intersect_y;
+    logic signed [`INTERSECT_Z_B-1:0]   intersect_z;
 
     // Raytracing Worker State-machine //
     always @ (posedge clk) begin
@@ -136,27 +125,32 @@ module Raytracing_Worker(
             busy <= (state == READY) ? HIGH : LOW;
             state <= (state == READY) ? state + 1: state;
             sqrt_start <= LOW;
+            index <= 2'b00;
+            closest_dist <= 0;
+            closest_index <= 0;
+            next_sphere <= 0;
         end
         else if (state == CALCULATING_1 && busy == HIGH) begin
+            if(next_sphere) begin
+                index <= index + 1;
+                next_sphere <= 0;
+            end
             pixel_x_sqrd <= pixel_x ** 2;
-            sphere_r_sqrd <= (`S_R_SQRD_B'b1 << sphere.r) ** 2;
+            sphere_r_sqrd <= (`S_R_SQRD_B'b1 << world.spheres[index].r) ** 2;
             state <= (state == CALCULATING_1) ? state + 1: state;
         end
         else if (state == CALCULATING_2 && busy == HIGH) begin
-
             a_times_two_r <= (pixel_x_sqrd + pixel_y_sqrd + pixel_z_sqrd) << 1;
-
-            dotx_r <= `DOT_X_B'(`DOT_X_B'(pixel_x) * `DOT_X_B'(sphere.x));
-            dotz_r <= `DOT_Z_B'(`DOT_Z_B'(pixel_z) * `DOT_Z_B'(sphere.z));
-
+            dotx_r <= `DOT_X_B'(`DOT_X_B'(pixel_x) * `DOT_X_B'(world.spheres[index].x));
+            dotz_r <= `DOT_Z_B'(`DOT_Z_B'(pixel_z) * `DOT_Z_B'(world.spheres[index].z));
+            doty_r <= `DOT_Y_B'(`DOT_Z_B'(pixel_y) * `DOT_Y_B'(world.spheres[index].y));
             state <= (state == CALCULATING_2) ? state + 1: state;
         end
         else if (state == CALCULATING_3 && busy == HIGH) begin
             b_r <= (`B_B'(dotx_r) + `B_B'(doty_r) + `B_B'(dotz_r)) <<< 1;
-            sphere_x_sqrd <= (sphere.x ** 2) >>> `FP_B;
-            // sphere_y_sqrd <= sphere.y ** 2;
-            sphere_z_sqrd <= (sphere.z ** 2) >>> `FP_B;
-
+            sphere_x_sqrd <= (world.spheres[index].x ** 2) >>> `FP_B;
+            sphere_y_sqrd <= (world.spheres[index].y ** 2) >>> `FP_B;
+            sphere_z_sqrd <= (world.spheres[index].z ** 2) >>> `FP_B;
             state <= (state == CALCULATING_3) ? state + 1: state;
         end
         else if (state == CALCULATING_4 && busy == HIGH) begin
@@ -168,11 +162,15 @@ module Raytracing_Worker(
             a_times_c_r <= `A_TIMES_C_B'(a_times_two_r) * `A_TIMES_C_B'(c_times_two_r);
             state <= (state == CALCULATING_5) ? state + 1: state;
         end
-        else if (state == CALCULATING_6 && busy == HIGH && sqrt_busy == LOW) begin 
+        else if (state == CALCULATING_6 && busy == HIGH && sqrt_busy == LOW) begin
             dis_r <= (`DIS_B'(br_sr) - `DIS_B'(a_times_c_r));
             if(dis_r < 0) begin
                 next_sphere <= HIGH;
-                break;
+                index <= index + 1;
+                state <= CALCULATING_1;
+                if(index == num_spheres - 1) begin
+                    state <= COLORING;
+                end
             end else begin
                 sqrt_start <= HIGH;
             end
@@ -183,7 +181,19 @@ module Raytracing_Worker(
         end
         else if (state == CALCULATING_7 && busy == HIGH && sqrt_busy == LOW) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
             dist_r <= (((b_r - dis_sqrt_r) <<< `FP_B ) / (a_times_two_r));
-            state <= (state == CALCULATING_7) ? state + 1: state;
+            if(dist_r < closest_dist) begin
+                closest_dist <= dist_r;
+                closest_index <= index;
+                next_sphere <= HIGH;
+            end else
+                closest_dist <= closest_dist;
+                closest_index <= closest_index;
+                next_sphere <= HIGH;
+            if(index == num_spheres - 1) begin
+                state <= (state == CALCULATING_7) ? state + 1: state;
+            end else begin
+                state <= CALCULATING_1;
+            end
         end
         else if (state == CALCULATING_8 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
             intersect_x <= (`INTERSECT_X_B'(pixel_x) * `INTERSECT_X_B'(dist_r));
@@ -192,15 +202,15 @@ module Raytracing_Worker(
             state <= (state == CALCULATING_8) ? state + 1: state;
         end
         else if (state == CALCULATING_9 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
-            intersect_x <= (intersect_x - (`INTERSECT_X_B'(sphere.x) <<< `FP_B));
-            intersect_y <= (intersect_y - (`INTERSECT_Y_B'(sphere.y) <<< `FP_B));
-            intersect_z <= (intersect_z - (`INTERSECT_Z_B'(sphere.z) <<< `FP_B));
+            intersect_x <= (intersect_x - (`INTERSECT_X_B'(world.spheres[closest_index].x) <<< `FP_B));
+            intersect_y <= (intersect_y - (`INTERSECT_Y_B'(world.spheres[closest_index].y) <<< `FP_B));
+            intersect_z <= (intersect_z - (`INTERSECT_Z_B'(world.spheres[closest_index].z) <<< `FP_B));
             state <= (state == CALCULATING_9) ? state + 1: state;
         end
         else if (state == CALCULATING_10 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
-            intersect_x <= intersect_x >>> (sphere.r);
-            intersect_y <= intersect_y >>> (sphere.r);
-            intersect_z <= intersect_z >>> (sphere.r);
+            intersect_x <= intersect_x >>> world.spheres[closest_index].r;
+            intersect_y <= intersect_y >>> world.spheres[closest_index].r;
+            intersect_z <= intersect_z >>> world.spheres[closest_index].r;
             state <= (state == CALCULATING_10) ? state + 1: state;
         end
         else if (state == CALCULATING_11 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin

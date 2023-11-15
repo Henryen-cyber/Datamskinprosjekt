@@ -22,8 +22,8 @@
 
 module VGA (
     input CLK25MHZ,
-    input ck_rst_,
-    input Types::Color [639:0] color_in, // RRRRGGGGBBBB
+    input  ck_rst_,
+    input  Color [639:0] color_in, // RRRRGGGGBBBB
     output [3:0] vga_r,
     output [3:0] vga_g,
     output [3:0] vga_b,
