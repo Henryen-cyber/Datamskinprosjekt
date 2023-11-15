@@ -65,18 +65,16 @@ typedef struct packed {
     logic signed [`S_Z_INT_B + `S_Z_FP_B - 1:0] z;
     logic signed [5:0] r;
     logic signed [11:0] c;
+    logic        [`S_X_SQRD_B-1:0] spherex_sr;
+    logic        [`S_Y_SQRD_B-1:0] spherey_sr;
+    logic        [`S_Z_SQRD_B-1:0] spherez_sr;
+    logic        [`S_R_SQRD_B-1:0] spherer_sr;
 } Sphere;
-
-//typedef struct {
-//    Sphere sphere_0;
-//    Sphere sphere_1;
-//    Sphere sphere_2;
-//    Sphere sphere_3;
-//} World;
 
 typedef struct {
     Sphere spheres[4];
 } World;
+
 // SIZES
 
 // Viewport width: 640
