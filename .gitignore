@@ -12,3 +12,4 @@ FPGA/SIM/*.log
 FPGA/SIM/*.pb
 FPGA/SIM/*.jou
 FPGA/SIM/*.str
+FPGA/SIM/*.wcfg
