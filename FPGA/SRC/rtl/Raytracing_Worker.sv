@@ -50,6 +50,12 @@ module Raytracing_Worker(
     localparam [3:0] COLORING = 12;
     localparam [3:0] FINISHED = 13;
     
+    localparam JOBS = 640;
+    localparam JOBS_SUBDIVISION = 64; // Must be divisible with JOBS
+    localparam N_WORKERS = JOBS / JOBS_SUBDIVISION;
+    localparam HIGH = 1'b1;
+    localparam LOW = 1'b0;
+
     // Calculation registers
     logic[5:0] current_job;
 
@@ -67,24 +73,6 @@ module Raytracing_Worker(
         .start(sqrt_start),
         .busy(sqrt_busy),
         .Q(dis_sqrt_r)
-    );
-
-
-    logic div_start, div_busy, div_done, div_valid, dbz, div_ovf;
-    logic signed[`PX_X_B-1:0] div_a, div_b, div_result;
-
-    div division_instance (
-        .clk(clk),
-        .rst(rst_),
-        .start(div_start),
-        .busy(div_busy),
-        .done(div_done),
-        .valid(div_valid),
-        .dbz(dbz),
-        .ovf(div_ovf),
-        .a(div_a),
-        .b(div_b),
-        .val(div_result)
     );
 
     logic        [`PX_X_B-1:0]        pixel_offset_x;
