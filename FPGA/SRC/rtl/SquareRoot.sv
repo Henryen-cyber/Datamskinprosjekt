@@ -114,7 +114,6 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
             end
 
             DONE : begin
-                // Needs some work to properly account for fixed point bits!
                 Q <= (x_k <<< ((two_times_m >> 1) - A_FP_DIFF_B));
                 find_m_s <= 0;
                 x_k <= x_k;

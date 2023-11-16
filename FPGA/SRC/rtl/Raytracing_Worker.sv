@@ -31,31 +31,33 @@ module Raytracing_Worker(
     input                                   World world,
     input logic [1:0]                       num_spheres,
 
-    output Color [JOBS_SUBDIVISION-1:0] buffer
+    output Color [JOBS_SUBDIVISION-1:0]     buffer
 );
     // Closest sphere logic
-    logic [1:0] index;
-    logic next_sphere;
-    logic [1:0] closest_index;
+    logic [1:0]         index;
+    logic               next_sphere;
+    logic [1:0]         closest_index;
     logic [`DIST_B-1:0] closest_dist;
+    logic [1:0]         num_misses;
 
-    logic [3:0] state;
-    localparam [3:0] READY = 0;
-    localparam [3:0] CALCULATING_1 = 1;
-    localparam [3:0] CALCULATING_2 = 2;
-    localparam [3:0] CALCULATING_3 = 3;
-    localparam [3:0] CALCULATING_4 = 4;
-    localparam [3:0] CALCULATING_5 = 5;
-    localparam [3:0] CALCULATING_6 = 6;
-    localparam [3:0] CALCULATING_7 = 7;
-    localparam [3:0] CALCULATING_8 = 8;
-    localparam [3:0] CALCULATING_9 = 9;
-    localparam [3:0] CALCULATING_10 = 10;
-    localparam [3:0] CALCULATING_11 = 11;
-    localparam [3:0] CALCULATING_12 = 12;
-    localparam [3:0] COLORING_1 = 13;
-    localparam [3:0] COLORING_2 = 14;
-    localparam [3:0] FINISHED = 15;
+    logic [4:0] state;
+    localparam [4:0] READY = 0;
+    localparam [4:0] CALCULATING_1 = 1;
+    localparam [4:0] CALCULATING_2 = 2;
+    localparam [4:0] CALCULATING_3 = 3;
+    localparam [4:0] CALCULATING_4 = 4;
+    localparam [4:0] CALCULATING_5 = 5;
+    localparam [4:0] CALCULATING_6 = 6;
+    localparam [4:0] CALCULATING_7 = 7;
+    localparam [4:0] CALCULATING_8 = 8;
+    localparam [4:0] CALCULATING_9 = 9;
+    localparam [4:0] CALCULATING_10 = 10;
+    localparam [4:0] CALCULATING_11 = 11;
+    localparam [4:0] CALCULATING_12 = 12;
+    localparam [4:0] CALCULATING_13 = 13;
+    localparam [4:0] COLORING_1 = 14;
+    localparam [4:0] COLORING_2 = 15;
+    localparam [4:0] FINISHED = 16;
 
     localparam JOBS = 640;
     localparam JOBS_SUBDIVISION = 64; // Must be divisible with JOBS
@@ -75,9 +77,7 @@ module Raytracing_Worker(
     localparam signed                   pixel_z = 320;
     localparam                          pixel_z_sqrd = pixel_z ** 2;
 
-    // Pixel square registers     All of these are much smaller due to Fixed
-    //                            Point representation!
-    //                            Needs to be updated accordingly
+    // Pixel square registers
     logic        [`PX_X_SQRD_B-1:0]     pixel_x_sqrd;   // Max possible value:                102'400
 
     // Dot-product registers
@@ -127,6 +127,15 @@ module Raytracing_Worker(
             closest_dist        <= 0;
             closest_index       <= 0;
             next_sphere         <= 0;
+            num_misses          <= 2'b00;
+            dis_r               <= 0;
+            dist_r              <= 0;
+            intersect_x         <= 0;
+            intersect_y         <= 0;
+            intersect_z         <= 0;
+            norm_x              <= 0;
+            norm_y              <= 0;
+            norm_z              <= 0;
         end
         else if (state == CALCULATING_1 && busy == HIGH) begin
             if(next_sphere) begin
@@ -137,10 +146,10 @@ module Raytracing_Worker(
             state               <= (state == CALCULATING_1) ? state + 1: state;
         end
         else if (state == CALCULATING_2 && busy == HIGH) begin
-            a_times_two_r       <= (pixel_x_sqrd + pixel_y_sqrd + pixel_z_sqrd) << 1;
+            a_times_two_r       <= (pixel_x_sqrd + pixel_y_sqrd + pixel_z_sqrd) <<< 1;
             dotx_r              <= `DOT_X_B'(`DOT_X_B'(pixel_x) * `DOT_X_B'(world.spheres[index].x));
-            dotz_r              <= `DOT_Z_B'(`DOT_Z_B'(pixel_z) * `DOT_Z_B'(world.spheres[index].z));
             doty_r              <= `DOT_Y_B'(`DOT_Z_B'(pixel_y) * `DOT_Y_B'(world.spheres[index].y));
+            dotz_r              <= `DOT_Z_B'(`DOT_Z_B'(pixel_z) * `DOT_Z_B'(world.spheres[index].z));
             state               <= (state == CALCULATING_2) ? state + 1: state;
         end
         else if (state == CALCULATING_3 && busy == HIGH) begin
@@ -149,7 +158,7 @@ module Raytracing_Worker(
         end
         else if (state == CALCULATING_4 && busy == HIGH) begin
             c_times_two_r       <= (`TWO_C_B'(world.spheres[index].spherex_sr + world.spheres[index].spherey_sr + world.spheres[index].spherez_sr) - (`TWO_C_B'(world.spheres[index].spherer_sr) << `FP_B)) <<< 1;
-            br_sr               <= (b_r ** 2) >> `FP_B;
+            br_sr               <= (b_r ** 2) >>> `FP_B;
             state               <= (state == CALCULATING_4) ? state + 1: state;
         end
         else if (state == CALCULATING_5 && busy == HIGH) begin
@@ -158,7 +167,11 @@ module Raytracing_Worker(
         end
         else if (state == CALCULATING_6 && busy == HIGH && sqrt_busy == LOW) begin
             dis_r               <= (`DIS_B'(br_sr) - `DIS_B'(a_times_c_r));
+            state               <= (state == CALCULATING_6) ? state + 1 : state;
+        end
+        else if(state == CALCULATING_7 && busy == HIGH && sqrt_busy == LOW) begin
             if(dis_r < 0) begin
+                num_misses      <= num_misses + 1;
                 if(index == num_spheres - 1) begin
                     state       <= COLORING_2;
                 end else begin
@@ -169,15 +182,15 @@ module Raytracing_Worker(
                 sqrt_start      <= HIGH;
             end
         end
-        else if (state == CALCULATING_6 && busy == HIGH && sqrt_start == HIGH && sqrt_busy == HIGH) begin
+        else if (state == CALCULATING_7 && busy == HIGH && sqrt_start == HIGH && sqrt_busy == HIGH) begin
             sqrt_start          <= LOW;
-            state               <= (state == CALCULATING_6) ? state + 1: state;
-        end
-        else if (state == CALCULATING_7 && busy == HIGH && sqrt_busy == LOW) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
-            dist_r              <= (((b_r - dis_sqrt_r) <<< `FP_B ) / (a_times_two_r));
             state               <= (state == CALCULATING_7) ? state + 1: state;
         end
-        else if (state == CALCULATING_8 && busy == HIGH) begin
+        else if (state == CALCULATING_8 && busy == HIGH && sqrt_busy == LOW) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
+            dist_r              <= (((b_r - dis_sqrt_r) <<< `FP_B ) / (a_times_two_r));
+            state               <= (state == CALCULATING_8) ? state + 1: state;
+        end
+        else if (state == CALCULATING_9 && busy == HIGH) begin
             if(closest_dist == 0) begin
                 closest_dist    <= dist_r;
                 closest_index   <= index;
@@ -191,34 +204,34 @@ module Raytracing_Worker(
                 closest_index   <= closest_index;
                 next_sphere     <= (index == num_spheres - 1) ? LOW : HIGH;
             if(index == num_spheres - 1) begin
-                state           <= (state == CALCULATING_8) ? state + 1: state;
+                state           <= (state == CALCULATING_9) ? state + 1: state;
             end else begin
                 state           <= CALCULATING_1;
             end
         end
-        else if (state == CALCULATING_9 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
+        else if (state == CALCULATING_10 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
             intersect_x         <= (`INTERSECT_X_B'(pixel_x) * `INTERSECT_X_B'(closest_dist));
             intersect_y         <= (`INTERSECT_Y_B'(pixel_y) * `INTERSECT_Y_B'(closest_dist));
             intersect_z         <= (`INTERSECT_Z_B'(pixel_z) * `INTERSECT_Z_B'(closest_dist));
-            state               <= (state == CALCULATING_9) ? state + 1: state;
-        end
-        else if (state == CALCULATING_10 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
-            intersect_x         <= (intersect_x - (`INTERSECT_X_B'(world.spheres[closest_index].x) <<< `FP_B));
-            intersect_y         <= (intersect_y - (`INTERSECT_Y_B'(world.spheres[closest_index].y) <<< `FP_B));
-            intersect_z         <= (intersect_z - (`INTERSECT_Z_B'(world.spheres[closest_index].z) <<< `FP_B));
             state               <= (state == CALCULATING_10) ? state + 1: state;
         end
         else if (state == CALCULATING_11 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
-            intersect_x         <= intersect_x >>> world.spheres[closest_index].r;
-            intersect_y         <= intersect_y >>> world.spheres[closest_index].r;
-            intersect_z         <= intersect_z >>> world.spheres[closest_index].r;
+            intersect_x         <= (intersect_x - (`INTERSECT_X_B'(world.spheres[closest_index].x) <<< `FP_B));
+            intersect_y         <= (intersect_y - (`INTERSECT_Y_B'(world.spheres[closest_index].y) <<< `FP_B));
+            intersect_z         <= (intersect_z - (`INTERSECT_Z_B'(world.spheres[closest_index].z) <<< `FP_B));
             state               <= (state == CALCULATING_11) ? state + 1: state;
         end
         else if (state == CALCULATING_12 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
+            intersect_x         <= intersect_x >>> world.spheres[closest_index].r;
+            intersect_y         <= intersect_y >>> world.spheres[closest_index].r;
+            intersect_z         <= intersect_z >>> world.spheres[closest_index].r;
+            state               <= (state == CALCULATING_12) ? state + 1: state;
+        end
+        else if (state == CALCULATING_13 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
             intersect_x         <= (((intersect_x * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
             intersect_y         <= (((intersect_y * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
             intersect_z         <= (((intersect_z * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
-            state               <= (state == CALCULATING_12) ? state + 1 : state;
+            state               <= (state == CALCULATING_13) ? state + 1 : state;
         end
         else if (state == COLORING_1 && busy == HIGH) begin
             norm_x              <= intersect_x[3:0];
@@ -227,7 +240,7 @@ module Raytracing_Worker(
             state               <= (state == COLORING_1) ? state + 1 : state;
         end
         else if (state == COLORING_2 && busy == HIGH) begin
-            buffer[current_job] <= (closest_dist != 0) ? {norm_x[3:0], norm_y[3:0], norm_z[3:0]} : `BACKGROUND_COLOR;
+            buffer[current_job] <= (num_misses != num_spheres) ? {norm_x[3:0], norm_y[3:0], norm_z[3:0]} : `BACKGROUND_COLOR;
             state               <= (state == COLORING_2) ? state + 1: state;
         end
         else if (state == FINISHED && busy == HIGH) begin
