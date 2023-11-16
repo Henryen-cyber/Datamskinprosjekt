@@ -44,11 +44,11 @@ place_design
 report_clock_utilization -file $outputDir/clock_util.rpt
 
 #Get timing vialation and run optimizations if needed
-if {[get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup]] < 0} {
-	puts "### Found Timing Vialations ###"
-	puts "### Running Physical Optimizations ###"
-	phys_opt_design
-}
+# if {[get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup]] < 0} {
+# 	puts "### Found Timing Vialations ###"
+# 	puts "### Running Physical Optimizations ###"
+# 	phys_opt_design
+# }
 
 write_checkpoint -force $outputDir/post_place.dcp
 report_utilization -file $outputDir/post_place_util.rpt
