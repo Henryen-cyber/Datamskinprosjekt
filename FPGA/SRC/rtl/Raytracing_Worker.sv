@@ -52,8 +52,10 @@ module Raytracing_Worker(
     localparam [3:0] CALCULATING_9 = 9;
     localparam [3:0] CALCULATING_10 = 10;
     localparam [3:0] CALCULATING_11 = 11;
-    localparam [3:0] COLORING = 12;
-    localparam [3:0] FINISHED = 13;
+    localparam [3:0] CALCULATING_12 = 12;
+    localparam [3:0] COLORING_1 = 13;
+    localparam [3:0] COLORING_2 = 14;
+    localparam [3:0] FINISHED = 15;
 
     localparam JOBS = 640;
     localparam JOBS_SUBDIVISION = 64; // Must be divisible with JOBS
@@ -93,9 +95,13 @@ module Raytracing_Worker(
 
     logic        [`DIST_B-1:0]          dist_r;
 
-    logic signed [`INTERSECT_X_B-1:0]   intersect_x;
-    logic signed [`INTERSECT_Y_B-1:0]   intersect_y;
-    logic signed [`INTERSECT_Z_B-1:0]   intersect_z;
+    logic        [`INTERSECT_X_B-1:0]   intersect_x;
+    logic        [`INTERSECT_Y_B-1:0]   intersect_y;
+    logic        [`INTERSECT_Z_B-1:0]   intersect_z;
+
+    logic        [3:0]                  norm_x;
+    logic        [3:0]                  norm_y;
+    logic        [3:0]                  norm_z;
 
     SquareRoot#(
         .A_INT_B(`DIS_B - `FP_B),
@@ -131,7 +137,7 @@ module Raytracing_Worker(
             state               <= (state == CALCULATING_1) ? state + 1: state;
         end
         else if (state == CALCULATING_2 && busy == HIGH) begin
-            a_times_two_r <= (pixel_x_sqrd + pixel_y_sqrd + pixel_z_sqrd) << 1;
+            a_times_two_r       <= (pixel_x_sqrd + pixel_y_sqrd + pixel_z_sqrd) << 1;
             dotx_r              <= `DOT_X_B'(`DOT_X_B'(pixel_x) * `DOT_X_B'(world.spheres[index].x));
             dotz_r              <= `DOT_Z_B'(`DOT_Z_B'(pixel_z) * `DOT_Z_B'(world.spheres[index].z));
             doty_r              <= `DOT_Y_B'(`DOT_Z_B'(pixel_y) * `DOT_Y_B'(world.spheres[index].y));
@@ -153,10 +159,11 @@ module Raytracing_Worker(
         else if (state == CALCULATING_6 && busy == HIGH && sqrt_busy == LOW) begin
             dis_r               <= (`DIS_B'(br_sr) - `DIS_B'(a_times_c_r));
             if(dis_r < 0) begin
-                next_sphere     <= HIGH;
-                state           <= CALCULATING_1;
                 if(index == num_spheres - 1) begin
-                    state       <= COLORING;
+                    state       <= COLORING_2;
+                end else begin
+                    next_sphere <= HIGH;
+                    state       <= CALCULATING_1;
                 end
             end else begin
                 sqrt_start      <= HIGH;
@@ -168,47 +175,60 @@ module Raytracing_Worker(
         end
         else if (state == CALCULATING_7 && busy == HIGH && sqrt_busy == LOW) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
             dist_r              <= (((b_r - dis_sqrt_r) <<< `FP_B ) / (a_times_two_r));
-            if(dist_r < closest_dist) begin
+            state               <= (state == CALCULATING_7) ? state + 1: state;
+        end
+        else if (state == CALCULATING_8 && busy == HIGH) begin
+            if(closest_dist == 0) begin
                 closest_dist    <= dist_r;
                 closest_index   <= index;
-                next_sphere     <= HIGH;
+                next_sphere     <= (index == num_spheres - 1) ? LOW : HIGH;
+            end else if(dist_r < closest_dist) begin
+                closest_dist    <= dist_r;
+                closest_index   <= index;
+                next_sphere     <= (index == num_spheres - 1) ? LOW : HIGH;
             end else
                 closest_dist    <= closest_dist;
                 closest_index   <= closest_index;
-                next_sphere     <= HIGH;
+                next_sphere     <= (index == num_spheres - 1) ? LOW : HIGH;
             if(index == num_spheres - 1) begin
-                state           <= (state == CALCULATING_7) ? state + 1: state;
+                state           <= (state == CALCULATING_8) ? state + 1: state;
             end else begin
                 state           <= CALCULATING_1;
             end
         end
-        else if (state == CALCULATING_8 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
-            intersect_x         <= (`INTERSECT_X_B'(pixel_x) * `INTERSECT_X_B'(dist_r));
-            intersect_y         <= (`INTERSECT_Y_B'(pixel_y) * `INTERSECT_Y_B'(dist_r));
-            intersect_z         <= (`INTERSECT_Z_B'(pixel_z) * `INTERSECT_Z_B'(dist_r));
-            state               <= (state == CALCULATING_8) ? state + 1: state;
-        end
         else if (state == CALCULATING_9 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
-            intersect_x         <= (intersect_x - (`INTERSECT_X_B'(world.spheres[closest_index].x) <<< `FP_B));
-            intersect_y         <= (intersect_y - (`INTERSECT_Y_B'(world.spheres[closest_index].y) <<< `FP_B));
-            intersect_z         <= (intersect_z - (`INTERSECT_Z_B'(world.spheres[closest_index].z) <<< `FP_B));
+            intersect_x         <= (`INTERSECT_X_B'(pixel_x) * `INTERSECT_X_B'(closest_dist));
+            intersect_y         <= (`INTERSECT_Y_B'(pixel_y) * `INTERSECT_Y_B'(closest_dist));
+            intersect_z         <= (`INTERSECT_Z_B'(pixel_z) * `INTERSECT_Z_B'(closest_dist));
             state               <= (state == CALCULATING_9) ? state + 1: state;
         end
         else if (state == CALCULATING_10 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
-            intersect_x         <= intersect_x >>> world.spheres[closest_index].r;
-            intersect_y         <= intersect_y >>> world.spheres[closest_index].r;
-            intersect_z         <= intersect_z >>> world.spheres[closest_index].r;
+            intersect_x         <= (intersect_x - (`INTERSECT_X_B'(world.spheres[closest_index].x) <<< `FP_B));
+            intersect_y         <= (intersect_y - (`INTERSECT_Y_B'(world.spheres[closest_index].y) <<< `FP_B));
+            intersect_z         <= (intersect_z - (`INTERSECT_Z_B'(world.spheres[closest_index].z) <<< `FP_B));
             state               <= (state == CALCULATING_10) ? state + 1: state;
         end
         else if (state == CALCULATING_11 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
+            intersect_x         <= intersect_x >>> world.spheres[closest_index].r;
+            intersect_y         <= intersect_y >>> world.spheres[closest_index].r;
+            intersect_z         <= intersect_z >>> world.spheres[closest_index].r;
+            state               <= (state == CALCULATING_11) ? state + 1: state;
+        end
+        else if (state == CALCULATING_12 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
             intersect_x         <= (((intersect_x * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
             intersect_y         <= (((intersect_y * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
             intersect_z         <= (((intersect_z * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
-            state               <= (state == CALCULATING_11) ? state + 1: state;
+            state               <= (state == CALCULATING_12) ? state + 1 : state;
         end
-        else if (state == COLORING && busy == HIGH) begin
-            buffer[current_job] <= (dis_r >= 0) ? {intersect_x[3:0], intersect_y[3:0], intersect_z[3:0]} : `BACKGROUND_COLOR;
-            state               <= (state == COLORING) ? state + 1: state;
+        else if (state == COLORING_1 && busy == HIGH) begin
+            norm_x              <= intersect_x[3:0];
+            norm_y              <= intersect_y[3:0];
+            norm_z              <= intersect_z[3:0];
+            state               <= (state == COLORING_1) ? state + 1 : state;
+        end
+        else if (state == COLORING_2 && busy == HIGH) begin
+            buffer[current_job] <= (closest_dist != 0) ? {norm_x[3:0], norm_y[3:0], norm_z[3:0]} : `BACKGROUND_COLOR;
+            state               <= (state == COLORING_2) ? state + 1: state;
         end
         else if (state == FINISHED && busy == HIGH) begin
             current_job         <= (state == FINISHED && current_job == JOBS_SUBDIVISION - 1) ? 0 : current_job + 1;
