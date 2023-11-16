@@ -13,3 +13,4 @@ FPGA/SIM/*.pb
 FPGA/SIM/*.jou
 FPGA/SIM/*.str
 FPGA/SIM/*.wcfg
+FPGA/SIM/*.wdb
