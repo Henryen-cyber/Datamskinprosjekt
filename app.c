@@ -15,17 +15,33 @@
  *
  ******************************************************************************/
 
-/***************************************************************************//**
- * Initialize application.
- ******************************************************************************/
 #include "spidrv.h"
 #include "em_usart.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <math.h>
+#include "app.h"
 
-// Fixed-point scale factor, e.g., 1/1024 for 10-bit fractional values.
-#define FIXED_POINT_SCALE 1024
+#define FIXED_POINT_FRACTIONAL_BITS 3
+#define N_Spheres 1
+#define CAM_SPEED 0.05
+#define ROT_SPEED 0.1
+
+// Fixed-point Format: 13.3 (16-bit)
+// 11.3 for y-axis
+typedef int16_t fixed_point_t;
+
+typedef struct {
+  fixed_point_t x;  // 16
+  fixed_point_t y;  // 14
+  fixed_point_t z;  // 16
+} Vector3_fp;
+
+typedef struct {
+  Vector3_fp center;       // 46
+  fixed_point_t radius;    // 6
+  fixed_point_t color;     // 12
+} Sphere_fp;
 
 // Define a 4x4 matrix type
 typedef float Matrix4x4[4][4];
@@ -33,137 +49,180 @@ typedef float Matrix4x4[4][4];
 // Define a 4D vector type
 typedef float Vector4[4];
 
-// Struct to represent a point with fixed-point coordinates.
-typedef struct {
-    float x;
-    float y;
-    float z;
-} Vector3;
-
-typedef struct {
-    Vector3 position;
-    Vector3 forward;
-    Vector3 up;
-    uint8_t near_clip;
-    uint8_t far_clip;
-    uint8_t field_of_view; // in radians
-} Camera;
-
-// Struct to represent a circle with fixed-point values.
+// Struct to represent a Sphere with fixed-point values.
 typedef struct {
     Vector3 center;
     float radius;
-    float diffusion;   // Diffusion factor
     float color;       // Color data
-} Circle;
+} Sphere;
 
-// Struct to represent the world with four circles.
+// Struct to represent the world with four Spheres.
 typedef struct {
-    Circle circles[1];
+    Sphere Spheres[N_Spheres];
 } World;
 
-// The entire world, ready to be transmitted to FPGA
-// Modify based on time/input
-World world;
-Camera camera;
+// Two fixed-point versions of world
+// one is most recent ready for sending on interrupt
+// the other is being worked on
+// 12 bytes, half the size of World using floats
+typedef struct {
+  Sphere_fp Spheres[N_Spheres];
+} World_fp;
 
-char * test_msg2;
+uint64_t *current_packed_data;
+uint64_t *noncurrent_packed_data;
+uint64_t packed_data_1;
+uint64_t packed_data_2;
 
 SPIDRV_HandleData_t handleData;
 SPIDRV_Handle_t handle = &handleData;
 
-void TransferComplete( SPIDRV_Handle_t handle,
-                       Ecode_t transferStatus,
-                       int itemsTransferred )
+
+void spi_send_data()
 {
-  if ( transferStatus == ECODE_EMDRV_SPIDRV_OK )
-  {
-    // Success !
-    test_msg2 = "Heartbeat\0";
+  // Go through the memory backwards in msb.
+  for (int i = 0; i < 8; i++) {
+      // Blocking transmit so that it doesn't overwrite itself
+      SPIDRV_MTransmitB( handle, (char *)current_packed_data + (7-i), 1 );
   }
+
 }
 
 
-uint8_t buffer[2];
-
-/***************************************************************************//**
- * App ticking function.
- ******************************************************************************/
-void spi_send_data(char value)
-{
-  //SPIDRV_MTransmitB( handle, buffer, 10 );
-  buffer[0] = value;
-  buffer[1] = value;
-
-  SPIDRV_MTransmit( handle, &world, 24, TransferComplete);
+fixed_point_t double_to_fixed(double input) {
+    return (fixed_point_t)(round(input * (1 << FIXED_POINT_FRACTIONAL_BITS)));
 }
 
+Sphere_fp Sphere_to_Sphere_fp (Sphere sphere) {
+  Sphere_fp result;
+
+  Vector3_fp center;
+  center.x = double_to_fixed(sphere.center.x);
+  center.y = double_to_fixed(sphere.center.y);
+  center.z = double_to_fixed(sphere.center.z);
+  result.center = center;
+  result.radius = sphere.radius;
+  result.color = sphere.color;
+
+  return result;
+}
+
+// Pack data into a 64-bit space
+void pack_data(Sphere_fp sphere) {
+
+    *noncurrent_packed_data = 0;
+
+    *noncurrent_packed_data |= ((uint64_t)sphere.center.x & 0xFFFF) << 48;  // 16 bits for x
+    *noncurrent_packed_data |= ((uint64_t)sphere.center.y & 0x7FFF) << 33;  // 15 bits for y
+    *noncurrent_packed_data |= ((uint64_t)sphere.center.z & 0x7FFF) << 18;  // 15 bits for z
+    *noncurrent_packed_data |= ((uint64_t)sphere.radius & 0x3F) << 12;      // 6 bits for radius
+    *noncurrent_packed_data |= (uint64_t)sphere.color & 0xFFF;              // 12 bits for color
+
+}
+
+World_fp world_to_world_fp(World world) {
+  World_fp world_fp;
+
+  for (int i = 0; i <= N_Spheres; i++) {
+      world_fp.Spheres[i] = Sphere_to_Sphere_fp(world.Spheres[i]);
+  }
+
+  return world_fp;
+}
+
+//uint64_t world_fp_to_spi_data(World_fp world_fp) {
+//  uint64_t packed_data = pack_data(world_fp.Spheres[0]);
+//  return packed_data;
+//}
 
 void multiplyMatrices(Matrix4x4 result, Matrix4x4 matrix1, Matrix4x4 matrix2) {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            result[i][j] = 0;
-            for (int k = 0; k < 4; k++) {
-                result[i][j] += matrix1[i][k] * matrix2[k][j];
-            }
-        }
-    }
+  for (int i = 0; i < 4; i++) {
+          for (int j = 0; j < 4; j++) {
+              result[i][j] = 0;
+              for (int k = 0; k < 4; k++) {
+                  result[i][j] += matrix1[i][k] * matrix2[k][j];
+              }
+          }
+      }
 }
 
 // Function to apply a 4x4 matrix to a 4D vector
 void multiplyMatrixVector(Vector4 result, Matrix4x4 matrix, Vector4 vector) {
-    for (int i = 0; i < 4; i++) {
-        result[i] = 0;
-        for (int j = 0; j < 4; j++) {
-            result[i] += matrix[i][j] * vector[j];
-        }
+      for (int i = 0; i < 4; i++) {
+          result[i] = 0;
+          for (int j = 0; j < 4; j++) {
+              result[i] += matrix[i][j] * vector[j];
+          }
+      }
+}
+
+void normalize(Vector3 *vec) {
+    float length = sqrt(vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
+    if (length != 0.0f) {
+        vec->x /= length;
+        vec->y /= length;
+        vec->z /= length;
     }
+}
+
+void cross(Vector3 *result, Vector3 v1, Vector3 v2) {
+    result->x = v1.y * v2.z - v1.z * v2.y;
+    result->y = v1.z * v2.x - v1.x * v2.z;
+    result->z = v1.x * v2.y - v1.y * v2.x;
+}
+
+float dot(Vector3 v1, Vector3 v2) {
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+float vector_length(Vector3 vector) {
+  return sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 }
 
 // Function to calculate the rotation matrix based on look-at parameters
-void lookAt(Matrix4x4 rotation_matrix, float camera_pos[3], float target[3], float up[3]) {
-    // Calculate the forward vector (the direction the camera is looking)
-    float forward[3];
-    for (int i = 0; i < 3; i++) {
-        forward[i] = target[i] - camera_pos[i];
-    }
+void lookAt(Matrix4x4 rotation_matrix, Vector3 camera_pos, Vector3 target, Vector3 up) {
+      Vector3 forward, right, newUp;
 
-    // Normalize the forward vector
-    float forward_length = sqrt(forward[0] * forward[0] + forward[1] * forward[1] + forward[2] * forward[2]);
-    for (int i = 0; i < 3; i++) {
-        forward[i] /= forward_length;
-    }
+      // Calculate the forward vector (the direction the camera is looking)
+      forward.x = target.x - camera_pos.x;
+      forward.y = target.y - camera_pos.y;
+      forward.z = target.z - camera_pos.z;
+      normalize(&forward);
 
-    // Calculate the right vector (perpendicular to the forward and up vectors)
-    float right[3];
-    for (int i = 0; i < 3; i++) {
-        right[i] = forward[(i + 1) % 3] * up[(i + 2) % 3] - forward[(i + 2) % 3] * up[(i + 1) % 3];
-    }
+      // Calculate the right vector (perpendicular to the forward and up vectors)
+      cross(&right, forward, up);
+      normalize(&right);
 
-    // Normalize the right vector
-    float right_length = sqrt(right[0] * right[0] + right[1] * right[1] + right[2] * right[2]);
-    for (int i = 0; i < 3; i++) {
-        right[i] /= right_length;
-    }
+      // Calculate the up vector (perpendicular to the forward and right vectors)
+      cross(&newUp, right, forward);
+      normalize(&newUp);
 
-    // Calculate the up vector (perpendicular to the forward and right vectors)
-    for (int i = 0; i < 3; i++) {
-        up[i] = right[(i + 1) % 3] * forward[(i + 2) % 3] - right[(i + 2) % 3] * forward[(i + 1) % 3];
-    }
+      // Create the rotation matrix
+      rotation_matrix[0][0] = right.x;
+      rotation_matrix[0][1] = newUp.x;
+      rotation_matrix[0][2] = forward.x;
+      rotation_matrix[0][3] = 0.0f;
 
-    // Create the rotation matrix
-    for (int i = 0; i < 3; i++) {
-        rotation_matrix[0][i] = right[i];
-        rotation_matrix[1][i] = up[i];
-        rotation_matrix[2][i] = -forward[i];
-    }
+      rotation_matrix[1][0] = right.y;
+      rotation_matrix[1][1] = newUp.y;
+      rotation_matrix[1][2] = forward.y;
+      rotation_matrix[1][3] = 0.0f;
 
-    // Set the last row and column of the rotation matrix
-    for (int i = 0; i < 4; i++) {
-        rotation_matrix[i][3] = 0.0f;
-        rotation_matrix[3][i] = (i == 3) ? 1.0f : 0.0f;
-    }
+      rotation_matrix[2][0] = right.z;
+      rotation_matrix[2][1] = newUp.z;
+      rotation_matrix[2][2] = forward.z;
+      rotation_matrix[2][3] = 0.0f;
+
+      rotation_matrix[3][0] = 0.0;//dot(camera_pos, right);
+      rotation_matrix[3][1] = 0.0;//dot(camera_pos, newUp);
+      rotation_matrix[3][2] = 0.0;//dot(camera_pos, forward);
+      rotation_matrix[3][3] = 1.0f;
 }
+
+// World to compute on, in floating point
+World world;
+Camera camera;
+Vector4 original_original_position;
 
 
 /***************************************************************************//**
@@ -171,75 +230,210 @@ void lookAt(Matrix4x4 rotation_matrix, float camera_pos[3], float target[3], flo
  ******************************************************************************/
 void app_init(void)
 {
-//  SWO_Setup_test();
+  // Initialize the first Sphere.
+    world.Spheres[0].center.x = 0;
+    world.Spheres[0].center.y = 0;
+    world.Spheres[0].center.z = 0;
+    world.Spheres[0].radius = 4;
+    world.Spheres[0].color = 2;
 
-  // Initialize the first circle.
-  world.circles[0].center.x = 512;
-  world.circles[0].center.y = 8;
-  world.circles[0].center.z = 512;
-  world.circles[0].radius = 256;
-  world.circles[0].diffusion = 512;
-  world.circles[0].color = 0xFF00;
-
-  test_msg2 = "First\0";
-
-    buffer[0] = 15;
-    //buffer[1] = 15;
-    //buffer[2] = 33;
-    //buffer[3] = 19;
-    //buffer[4] = 1;
-    //buffer[5] = 77;
-    //buffer[6] = 51;
-    //buffer[7] = 7;
-
-    SPIDRV_Init_t initData = SPIDRV_MASTER_USART1;
+    Vector3 pos = {0.0, 0.0, 400.0};
+    camera.position = pos;
+    Vector3 target = {0.0, 0.0, 0.0};
+    camera.target = target;
+    Vector3 up = {0.0, 1.0, 0.0};
+    normalize(&up);
+    camera.yaw = 90.0 * 3.14/4.0;
+    camera.up = up;
+    original_original_position[0] = 0.0;
+    original_original_position[1] = 0.0;
+    original_original_position[2] = 0.0;
+    original_original_position[3] = 1.0;
 
 
-    // Init
-    SPIDRV_Init( handle, &initData );
+    current_packed_data = &packed_data_1;
+    //*current_packed_data = 0b0000000000000000000000000010000000110100011000001110000000000010;
+    noncurrent_packed_data = &packed_data_2;
 
-    test_msg2 = "Second\0";
+  SPIDRV_Init_t initData = SPIDRV_MASTER_USART1;
 
+  SPIDRV_Init( handle, &initData );
+
+
+}
+
+void app_reset()
+{
+  // Initialize the first Sphere.
+    world.Spheres[0].center.x = 0;
+    world.Spheres[0].center.y = 0;
+    world.Spheres[0].center.z = 0;
+    world.Spheres[0].radius = 4;
+    world.Spheres[0].color = 2;
+
+    Vector3 pos = {0.0, 0.0, 400.0};
+    camera.position = pos;
+    Vector3 target = {0.0, 0.0, 0.0};
+    camera.target = target;
+    Vector3 up = {0.0, 1.0, 0.0};
+    normalize(&up);
+    camera.yaw = 90.0 * 3.14/4.0;
+    camera.up = up;
+    original_original_position[0] = 0.0;
+    original_original_position[1] = 0.0;
+    original_original_position[2] = 0.0;
+    original_original_position[3] = 1.0;
+
+
+}
+
+void printMatrix(Matrix4x4 printmatix) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            printf("%f\n", printmatix[i][j]);
+        }
+    }
+}
+
+void set_camera_position(Vector3 pos) {
+  camera.position.x = pos.x;
+  camera.position.y = pos.y;
+  camera.position.z = pos.z;
+}
+
+float glob_t = 0.0;
+
+void pan_camera(float t) {
+  Vector3 temp = {camera.target.x - camera.position.x,
+                camera.target.y - camera.position.y,
+                camera.target.z - camera.position.z};
+  glob_t += t;
+  if (glob_t > 6.28) {
+      glob_t -= 6.28;
+  }
+
+  float camX = sinf(glob_t) * vector_length(temp);
+  float camZ = cosf(glob_t) * vector_length(temp);
+
+  camera.position.x = camX;
+  camera.position.z = camZ;
+}
+
+void move_camera_x(int dir) {
+  Vector3 right = {0.0, 0.0, 0.0};
+  cross(&right, camera.up, camera.forward);
+  normalize(&right);
+
+  dir*=20;
+
+  camera.position.x += CAM_SPEED * dir * right.x;
+  camera.position.y += CAM_SPEED * dir * right.y;
+  camera.position.z += CAM_SPEED * dir * right.z;
+
+}
+
+void move_camera_z(int dir) {
+    dir *= 20;
+    camera.position.x += CAM_SPEED * dir * camera.forward.x;
+    camera.position.y += CAM_SPEED * dir * camera.forward.y;
+    camera.position.z += CAM_SPEED * dir * camera.forward.z;
+}
+
+void camera_pitch(float pitch) {
+  camera.pitch += pitch * ROT_SPEED;
+
+  if (camera.pitch < -89) {
+      camera.pitch = -89;
+  } else if (camera.pitch > 89) {
+      camera.pitch = 89;
+  }
+}
+
+void camera_yaw(float yaw) {
+  camera.yaw += yaw * ROT_SPEED;
 }
 
 /***************************************************************************//**
  * App ticking function.
  ******************************************************************************/
-void app_process_action(void)
+void app_process_action(int pan)
 {
-  // Define camera's position, target, and up vector
-  Vector3 camera_pos = {125.0, 0.0, -10.0};
-  camera.position = camera_pos;
+   World_fp world_fp;
 
-  float target[3] = {0.0, 0.0, 100.0};
-  float up[3] = {0.0, 1.0, 0.0};
+   camera.forward.x = cosf(camera.yaw) * cosf(camera.pitch);
+   camera.forward.y = sinf(camera.pitch);
+   camera.forward.z = sinf(camera.yaw) * cosf(camera.pitch);
 
-  // Set circle ref
-  Circle *circle1 = &world.circles[0];
-  Vector4 original_position = {circle1->center.x, circle1->center.y, circle1->center.z, 1.0f};
+   Vector3 camera_right = {0.0,0.0,0.0};
+   cross(&camera_right, camera.up, camera.forward);
+   normalize(&camera_right);
 
-  // Define the camera's transformation matrix (identity for camera at 0, 0, 0)
-  Vector3 *cam_pos = &camera.position;
+   // Set Sphere ref
+   Sphere *Sphere1 = &world.Spheres[0];
 
-  Matrix4x4 translation_matrix = {{1, 0, 0, cam_pos->x},
-                                 {0, 1, 0, cam_pos->y},
-                                 {0, 0, 1, cam_pos->z},
-                                 {0, 0, 0, 1}};
+   Matrix4x4 translation_matrix = {{1,0,0,-camera.position.x},
+                                   {0,1,0,-camera.position.y},
+                                   {0,0,1,-camera.position.z},
+                                   {0,0,0,1}};
+   printf("Translation: \n");
+   printMatrix(translation_matrix);
 
-  // Create a rotation matrix based on the look-at parameters
-  Matrix4x4 rotation_matrix;
-  lookAt(rotation_matrix, cam_pos, target, up);
+   Vector3 temp = {0.0, 0.0, 0.0};
 
-  // Combine the matrices for the object
-  Matrix4x4 combined_matrix;
-  multiplyMatrices(combined_matrix, translation_matrix, rotation_matrix);
+      // Create a rotation matrix based on the look-at parameters
+      if (pan) {
+          temp.x = camera.position.x + camera.target.x;
+          temp.y = camera.position.y + camera.target.y;
+          temp.z = camera.position.z + camera.target.z;
+          normalize(&temp);
+      } else {
+          temp.x = camera.forward.x;
+          temp.y = camera.forward.y;
+          temp.z = camera.forward.z;
+      }
 
-  // Apply the transformations to the object's position
-  Vector4 transformed_position;
-  multiplyMatrixVector(transformed_position, combined_matrix, original_position);
 
-  // The object is now in the camera's coordinate system
-  printf("Transformed Position: (%.2f, %.2f, %.2f)\n",
-         transformed_position[0], transformed_position[1], transformed_position[2]);
+   // Create a rotation matrix based on the look-at parameters
+       Matrix4x4 rotation_matrix = {{camera_right.x, camera_right.y, camera_right.z, 0},
+                                       {camera.up.x, camera.up.y, camera.up.z, 0},
+                                       {temp.x, temp.y, temp.z, 0},
+                                       {0,0,0,1}};
+
+   printf("\nRotation: \n");
+   printMatrix(rotation_matrix);
+
+   // Combine the matrices for the object
+   Matrix4x4 combined_matrix;
+   multiplyMatrices(combined_matrix, rotation_matrix, translation_matrix);
+
+   printf("\nTranslation: \n");
+   printMatrix(combined_matrix);
+   // Apply the transformations to the object's position
+   Vector4 transformed_position;
+   multiplyMatrixVector(transformed_position, combined_matrix, original_original_position);
+
+   Sphere1->center.x = -transformed_position[0];
+   Sphere1->center.y = transformed_position[1];
+   Sphere1->center.z = -transformed_position[2];
+
+   // Update current world_fp data
+   world_fp = world_to_world_fp(world);
+
+   // Pack world_fp into 64 bits in our bit-scheme
+   //*current_packed_data = world_fp_to_spi_data(world_fp);
+   pack_data(world_fp.Spheres[0]);
+
+   // Swap what world to work on
+   if (current_packed_data == &packed_data_1) {
+       current_packed_data = &packed_data_2;
+       noncurrent_packed_data = &packed_data_1;
+   } else {
+       current_packed_data = &packed_data_1;
+       noncurrent_packed_data = &packed_data_2;
+   }
+
+   // The object is now in the camera's coordinate system
+   printf("Transformed Position: (%.2f, %.2f, %.2f)\n",
+          transformed_position[0], transformed_position[1], transformed_position[2]);
 
 }

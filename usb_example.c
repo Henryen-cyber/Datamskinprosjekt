@@ -63,6 +63,7 @@
 char test;
 char test2;
 int spi_send = 0;
+int update_count = 0;
 
 /* Timer indices. */
 #define KBD_LED_TIMER     1
@@ -120,8 +121,8 @@ void usb_example( void )
   uint8_t hidReport;
   USBH_Init_TypeDef initstruct = USBH_INIT_DEFAULT;
 
-  test = 'a';
-  test2 = 'a';
+  test = 'm';
+  test2 = 'm';
 
   CMU_ClockSelectSet( cmuClock_HF, cmuSelect_HFXO );
   CMU_ClockEnable(cmuClock_GPIO, true);
@@ -178,7 +179,7 @@ void usb_example( void )
 
           if (spi_send == 1) {
               spi_send = 0;
-              spi_send_data(test);
+              spi_send_data();
           }
 
         }
@@ -190,16 +191,11 @@ void usb_example( void )
     USBTIMER_Stop( KBD_POLL_TIMER );
 
     /* Wait for malfunctional device or unknown HID keyboard removal. */
-    if (test != 'd') {
-        while ( USBH_DeviceConnected() ){}
-    }
+    while ( USBH_DeviceConnected() ){}
 
 
     /* Disable USB peripheral, power down USB port. */
     USBH_Stop();
-    if (test == 'd') {
-        break;
-    }
   }
 }
 
@@ -269,11 +265,62 @@ int callBackFunc(USB_Status_TypeDef status, uint32_t xferred, uint32_t remaining
       {
         char c = USB_HidScancodeToAscii( tmpBuf[ 2 ] );
         if ( c ) {
-            if (c == 'd') {
+            if (c == 'e') {
+                pan_camera(0.02);
+                app_process_action(1);
                 spi_send = 1;
+            } else if(c == 'q') {
+                pan_camera(-0.02);
+                app_process_action(1);
+                spi_send = 1;
+            }
+            // Move around
+            else if(c == 'w') {
+                move_camera_z(1);
+                app_process_action(0);
+                spi_send = 1;
+            } else if(c == 'a') {
+                move_camera_x(1);
+                app_process_action(0);
+                spi_send = 1;
+            } else if(c == 's') {
+                move_camera_z(-1);
+                app_process_action(0);
+                spi_send = 1;
+            } else if(c == 'd') {
+                move_camera_x(-1);
+                app_process_action(0);
+                spi_send = 1;
+            }
+            // Look around
+            else if(c == 'l') {
+                camera_yaw(1);
+                app_process_action(0);
+                spi_send = 1;
+            } else if(c == 'j') {
+                camera_yaw(-1);
+                app_process_action(0);
+                spi_send = 1;
+            } else if(c == 'i') {
+                camera_pitch(1);
+                app_process_action(0);
+                spi_send = 1;
+            } else if(c == 'k') {
+                camera_pitch(-1);
+                app_process_action(0);
+                spi_send = 1;
+            } else if (c == 'r' && test != 'r') {
+                app_reset();
+                app_process_action(0);
+                spi_send = 1;
+            } else if (c == 'p' && test != 'p') {
+                spi_send = 1;
+            } else if (c == 'u' && test != 'u') {
+                app_process_action(0);
             } else {
                 test = c;
             }
+            test = c;
 
         }
       }
