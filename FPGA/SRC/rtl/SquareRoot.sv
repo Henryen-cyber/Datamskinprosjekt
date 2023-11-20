@@ -6,8 +6,8 @@
 `include "last_set_bit.sv"
 `include "Types.sv"
 
-module SquareRoot#(parameter N=16, parameter A_INT_B=8, parameter A_FP_B=4, parameter A_NORM_FP_B=16,
-parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
+module SquareRoot#(parameter N=8, parameter A_INT_B=8, parameter A_FP_B=3, parameter A_NORM_FP_B=8,
+parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=8
 )(
 
     input  logic clk,
@@ -45,7 +45,6 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
         case(CURRENT_STATE)
 
             IDLE : begin
-
                 x_k <= 0;
                 x_k1 <= 0;
                 c_k <= 0;
@@ -69,6 +68,8 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
                 c_k1 <= 0;
                 find_m_s <= 1;
                 busy <= 1;
+                c_k_less_than_A_norm <= 0;
+                Q <= 0;
                 if(m_valid && two_times_m) begin
                     A_norm <= {A, A_FP_DIFF_B'('b0)} >> (two_times_m);
                     NEXT_STATE <= LOOP;
@@ -76,8 +77,6 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
                     NEXT_STATE <= START;
 					A_norm <= A_norm;
                 end
-                c_k_less_than_A_norm <= 0;
-                Q <= 0;
             end
 
             LOOP : begin
@@ -90,6 +89,7 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
                     x_k1 = x_k - (`SR_ONE >>> (k + 1));
                     c_k1 = c_k - ((x_k_padded >>> (k))) + (`SR_C_ONE >>> (2 * (k + 1)));
                 end
+                busy <= 1;
                 x_k <= x_k;
                 c_k <= c_k;
                 A_norm <= A_norm;
@@ -105,6 +105,8 @@ parameter A_FP_DIFF_B=A_NORM_FP_B - A_FP_B, parameter PADDED_FB_BITS=16
                 c_k1 <= c_k1;
                 x_k <= x_k1;
                 c_k <= c_k1;
+                A_norm <= A_norm;
+                busy <= 1;
                 Q <= 0;
                 if(k == N - 1) begin
                     NEXT_STATE <= DONE;

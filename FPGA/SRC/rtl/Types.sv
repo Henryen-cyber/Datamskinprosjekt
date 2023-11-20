@@ -4,9 +4,8 @@
 //////////////////////////////////
 `define SR_FIXED_POINT_BITS 16
 `define FIXED_POINT_BITS 4
-`define SR_ONE 17'b10000000000000000
-`define SR_C_ONE 33'b100000000000000000000000000000000
-
+`define SR_ONE 9'b100000000
+`define SR_C_ONE 17'b10000000000000000
 `define FP_B 3
 `define PX_X_B 10
 `define PX_X_SQRD_B 18
