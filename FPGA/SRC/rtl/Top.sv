@@ -37,7 +37,7 @@ module Top(
     input ck_ss,
     input ck_sck,
     output ck_a0,
-    
+
     output [7:0] led
     );
 
@@ -51,16 +51,26 @@ module Top(
     assign i_SPI_MOSI = ck_mosi;
     assign i_SPI_CS_n = ck_ss;
 
-    logic CLK25MHZ;
-    clk_100MHz_25MHz_100T clock_wiz_0_instance
-   (
+    // 25 MHz clock instance
+    //logic CLK25MHZ;
+    //clk_100MHz_25MHz_100T clock_wiz_0_instance
+    // (
     // Clock out ports
-    .clk_out1(CLK25MHZ),     // output clk_out1
+    //.clk_out1(CLK25MHZ),     // output clk_out1
     // Status and control signals
-   // Clock in ports
-    .clk_in1(CLK100MHZ)  // input clk_in1
-    );
+    // Clock in ports
+    //.clk_in1(CLK100MHZ)  // input clk_in1
+    //);
 
+    // 125Mhz & 25MHz clock instance
+    logic CLK25MHZ;
+    logic CLK125MHZ;
+    CLK_125MHZ_25_MHZ clocking_instance
+    (
+        .clk_out1(CLK25MHZ),
+        .clk_out2(CLK125MHZ),
+        .clk_in1(CLK100MHZ)
+    );
 
     logic recv_byte_dv;
     logic [7:0] recv_byte;
@@ -69,7 +79,7 @@ module Top(
 
     SPI_Slave SPI_Slave_instance (
     .i_Rst_L(ck_rst_),
-    .i_Clk(CLK100MHZ),
+    .i_Clk(CLK125MHZ),
     .o_RX_DV(recv_byte_dv),
     .o_RX_Byte(recv_byte),
     // .i_TX_DV(tran_dv),
@@ -82,10 +92,10 @@ module Top(
 
 
     assign led = recv_byte[7:0];
-    
+
     SPI_Slave_Acc SPI_Slave_Acc_instance (
         .rst_(ck_rst_),
-        .clk(CLK100MHZ),
+        .clk(CLK125MHZ),
         .i_RX_DV(recv_byte_dv),
         .i_RX_Byte(recv_byte),
         .o_Acc_DV(recv_64bit_dv),
@@ -93,8 +103,8 @@ module Top(
     );
 
 
-    Raytracing_Controller controller_instance (    
-    .CLK100MHZ(CLK100MHZ), 
+    Raytracing_Controller controller_instance (
+    .CLK100MHZ(CLK125MHZ),
     .CLK25MHZ(CLK25MHZ),
     .ck_rst_(ck_rst_),
     .vga_r(vga_r),

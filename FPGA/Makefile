@@ -1,9 +1,9 @@
 bit : 
-	vivado -mode batch -nolog -nojournal -source RayTrace.tcl
+	vivado -mode batch -source RayTrace.tcl
 
 .PHONY : program
 program : 
-	vivado -mode tcl -nolog -nojournal -source program_fpga.tcl -tclargs OPT/raytrace.bit
+	vivado -mode tcl -source program_fpga.tcl -tclargs OPT/raytrace.bit
 
 .PHONY : clean
 clean : 
