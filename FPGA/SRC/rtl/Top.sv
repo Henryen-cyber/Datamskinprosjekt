@@ -52,7 +52,7 @@ module Top(
     assign i_SPI_CS_n = ck_ss;
 
     logic CLK25MHZ;
-    clk_100MHz_25MHz_100T clock_wiz_0_instance
+    clk_100MHz_25MHz_PCB clock_wiz_0_instance
    (
     // Clock out ports
     .clk_out1(CLK25MHZ),     // output clk_out1
