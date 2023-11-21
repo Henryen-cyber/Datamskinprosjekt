@@ -23,6 +23,7 @@
 module Top(
     input CLK100MHZ,
     input ck_rst_,
+    output ck_rst_signal,
 
     // VGA
     output [3:0] vga_r,
@@ -36,9 +37,9 @@ module Top(
     output ck_miso,
     input ck_ss,
     input ck_sck,
-    output ck_a0,
+    // output ck_a0,
     
-    output [7:0] led
+    output [1:0] led
     );
 
     logic i_SPI_Clk;
@@ -52,7 +53,7 @@ module Top(
     assign i_SPI_CS_n = ck_ss;
 
     logic CLK25MHZ;
-    clk_100MHz_25MHz_100T clock_wiz_0_instance
+    clk_100MHz_25MHz_PCB clock_wiz_0_instance
    (
     // Clock out ports
     .clk_out1(CLK25MHZ),     // output clk_out1
@@ -80,8 +81,30 @@ module Top(
     .i_SPI_CS_n(i_SPI_CS_n)
     );
 
+    logic ck_rst_signal;
+    assign ck_rst_signal = 1;
 
-    assign led = recv_byte[7:0];
+    // assign led = recv_byte[7:0];
+    logic [25:0] led_25;
+    logic [25:0] led_100;
+
+    assign led[0] = led_25[25];
+    assign led[1] = led_100[25];
+
+    always @(posedge CLK25MHZ or negedge ck_rst_) begin
+        if (~ck_rst_) begin 
+            led_25 <= 0;
+        end else begin
+            led_25 <= led_25 + 1;
+        end
+    end
+    always @(posedge CLK100MHZ or negedge ck_rst_) begin 
+        if (~ck_rst_) begin 
+            led_100 <= 0;
+        end else begin
+            led_100 <= led_100 + 1;
+        end
+    end
     
     SPI_Slave_Acc SPI_Slave_Acc_instance (
         .rst_(ck_rst_),
