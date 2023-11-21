@@ -34,19 +34,6 @@
 
 char test3;
 
-volatile uint8_t pinInt[16];
-
-// Defines for the interrupt
-//#define int_pin SL_SIMPLE_BUTTON_BTN0_PIN
-#define int_pin 9
-//#define int_port SL_SIMPLE_BUTTON_BTN0_PORT
-#define int_port gpioPortE
-
-
-void gpioCallback(uint8_t pin)
-{
-  pinInt[pin]++;
-}
 
 int main(void)
 {
@@ -59,13 +46,8 @@ int main(void)
   // task(s) if the kernel is present.
   app_init();
 
-  // Set up the interrupt
   CMU_ClockEnable(cmuClock_GPIO, true);
-  GPIO_PinModeSet(int_port, int_pin, gpioModeInputPull, 1);
 
-  GPIOINT_Init();
-  GPIOINT_CallbackRegister(int_pin, gpioCallback);
-  GPIO_IntConfig(int_port, int_pin, false, true, true);
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.

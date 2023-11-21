@@ -2,6 +2,17 @@
 <device:XMLDevice xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:device="http://www.silabs.com/ss/hwconfig/document/device.ecore" name="pin_tool.EFM32GG990F1024" partId="mcu.arm.efm32.gg.efm32gg990f1024" contextId="com.silabs.sdk.stack.super:3.2.8._640221276">
   <mode name="DefaultMode">
     <property object="DefaultMode" propertyId="mode.diagramLocation" value="100, 100"/>
+    <property object="PB9" propertyId="ABModule.selectedRequirement" value="gpio%T%SL_SIMPLE_BUTTON_BTN0%T%sl_simple_button_btn0_config.h"/>
+    <property object="PB9" propertyId="pin.reserve" value="Reserved"/>
+    <property object="PF7" propertyId="ABModule.selectedRequirement" value="gpio%T%SL_BOARD_ENABLE_VCOM%T%sl_board_control_config.h"/>
+    <property object="PF7" propertyId="pin.reserve" value="Reserved"/>
+    <property object="PORTIO" propertyId="portio.usart1.enable.clk" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart1.enable.cs" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart1.enable.rx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart1.enable.tx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart1.location.route" value="1"/>
+    <property object="USART1" propertyId="ABModule.selectedRequirement" value="usart%T%SL_SPIDRV_EXP%T%sl_spidrv_exp_config.h"/>
+    <property object="USART1" propertyId="ABPeripheral.included" value="true"/>
   </mode>
   <modeTransition>
     <property object="RESET &#x2192; DefaultMode" propertyId="modeTransition.source" value="RESET"/>

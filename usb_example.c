@@ -276,7 +276,7 @@ int callBackFunc(USB_Status_TypeDef status, uint32_t xferred, uint32_t remaining
             }
             // Move around
             else if(c == 'w') {
-                move_camera_z(1);
+                move_camera_z(-1);
                 app_process_action(0);
                 spi_send = 1;
             } else if(c == 'a') {
@@ -284,7 +284,7 @@ int callBackFunc(USB_Status_TypeDef status, uint32_t xferred, uint32_t remaining
                 app_process_action(0);
                 spi_send = 1;
             } else if(c == 's') {
-                move_camera_z(-1);
+                move_camera_z(1);
                 app_process_action(0);
                 spi_send = 1;
             } else if(c == 'd') {

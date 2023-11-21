@@ -25,7 +25,7 @@
 #define FIXED_POINT_FRACTIONAL_BITS 3
 #define N_Spheres 1
 #define CAM_SPEED 0.05
-#define ROT_SPEED 0.1
+#define ROT_SPEED 0.01
 
 // Fixed-point Format: 13.3 (16-bit)
 // 11.3 for y-axis
