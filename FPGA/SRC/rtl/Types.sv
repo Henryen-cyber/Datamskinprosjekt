@@ -1,3 +1,4 @@
+`ifndef TYPES 
 //////////////////////////////////
 //  Definitions and parameters  //
 //////////////////////////////////
@@ -48,6 +49,11 @@
 
 `define BACKGROUND_COLOR 12'h036
 
+`define JOBS 640
+`define JOBS_SUBDIVISION 64
+`define N_WORKERS JOBS / JOBS_SUBDIVISION
+`define HIGH 1'b1
+`define LOW 1'b0
 //////////////////////////////////
 // Data collections and structs //
 //////////////////////////////////
@@ -76,3 +82,5 @@ endpackage
 // Viewport width: 640
 // Viewport height: 480
 // VIewport focal length: 640 / 2 = 320 (90 deg)
+`define TYPES
+`endif

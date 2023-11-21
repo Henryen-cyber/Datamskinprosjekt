@@ -20,13 +20,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 `include "Types.sv"
 
-// Worker instantiation parameters
-localparam JOBS = 640;
-localparam JOBS_SUBDIVISION = 64; // Must be divisible with JOBS
-localparam N_WORKERS = JOBS / JOBS_SUBDIVISION;
-localparam HIGH = 1'b1;
-localparam LOW = 1'b0;
-
 module Raytracing_Controller(
     // Clocks
     input CLK100MHZ,
@@ -78,23 +71,23 @@ module Raytracing_Controller(
     logic [`S_Y_SQRD_B-1:0]    originy_sr; // Max possible value:            67'108'864
     logic next_line;
 
-    logic [N_WORKERS - 1:0] worker_busyr;
+    logic [`N_WORKERS - 1:0] worker_busyr;
     logic worker_any_busy;
-    assign worker_any_busy = (worker_busyr == '0) ? LOW : HIGH;
+    assign worker_any_busy = (worker_busyr == '0) ? `LOW : `HIGH;
 
     generate
       genvar i;
       genvar j;
-      for (i=0; i<N_WORKERS; i=i+1) begin : worker_instantiation
+      for (i=0; i<`N_WORKERS; i=i+1) begin : worker_instantiation
 
         // Variables unique for each worker
         logic signed [11:0] x_i = i - (JOBS / 2);
 
         // Connection to line buffer
         // Creates an evenly distributed interleaving pattern
-        Types::Color [JOBS_SUBDIVISION-1:0] worker_line_color_buffer = 0;
-        for (j=0; j<JOBS_SUBDIVISION; j=j+1) begin : thread_jobs
-            assign line_color_buffer[i + j * N_WORKERS] = worker_line_color_buffer[j];
+        Types::Color [`JOBS_SUBDIVISION-1:0] worker_line_color_buffer = 0;
+        for (j=0; j<`JOBS_SUBDIVISION; j=j+1) begin : thread_jobs
+            assign line_color_buffer[i + j * `N_WORKERS] = worker_line_color_buffer[j];
         end
 
         Raytracing_Worker worker_i(
@@ -118,39 +111,39 @@ module Raytracing_Controller(
         if (~ck_rst_) begin
             recv_64bitr <= {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
             // recv_64bitr <= 64'b0000000000000000000000000010000000110100011000001110000000000010;
-            recv_interrupt <= LOW;
+            recv_interrupt <= `LOW;
         end
-        if (recv_dv == HIGH) begin
+        if (recv_dv == `HIGH) begin
             recv_64bitr <= recv_64bit;
         end
-        if (state == READY && next_line == LOW && recv_dv == LOW) begin
-            recv_interrupt <= HIGH;
+        if (state == READY && next_line == `LOW && recv_dv == `LOW) begin
+            recv_interrupt <= `HIGH;
             spherer <= recv_64bitr;
         end
 
-        if (state == READY && next_line == HIGH) begin
+        if (state == READY && next_line == `HIGH) begin
             state <= (state == READY) ? state + 1: state;
         end
-        else if (state == SETUP_1 && activate_workersr == LOW && worker_any_busy == LOW) begin
+        else if (state == SETUP_1 && activate_workersr == `LOW && worker_any_busy == `LOW) begin
             pixel_y <= next_y - `PX_Y_B'd240;
             originy_sr <= (sphere.y ** 2) >>> `FP_B;
             state <= (state == SETUP_1) ? state + 1: state;
         end
-        else if (state == SETUP_2 && activate_workersr == LOW && worker_any_busy == LOW) begin
+        else if (state == SETUP_2 && activate_workersr == `LOW && worker_any_busy == `LOW) begin
             pixely_sr <= pixel_y ** 2;
             doty_r <= `DOT_Y_B'(`DOT_Y_B'(pixel_y) * `DOT_Y_B'(sphere.y));
 
-            recv_interrupt <= LOW;
-            activate_workersr <= HIGH;
+            recv_interrupt <= `LOW;
+            activate_workersr <= `HIGH;
         end
-        else if (state == SETUP_2 && activate_workersr == HIGH && worker_any_busy == HIGH) begin
-            recv_interrupt <= LOW;
+        else if (state == SETUP_2 && activate_workersr == `HIGH && worker_any_busy == `HIGH) begin
+            recv_interrupt <= `LOW;
             state <= RENDERING;
         end
-        else if (next_line == LOW) begin
+        else if (next_line == `LOW) begin
             line_color <= line_color_buffer;
             state <= READY;
-            activate_workersr <= LOW;
+            activate_workersr <= `LOW;
         end
 
     end

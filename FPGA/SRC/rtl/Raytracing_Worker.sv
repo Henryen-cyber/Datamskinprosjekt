@@ -27,12 +27,12 @@ module Raytracing_Worker(
     // input signed[11:0] pixel_y,
     input logic signed[`DOT_Y_B-1:0] doty_r,  // Max possible value:               982'800
     input logic signed [`PX_Y_B-1:0] pixel_y,
-    input logic [`PX_Y_SQRD_B-1:0]    pixel_y_sqrd, // Max possible value:                 57'600
+    input logic [`PX_Y_SQRD_B-1:0]   pixel_y_sqrd, // Max possible value:                 57'600
     input logic [`S_Y_SQRD_B-1:0]    sphere_y_sqrd, // Max possible value:            67'108'864
     
     input Types::Sphere sphere,
     output logic busy,
-    output Types::Color [JOBS_SUBDIVISION-1:0] buffer
+    output Types::Color [`JOBS_SUBDIVISION-1:0] buffer
 );
     logic [3:0] state;
     localparam [3:0] READY = 0;
@@ -68,24 +68,6 @@ module Raytracing_Worker(
         .start(sqrt_start),
         .busy(sqrt_busy),
         .Q(dis_sqrt_r)
-    );
-
-
-    logic div_start, div_busy, div_done, div_valid, dbz, div_ovf;
-    logic signed[`PX_X_B-1:0] div_a, div_b, div_result;
-
-    div division_instance (
-        .clk(clk),
-        .rst(rst_),
-        .start(div_start),
-        .busy(div_busy),
-        .done(div_done),
-        .valid(div_valid),
-        .dbz(dbz),
-        .ovf(div_ovf),
-        .a(div_a),
-        .b(div_b),
-        .val(div_result)
     );
 
     logic        [`PX_X_B-1:0]        pixel_offset_x;
@@ -126,28 +108,28 @@ module Raytracing_Worker(
 
     // Raytracing Worker State-machine //
     always @ (posedge clk) begin
-        if (activate == LOW) begin
+        if (activate == `LOW) begin
             state <= READY;
-            busy <= LOW;
+            busy <= `LOW;
             current_job <= 0;
             pixel_offset_x <= 0;
-            sqrt_start <= LOW;
+            sqrt_start <= `LOW;
             sqrt_rst_ <= 0;
         end 
-        else if (state == READY && activate == HIGH) begin
+        else if (state == READY && activate == `HIGH) begin
             sqrt_rst_ <= 1;
             buffer[current_job] <= 0;
             pixel_x <= `PX_X_B'(pixel_start_x) + `PX_X_B'(pixel_offset_x);
-            busy <= (state == READY) ? HIGH : LOW;
+            busy <= (state == READY) ? `HIGH : `LOW;
             state <= (state == READY) ? state + 1: state;
-            sqrt_start <= LOW;
+            sqrt_start <= `LOW;
         end
-        else if (state == CALCULATING_1 && busy == HIGH) begin
+        else if (state == CALCULATING_1 && busy == `HIGH) begin
             pixel_x_sqrd <= pixel_x ** 2;
             sphere_r_sqrd <= (`S_R_SQRD_B'b1 << sphere.r) ** 2;
             state <= (state == CALCULATING_1) ? state + 1: state;
         end
-        else if (state == CALCULATING_2 && busy == HIGH) begin
+        else if (state == CALCULATING_2 && busy == `HIGH) begin
 
             a_times_two_r <= (pixel_x_sqrd + pixel_y_sqrd + pixel_z_sqrd) << 1;
 
@@ -156,7 +138,7 @@ module Raytracing_Worker(
 
             state <= (state == CALCULATING_2) ? state + 1: state;
         end
-        else if (state == CALCULATING_3 && busy == HIGH) begin
+        else if (state == CALCULATING_3 && busy == `HIGH) begin
             b_r <= (`B_B'(dotx_r) + `B_B'(doty_r) + `B_B'(dotz_r)) <<< 1;
             sphere_x_sqrd <= (sphere.x ** 2) >>> `FP_B;
             // sphere_y_sqrd <= sphere.y ** 2;
@@ -164,62 +146,62 @@ module Raytracing_Worker(
 
             state <= (state == CALCULATING_3) ? state + 1: state;
         end
-        else if (state == CALCULATING_4 && busy == HIGH) begin
+        else if (state == CALCULATING_4 && busy == `HIGH) begin
             c_times_two_r <= (`TWO_C_B'(sphere_x_sqrd + sphere_y_sqrd + sphere_z_sqrd) - (`TWO_C_B'(sphere_r_sqrd) << `FP_B)) <<< 1;
             br_sr <= (b_r ** 2) >> `FP_B;
             state <= (state == CALCULATING_4) ? state + 1: state;
         end
-        else if (state == CALCULATING_5 && busy == HIGH) begin
+        else if (state == CALCULATING_5 && busy == `HIGH) begin
             a_times_c_r <= `A_TIMES_C_B'(a_times_two_r) * `A_TIMES_C_B'(c_times_two_r);
             state <= (state == CALCULATING_5) ? state + 1: state;
         end
-        else if (state == CALCULATING_6 && busy == HIGH && sqrt_busy == LOW) begin 
+        else if (state == CALCULATING_6 && busy == `HIGH && sqrt_busy == `LOW) begin 
             dis_r <= (`DIS_B'(br_sr) - `DIS_B'(a_times_c_r));
-            sqrt_start <= HIGH;
+            sqrt_start <= `HIGH;
         end
-        else if (state == CALCULATING_6 && busy == HIGH && sqrt_start == HIGH && sqrt_busy == HIGH) begin
-            sqrt_start <= LOW;
+        else if (state == CALCULATING_6 && busy == `HIGH && sqrt_start == `HIGH && sqrt_busy == `HIGH) begin
+            sqrt_start <= `LOW;
             state <= (state == CALCULATING_6) ? state + 1: state;
         end
-        else if (state == CALCULATING_7 && busy == HIGH && sqrt_busy == LOW) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
+        else if (state == CALCULATING_7 && busy == `HIGH && sqrt_busy == `LOW) begin //&& sqrt_busy == `HIGH) begin && sqrt_busy == `LOW) begin
             dist_r <= (((b_r - dis_sqrt_r) <<< `FP_B ) / (a_times_two_r));
 
             state <= (state == CALCULATING_7) ? state + 1: state;
         end
-        else if (state == CALCULATING_8 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
+        else if (state == CALCULATING_8 && busy == `HIGH) begin //&& sqrt_busy == `HIGH) begin && sqrt_busy == `LOW) begin
             intersect_x <= (`INTERSECT_X_B'(pixel_x) * `INTERSECT_X_B'(dist_r));
             intersect_y <= (`INTERSECT_Y_B'(pixel_y) * `INTERSECT_Y_B'(dist_r));
             intersect_z <= (`INTERSECT_Z_B'(pixel_z) * `INTERSECT_Z_B'(dist_r));
             state <= (state == CALCULATING_8) ? state + 1: state;
         end
-        else if (state == CALCULATING_9 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
+        else if (state == CALCULATING_9 && busy == `HIGH) begin //&& sqrt_busy == `HIGH) begin && sqrt_busy == `LOW) begin
             intersect_x <= (intersect_x - (`INTERSECT_X_B'(sphere.x) <<< `FP_B));
             intersect_y <= (intersect_y - (`INTERSECT_Y_B'(sphere.y) <<< `FP_B));
             intersect_z <= (intersect_z - (`INTERSECT_Z_B'(sphere.z) <<< `FP_B));
             state <= (state == CALCULATING_9) ? state + 1: state;
         end
-        else if (state == CALCULATING_10 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
+        else if (state == CALCULATING_10 && busy == `HIGH) begin //&& sqrt_busy == `HIGH) begin && sqrt_busy == `LOW) begin
             intersect_x <= intersect_x >>> (sphere.r);
             intersect_y <= intersect_y >>> (sphere.r);
             intersect_z <= intersect_z >>> (sphere.r);
             state <= (state == CALCULATING_10) ? state + 1: state;
         end
-        else if (state == CALCULATING_11 && busy == HIGH) begin //&& sqrt_busy == HIGH) begin && sqrt_busy == LOW) begin
+        else if (state == CALCULATING_11 && busy == `HIGH) begin //&& sqrt_busy == `HIGH) begin && sqrt_busy == `LOW) begin
             intersect_x <= (((intersect_x * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
             intersect_y <= (((intersect_y * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
             intersect_z <= (((intersect_z * 7) + (7 <<< (2 * `FP_B))) >>> (2 * `FP_B));
             state <= (state == CALCULATING_11) ? state + 1: state;
         end
-        else if (state == COLORING && busy == HIGH) begin
+        else if (state == COLORING && busy == `HIGH) begin
             buffer[current_job] <= (dis_r >= 0) ? {intersect_x[3:0], intersect_y[3:0], intersect_z[3:0]} : `BACKGROUND_COLOR;
             // dis_r <= (dis_r == 0) ? -1 : (dis_r > 0) ? dis_r >> 1 : -1;
             state <= (state == COLORING) ? state + 1: state;
         end
-        else if (state == FINISHED && busy == HIGH) begin
-            current_job <= (state == FINISHED && current_job == JOBS_SUBDIVISION - 1) ? 0 : current_job + 1;
-            pixel_offset_x <= (state == FINISHED && current_job == JOBS_SUBDIVISION - 1) ? 0 : pixel_offset_x + N_WORKERS;
-            busy <= (state == FINISHED && current_job == JOBS_SUBDIVISION - 1) ? LOW : HIGH;
-            state <= (state == FINISHED && current_job == JOBS_SUBDIVISION - 1) ? FINISHED : READY;
+        else if (state == FINISHED && busy == `HIGH) begin
+            current_job <= (state == FINISHED && current_job == `JOBS_SUBDIVISION - 1) ? 0 : current_job + 1;
+            pixel_offset_x <= (state == FINISHED && current_job == `JOBS_SUBDIVISION - 1) ? 0 : pixel_offset_x + `N_WORKERS;
+            busy <= (state == FINISHED && current_job == `JOBS_SUBDIVISION - 1) ? `LOW : `HIGH;
+            state <= (state == FINISHED && current_job == `JOBS_SUBDIVISION - 1) ? FINISHED : READY;
         end
     end
 endmodule
