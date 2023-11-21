@@ -21,7 +21,6 @@ module last_set#(parameter WIDTH=16, parameter FP_B = 4)(
     logic setup_finished;
 
     always_ff @(posedge clk) begin
-
         if(start) begin
             if (!setup_finished) begin
                 int_vector <= fixed_point_vector >> FP_B;   // We want the first set bit of the integer

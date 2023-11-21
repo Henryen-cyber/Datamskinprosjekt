@@ -55,6 +55,7 @@ module Raytracing_Worker(
 
     logic sqrt_start;
     logic sqrt_busy;
+    logic sqrt_rst_;
     logic [`DIS_SQRT_B-1:0] dis_sqrt_r;
 
     SquareRoot#(
@@ -62,7 +63,7 @@ module Raytracing_Worker(
         .A_FP_B(`FP_B)
     ) square_root_instance (
         .clk(clk),
-        .rst_(1),
+        .rst_(sqrt_rst_),
         .A(dis_r),
         .start(sqrt_start),
         .busy(sqrt_busy),
@@ -125,7 +126,16 @@ module Raytracing_Worker(
 
     // Raytracing Worker State-machine //
     always @ (posedge clk) begin
-        if (state == READY && activate == HIGH) begin
+        if (activate == LOW) begin
+            state <= READY;
+            busy <= LOW;
+            current_job <= 0;
+            pixel_offset_x <= 0;
+            sqrt_start <= LOW;
+            sqrt_rst_ <= 0;
+        end 
+        else if (state == READY && activate == HIGH) begin
+            sqrt_rst_ <= 1;
             buffer[current_job] <= 0;
             pixel_x <= `PX_X_B'(pixel_start_x) + `PX_X_B'(pixel_offset_x);
             busy <= (state == READY) ? HIGH : LOW;
@@ -210,13 +220,6 @@ module Raytracing_Worker(
             pixel_offset_x <= (state == FINISHED && current_job == JOBS_SUBDIVISION - 1) ? 0 : pixel_offset_x + N_WORKERS;
             busy <= (state == FINISHED && current_job == JOBS_SUBDIVISION - 1) ? LOW : HIGH;
             state <= (state == FINISHED && current_job == JOBS_SUBDIVISION - 1) ? FINISHED : READY;
-        end
-        else if (activate == LOW) begin
-            state <= READY;
-            busy <= LOW;
-            current_job <= 0;
-            pixel_offset_x <= 0;
-            sqrt_start <= LOW;
         end
     end
 endmodule

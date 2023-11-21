@@ -117,6 +117,7 @@ module Raytracing_Controller(
     always @ (posedge CLK100MHZ) begin
         if (~ck_rst_) begin
             recv_64bitr <= {- {`S_X_INT_B'd100, `S_X_FP_B'd0}, - {`S_Y_INT_B'd200, `S_Y_FP_B'd0}, {`S_Z_INT_B'd400, `S_Z_FP_B'd0}, 6'd6, 12'd0};
+            // recv_64bitr <= 64'b0000000000000000000000000010000000110100011000001110000000000010;
             recv_interrupt <= LOW;
         end
         if (recv_dv == HIGH) begin
