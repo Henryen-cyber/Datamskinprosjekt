@@ -2,12 +2,12 @@ module spi_interface(
 
     input clk,
 
-    input logic mosi,
-    input logic ssel_,
-    input logic sck,
-    output logic miso,
-
-    output logic led
+    input  logic        mosi,
+    input  logic        ssel_,
+    input  logic        sck,
+    output logic        miso,
+    output logic[7:0]   data_out,
+    output logic        led
 );
 
     logic[2:0] sckr; always @(posedge clk) sckr <= {sckr[1:0], sck};
@@ -45,7 +45,7 @@ module spi_interface(
 
     always @(posedge clk) if(ssel_startmessage) cnt <= cnt + 8'h1;
 
-    always @(posedge clk)
+    always @(posedge clk) begin
         if(ssel_active)
         begin
             led <= 1;
@@ -61,5 +61,10 @@ module spi_interface(
         end else begin
                 led <= 0;
         end
-    assign miso = byte_data_sendt[7];
+        miso <= byte_data_sendt[7];
+
+        if(ssel_endmessage) begin
+            data_out <= byte_data_sendt;
+        end
+    end
 endmodule
