@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ASCII"?>
+<device:XMLDevice xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:device="http://www.silabs.com/ss/hwconfig/document/device.ecore" name="pin_tool.EFM32GG11B420F2048GQ100" partId="mcu.arm.efm32.gg11.efm32gg11b420f2048gq100" contextId="com.silabs.sdk.stack.super:4.3.2._-121749093">
+  <mode name="DefaultMode">
+    <property object="DefaultMode" propertyId="mode.diagramLocation" value="100, 100"/>
+    <property object="PB3" propertyId="pin.name" value="MOSI_SPI_DQ4_A16"/>
+    <property object="PB4" propertyId="pin.name" value="MISO_SPI_DQ5_C17"/>
+    <property object="PB5" propertyId="pin.name" value="SPI_CLK_DQ6_A15"/>
+    <property object="PB6" propertyId="pin.name" value="SPI_CS_DQ7_C18"/>
+    <property object="PORTIO" propertyId="portio.usart2.enable.clk" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart2.enable.cs" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart2.enable.rx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart2.enable.tx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart2.location.clk" value="1"/>
+    <property object="PORTIO" propertyId="portio.usart2.location.cs" value="1"/>
+    <property object="PORTIO" propertyId="portio.usart2.location.rx" value="1"/>
+    <property object="PORTIO" propertyId="portio.usart2.location.tx" value="1"/>
+    <property object="USART2" propertyId="ABModule.selectedRequirement" value="usart%T%SL_SPIDRV_FPGA_SPI%T%sl_spidrv_FPGA_SPI_config.h"/>
+    <property object="USART2" propertyId="ABPeripheral.included" value="true"/>
+    <property object="USART2" propertyId="peripheral.name" value="FPGA_SPI"/>
+  </mode>
+  <modeTransition>
+    <property object="RESET &#x2192; DefaultMode" propertyId="modeTransition.source" value="RESET"/>
+    <property object="RESET &#x2192; DefaultMode" propertyId="modeTransition.target" value="DefaultMode"/>
+  </modeTransition>
+</device:XMLDevice>
