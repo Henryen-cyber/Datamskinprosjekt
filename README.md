@@ -4,6 +4,8 @@ Bitstreams for FPGA are located [here](./FPGA/bitstreams/).
 
 Hex for MCU are packaged in the Github releases.
 
+## [The Report](./Rapport_Gruppe2_TDT4295_Datamaskinprosjekt.pdf)
+
 ## PCB KiCAD Checkout
 
 When working on a KiCAD File ALWAYS update this table to state that you are working on it
